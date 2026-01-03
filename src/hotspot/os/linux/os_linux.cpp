@@ -5571,7 +5571,7 @@ void os::pd_init_container_support() {
 // this is called _after_ the global arguments have been parsed
 jint os::init_2(void) {
     /*
-     * posix通用初始化,跳转不过去,但是完成的事情只是打印一些日志
+     * posix通用初始化,跳转不过去,方法在os_posix.cpp中实现,但是不重要,因为该方法只是打印了一些日志
      */
     os::Posix::init_2();
 
