@@ -344,12 +344,12 @@ bool Abstract_VM_Version::print_matching_lines_from_file(const char* filename, o
   fclose(fp);
   return true;
 }
-
+// forcus 用于计算GC并行工作线程数,核心思想是:大机器上线程数要打折,避免资源浪费
 unsigned int Abstract_VM_Version::nof_parallel_worker_threads(
-                                                      unsigned int num,
-                                                      unsigned int den,
-                                                      unsigned int switch_pt) {
-  if (FLAG_IS_DEFAULT(ParallelGCThreads)) {
+                                                      unsigned int num, // 5 分子
+                                                      unsigned int den, // 8 分母
+                                                      unsigned int switch_pt) { // 8 切换点
+  if (FLAG_IS_DEFAULT(ParallelGCThreads)) {  // forcus 如果用户没有指定,那么自动计算
     assert(ParallelGCThreads == 0, "Default ParallelGCThreads is not 0");
     unsigned int threads;
     // For very large machines, there are diminishing returns
@@ -359,10 +359,33 @@ unsigned int Abstract_VM_Version::nof_parallel_worker_threads(
     // and a chosen fraction of 5/8
     // use 8 + (72 - 8) * (5/8) == 48 worker threads.
     unsigned int ncpus = (unsigned int) os::initial_active_processor_count();
+    /*
+     * if ncpus <= 8
+     *   threads = ncpus
+     * else
+     *   threads = 8 + (ncpus - 8) * (5/8)
+     * 大机器上,GC 线程太多收益递减,不要霸占整个系统
+     * ParallelGCThreads
+        │
+     80 ┤                                          ╱
+        │                                        ╱
+     60 ┤                                      ╱
+        │                                    ╱  斜率 = 5/8
+     40 ┤                                  ╱
+        │                                ╱
+     20 ┤                    ╱─────────╱
+        │              ╱─────
+      8 ┤        ╱─────  斜率 = 1
+        │  ╱─────
+      0 ┼─────┬─────┬─────┬─────┬─────┬─────┬───► CPU
+        0     8    16    32    48    64    80
+                  │
+                  └── 切换点 (switch_pt = 8)
+     */
     threads = (ncpus <= switch_pt) ?
              ncpus :
              (switch_pt + ((ncpus - switch_pt) * num) / den);
-#ifndef _LP64
+#ifndef _LP64 // 忽略 32位(生产机器不可能是32位的)
     // On 32-bit binaries the virtual address space available to the JVM
     // is usually limited to 2-3 GB (depends on the platform).
     // Do not use up address space with too many threads (stacks and per-thread
@@ -373,7 +396,7 @@ unsigned int Abstract_VM_Version::nof_parallel_worker_threads(
     threads = MIN2(threads, (2*switch_pt));
 #endif
     return threads;
-  } else {
+  } else { // forcus 否则用户指定了,那么直接返回
     return ParallelGCThreads;
   }
 }
@@ -387,12 +410,13 @@ unsigned int Abstract_VM_Version::calc_parallel_worker_threads() {
 // a global flag.
 unsigned int Abstract_VM_Version::parallel_worker_threads() {
   if (!_parallel_worker_threads_initialized) {
+    // forcus-1 如果用户没有指定,那么自动计算
     if (FLAG_IS_DEFAULT(ParallelGCThreads)) {
       _parallel_worker_threads = VM_Version::calc_parallel_worker_threads();
-    } else {
+    } else { // forcus-2 否则使用用户指定的值
       _parallel_worker_threads = ParallelGCThreads;
     }
-    _parallel_worker_threads_initialized = true;
+    _parallel_worker_threads_initialized = true; // forcus 设置为已初始化
   }
   return _parallel_worker_threads;
 }

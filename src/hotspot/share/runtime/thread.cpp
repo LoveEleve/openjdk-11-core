@@ -3828,6 +3828,7 @@ jint Threads::create_vm(JavaVMInitArgs *args, bool *canTryAgain) {
     TraceTime timer("Create VM", TRACETIME_LOG(Info, startuptime));
 
     // Initialize the os module after parsing the args
+    // forcus os模块初始化
     jint os_init_2_result = os::init_2();
     if (os_init_2_result != JNI_OK) return os_init_2_result;
 

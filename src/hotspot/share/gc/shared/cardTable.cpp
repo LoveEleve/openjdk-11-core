@@ -449,7 +449,17 @@ MemRegion CardTable::dirty_card_range_after_reset(MemRegion mr,
   }
   return MemRegion(mr.end(), mr.end());
 }
-
+// forcus  计算卡表对堆内存的最大对齐约束
+/*
+ * card_size:堆中多少字节对应卡表1字节(默认为2^9=512字节)
+ * os::vm_page_size()：操作系统页大小
+ *  - 这是什么意思呢？
+ *  card table size = heap_size / card_size
+ *  要求:card table size = N * os::vm_page_size() {因为卡表内存是在C Heap上分配的,也即是向操作系统申请的,所以需要按照page size对齐}
+ *  so: heap size / card_size = N * os::vm_page_size()
+ *  so: heap size = N * card_size * os::vm_page_size()
+ *  --> heap_size 必须是 card_size * os::vm_page_size() 对齐 = 512B * 4KB = 2 MB
+ */
 uintx CardTable::ct_max_alignment_constraint() {
   return card_size * os::vm_page_size();
 }

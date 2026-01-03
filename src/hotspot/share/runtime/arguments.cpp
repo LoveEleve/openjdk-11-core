@@ -75,7 +75,7 @@ int    Arguments::_num_jvm_args                 = 0;
 char*  Arguments::_java_command                 = NULL;
 SystemProperty* Arguments::_system_properties   = NULL;
 const char*  Arguments::_gc_log_filename        = NULL;
-size_t Arguments::_conservative_max_heap_alignment = 0;
+size_t Arguments::_conservative_max_heap_alignment = 0; // 保守的最大堆对齐方式 32MB
 size_t Arguments::_min_heap_size                = 0;
 Arguments::Mode Arguments::_mode                = _mixed;
 bool   Arguments::_java_compiler                = false;
@@ -1643,7 +1643,7 @@ void set_object_alignment() {
     SurvivorAlignmentInBytes = ObjectAlignmentInBytes;
   }
 }
-
+// forcus 计算压缩指针最大堆大小
 size_t Arguments::max_heap_for_compressed_oops() {
   // Avoid sign flip.
   assert(OopEncodingHeapMax > (uint64_t)os::vm_page_size(), "Unusual page size");
@@ -1651,29 +1651,35 @@ size_t Arguments::max_heap_for_compressed_oops() {
   // keeping alignment constraints of the heap. To guarantee the latter, as the
   // NULL page is located before the heap, we pad the NULL page to the conservative
   // maximum alignment that the GC may ever impose upon the heap.
-  size_t displacement_due_to_null_page = align_up((size_t)os::vm_page_size(),
+  // forcus-1 计算 NULL 页占用的空间（按堆对齐要求对齐）
+     size_t displacement_due_to_null_page = align_up((size_t)os::vm_page_size(),
                                                   _conservative_max_heap_alignment);
 
   LP64_ONLY(return OopEncodingHeapMax - displacement_due_to_null_page);
   NOT_LP64(ShouldNotReachHere(); return 0);
 }
 
+// forcus 用于自动决定是否启用压缩对象指针
+/*
+ * 如果堆内存超过了32GB,那么将会关闭压缩指针,此时的内存地址必须使用8字节(64位)来表示,而不能使用4字节(32位)来表示
+ * 因为超过了32GB外的内存'格子',将无法被访问到
+ */
 void Arguments::set_use_compressed_oops() {
 #ifndef ZERO
 #ifdef _LP64
   // MaxHeapSize is not set up properly at this point, but
   // the only value that can override MaxHeapSize if we are
   // to use UseCompressedOops is InitialHeapSize.
-  size_t max_heap_size = MAX2(MaxHeapSize, InitialHeapSize);
-
+  size_t max_heap_size = MAX2(MaxHeapSize, InitialHeapSize); // forcus 获取到最大堆内存大小(-Xms和-Xmx的最大值,这两个值一般都是相等的)
+  // forcus 堆内存大小 <= 32GB，自动启用压缩指针
   if (max_heap_size <= max_heap_for_compressed_oops()) {
 #if !defined(COMPILER1) || defined(TIERED)
     if (FLAG_IS_DEFAULT(UseCompressedOops)) {
       FLAG_SET_ERGO(bool, UseCompressedOops, true);
     }
 #endif
-  } else {
-    if (UseCompressedOops && !FLAG_IS_DEFAULT(UseCompressedOops)) {
+  } else { // forcus 否则堆内存很大,无法使用压缩指针
+    if (UseCompressedOops && !FLAG_IS_DEFAULT(UseCompressedOops)) { // forcus 用户强制启用了压缩指针,那么在这里打印警告并且强制关闭压缩指针
       warning("Max heap size too large for Compressed Oops");
       FLAG_SET_DEFAULT(UseCompressedOops, false);
       FLAG_SET_DEFAULT(UseCompressedClassPointers, false);
@@ -1685,22 +1691,28 @@ void Arguments::set_use_compressed_oops() {
 
 
 // NOTE: set_use_compressed_klass_ptrs() must be called after calling
-// set_use_compressed_oops().
+// set_use_compressed_oops(). 依赖于 set_use_compressed_oops() 对象地址是否开启压缩指针
+/*
+ * 用于设置是否启用压缩类指针(也即是否对Klass指针进行压缩 - 对象头中指向类元数据的指针)
+ */
 void Arguments::set_use_compressed_klass_ptrs() {
 #ifndef ZERO
 #ifdef _LP64
   // UseCompressedOops must be on for UseCompressedClassPointers to be on.
   if (!UseCompressedOops) {
+      // forcus-1 对象压缩指针关闭,那么类压缩指针也必须关闭,如果用户强制开启,那么打印警告并且关闭
     if (UseCompressedClassPointers) {
       warning("UseCompressedClassPointers requires UseCompressedOops");
     }
     FLAG_SET_DEFAULT(UseCompressedClassPointers, false);
-  } else {
+  } else { // forcus-2 对象压缩指针开启,那么类压缩指针也可以开启
     // Turn on UseCompressedClassPointers too
     if (FLAG_IS_DEFAULT(UseCompressedClassPointers)) {
       FLAG_SET_ERGO(bool, UseCompressedClassPointers, true);
     }
     // Check the CompressedClassSpaceSize to make sure we use compressed klass ptrs.
+    // forcus-3 但是 CompressedClassSpaceSize(3GB) > KlassEncodingMetaspaceMax(32GB),那么及时开启了对象压缩指针,也无法使用类压缩指针
+    // 这个分支通常永远不会执行
     if (UseCompressedClassPointers) {
       if (CompressedClassSpaceSize > KlassEncodingMetaspaceMax) {
         warning("CompressedClassSpaceSize is too large for UseCompressedClassPointers");
@@ -1711,31 +1723,45 @@ void Arguments::set_use_compressed_klass_ptrs() {
 #endif // _LP64
 #endif // !ZERO
 }
-
+// forcus 用于计算并且设置JVM堆内存的保存最大对齐值 (设置保守的(在任何情况下都能满足内存对齐要求)最大堆内存对齐)
 void Arguments::set_conservative_max_heap_alignment() {
   // The conservative maximum required alignment for the heap is the maximum of
   // the alignments imposed by several sources: any requirements from the heap
   // itself, the collector policy and the maximum page size we may run the VM
   // with.
+    /*
+     *  GC收集器自身的对齐要求,在这里不同的GC有不同的对齐要求(这是一个虚方法) - 由子类实现
+     *   - G1:32MB
+     *   - Parallel GC:通常较小,依赖 CardTable 对齐
+     *   - Serial/CMS:64KB
+     *   - ZGC:很大,ZGC有自己的大页需求
+     *    为什么要这样做呢？
+     *     - G1:因为G1会将堆划分为固定大小的Region(最大32MB),那么堆的起始地址必须对齐到Region边界
+     *     - 大页：内存必须对齐到页大小才能进行高效映射
+     *     - 分代GC对齐：老年代/新生代需要按照GenGrain(64KB)对齐
+     *    为什么选择最大的呢？
+     *     - 因为需要同时满足所有对齐要求,因此选择最大的对齐值
+     */
   size_t heap_alignment = GCConfig::arguments()->conservative_max_heap_alignment();
-  _conservative_max_heap_alignment = MAX4(heap_alignment,
-                                          (size_t)os::vm_allocation_granularity(),
-                                          os::max_page_size(),
-                                          CollectorPolicy::compute_heap_alignment());
-}
-// forcus
-jint Arguments::set_ergonomics_flags() {
-  GCConfig::initialize(); // forcus 选择GC收集器 (服务器级别则使用G1)
 
-  set_conservative_max_heap_alignment(); // forcus 设置堆对齐
+  _conservative_max_heap_alignment = MAX4(heap_alignment, // 以G1为例,这里为32MB
+                                          (size_t)os::vm_allocation_granularity(), // 操作系统的内存分配粒度(Linux系统中通常是页大小 - 4KB)
+                                          os::max_page_size(), // 系统支持的最大页大小(考虑大页/Huge Page场景) // 4KB
+                                          CollectorPolicy::compute_heap_alignment()); // 基于代的收集器对齐粒度 通常是 64KB
+}
+// forcus 自动调优属性设置
+jint Arguments::set_ergonomics_flags() {
+  GCConfig::initialize(); // forcus 选择GC收集器 (服务器级别则使用G1)「一般都是这个」
+
+  set_conservative_max_heap_alignment(); // forcus 设置保守堆对齐(确保在各种场景下都能满足内存对齐要求 - 也即取最大值 -->   _conservative_max_heap_alignment = 32MB)
 
 #ifndef ZERO
 #ifdef _LP64
-  set_use_compressed_oops(); // 设置压缩指针
+  set_use_compressed_oops(); // forcus 设置oops压缩指针
 
   // set_use_compressed_klass_ptrs() must be called after calling
   // set_use_compressed_oops().
-  set_use_compressed_klass_ptrs(); // 设置压缩类指针
+  set_use_compressed_klass_ptrs(); // forcus 设置压缩类指针
 
   // Also checks that certain machines are slower with compressed oops
   // in vm_version initialization code.
@@ -1756,7 +1782,7 @@ julong Arguments::limit_by_allocatable_memory(julong limit) {
 
 // Use static initialization to get the default before parsing
 static const size_t DefaultHeapBaseMinAddress = HeapBaseMinAddress;
-
+//
 void Arguments::set_heap_size() {
   julong phys_mem =
     FLAG_IS_DEFAULT(MaxRAM) ? MIN2(os::physical_memory(), (julong)MaxRAM)
@@ -4008,27 +4034,44 @@ jint Arguments::parse(const JavaVMInitArgs* initial_cmd_args) {
 jint Arguments::apply_ergo() {
   // Set flags based on ergonomics.
   // forcus 设置基础的 ergonomics_flag
+    /*
+     * 总结一下：
+     *  - 选择GC收集器,对于server机器来说,一般选择的都是G1 GC
+     *  - 设置保守的堆内存对齐大小(在G1 GC情况下为32GB)
+     *  - 判断oop对象压缩指针是否开启 (如果堆内存大小 > 32GB,那么强制关闭)
+     *  - 判断klass指针压缩是否开启
+     */
   jint result = set_ergonomics_flags();
   if (result != JNI_OK) return result;
 
   // Set heap size based on available physical memory
+  // 核心任务：当用户没有显示的指定 -Xmx / -Xms 时,自动计算合理的堆大小,但是在生产环境中,一般都是会指定的,所以内部基本上都是空操作
   set_heap_size();
-
+  // forcus 这是一个多态调用,调用的是实际GC的initialize()方法
+  /*
+   * - GCConfig::arguments()：返回具体的GC_Arguments对象,比如 G1Arguments
+   * - 调用 G1Arguments.initialize()
+   *  // forcus 在这里只关系G1 GC,初始化了很多重要的参数
+   */
   GCConfig::arguments()->initialize();
 
   set_shared_spaces_flags();
 
   // Initialize Metaspace flags and alignments
+  // forcus 元空间参数初始化,主要做对齐和边界检查
   Metaspace::ergo_initialize();
 
   // Set compiler flags after GC is selected and GC specific
   // flags (LoopStripMiningIter) are set.
+  // forcus JIT编译器的参数初始化,配置C1/C2编译器的行为
   CompilerConfig::ergo_initialize();
 
   // Set bytecode rewriting flags
+  // 不需要关系,因为默认是开启的(字节码重写)
   set_bytecode_flags();
 
   // Set flags if Aggressive optimization flags (-XX:+AggressiveOpts) enabled
+  // 废弃方法,不需要关注
   jint code = set_aggressive_opts_flags();
   if (code != JNI_OK) {
     return code;

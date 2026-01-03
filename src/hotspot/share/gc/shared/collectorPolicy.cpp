@@ -141,16 +141,20 @@ void CollectorPolicy::initialize_size_info() {
 
   DEBUG_ONLY(CollectorPolicy::assert_size_info();)
 }
-
+// forcus 影响保守堆内存对齐的方法 - 在这里主要与 卡表(Card Table) & Large Pages相关
 size_t CollectorPolicy::compute_heap_alignment() {
   // The card marking array and the offset arrays for old generations are
   // committed in os pages as well. Make sure they are entirely full (to
   // avoid partial page problems), e.g. if 512 bytes heap corresponds to 1
   // byte entry and the os page size is 4096, the maximum heap size should
   // be 512*4096 = 2MB aligned.
-
+  // forcus-1 获取 Card Table 的最大对齐约束
+  /*
+   * 为什么 Card Table 需要对齐？
+   *  - 卡表本身也要按 OS 页（通常 4KB） 提交内存 (卡表所占用的内存位于C堆,也就是进程堆空间)
+   */
   size_t alignment = CardTableRS::ct_max_alignment_constraint();
-
+  // forcus-2 考虑 Large Pages 页面对齐
   if (UseLargePages) {
       // In presence of large pages we have to make sure that our
       // alignment is large page aware.

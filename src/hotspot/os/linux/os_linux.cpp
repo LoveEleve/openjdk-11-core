@@ -5570,7 +5570,9 @@ void os::pd_init_container_support() {
 
 // this is called _after_ the global arguments have been parsed
 jint os::init_2(void) {
-
+    /*
+     * posix通用初始化,跳转不过去,但是完成的事情只是打印一些日志
+     */
     os::Posix::init_2();
 
     Linux::fast_thread_clock_init();

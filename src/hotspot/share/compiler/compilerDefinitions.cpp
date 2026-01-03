@@ -383,15 +383,16 @@ bool CompilerConfig::check_args_consistency(bool status) {
   }
   return status;
 }
-
+// forcus JIT 编译器的参数初始化，配置 C1/C2 编译器的行为
 void CompilerConfig::ergo_initialize() {
-  if (Arguments::is_interpreter_only()) {
+  if (Arguments::is_interpreter_only()) { // forcus 如果配置了 -Xint(解释执行),那么直接返回
     return; // Nothing to do.
   }
 
-#ifdef TIERED
+#ifdef TIERED // forcus 如果开启了分层编译(默认)
   if (!compilation_mode_selected()) {
-    select_compilation_mode_ergonomically();
+      // forcus -server：默认选择的分层编译
+    select_compilation_mode_ergonomically(); // 自动选择编译模式
   }
 #endif
 
@@ -401,7 +402,13 @@ void CompilerConfig::ergo_initialize() {
   JVMCIGlobals::check_jvmci_supported_gc();
   set_jvmci_specific_flags();
 #endif
-
+  // forcus 设置分配编译参数
+  /*
+   * 这里会涉及到一些编译相关的(重要的)参数
+   *  - Tier3InvokeNotifyFreqLog - 方法调用计数频率
+   *  - Tier4InvocationThreshold - 触发C2编译的阈值
+   *  - 各层编译的触发条件等
+   */
   if (TieredCompilation) {
     set_tiered_flags();
   } else {
@@ -422,7 +429,7 @@ void CompilerConfig::ergo_initialize() {
       FLAG_SET_ERGO(intx, CompileThreshold, scaled_compile_threshold(CompileThreshold));
     }
   }
-
+  // forcus OSR(栈上替换)检查
   if (UseOnStackReplacement && !UseLoopCounter) {
     warning("On-stack-replacement requires loop counters; enabling loop counters");
     FLAG_SET_DEFAULT(UseLoopCounter, true);

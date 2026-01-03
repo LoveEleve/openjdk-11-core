@@ -73,16 +73,35 @@ void G1Arguments::parse_verification_type(const char* type) {
                             "young-normal, concurrent-start, mixed, remark, cleanup and full", type);
   }
 }
-
+// forcus G1相关的初始化,该方法是在为G1 GC 设置各种默认参数
+/*
+ * 在该方法中一共初始化了10个参数
+ * 1. ParallelGCThreads - STW 阶段并行线程数
+ * 2. G1ConcRefinementThreads - 并发 RSet 更新线程数
+ * 3. MarkStackSizeMax - 并发标记栈最大容量
+ * 4. GCTimeRatio - GC 时间占比目标
+ * 5. MaxGCPauseMillis - GC 暂停时间目标(默认为200ms,最核心的调优参数,根据SLA调整)
+ * 6. GCPauseIntervalMillis - GC 暂停间隔
+ * 7. ParallelRefProcEnabled - 并行引用处理
+ * 8. GCDrainStackTargetSize - 任务队列目标大小(负载均衡)
+ * 9. LoopStripMiningIter
+ * 10. LoopStripMiningStackSize
+ */
 void G1Arguments::initialize() {
+  // forcus 首先调用基类的初始化方法 (核心关注一点就是设置:ScavengeBeforeFullGC == false),也即 g1不需要在full gc之前做一次young gc
   GCArguments::initialize();
   assert(UseG1GC, "Error");
+  // forcus 设置 ParallelGCThreads (影响所有STW阶段的并行度)
+  /*
+   * 等价于: ParallelGCThreads = Abstract_VM_Version::parallel_worker_threads();
+   */
   FLAG_SET_DEFAULT(ParallelGCThreads, Abstract_VM_Version::parallel_worker_threads());
+  // 如果 ParallelGCThreads == 0,则退出,一般不会
   if (ParallelGCThreads == 0) {
     assert(!FLAG_IS_DEFAULT(ParallelGCThreads), "The default value for ParallelGCThreads should not be 0.");
     vm_exit_during_initialization("The flag -XX:+UseG1GC can not be combined with -XX:ParallelGCThreads=0", NULL);
   }
-
+  // forcus G1ConcRefinementThreads 的作用：并发处理 RSet（Remembered Set）更新的线程数，默认等于 ParallelGCThreads。
   if (FLAG_IS_DEFAULT(G1ConcRefinementThreads)) {
     FLAG_SET_ERGO(uint, G1ConcRefinementThreads, ParallelGCThreads);
   }
@@ -91,10 +110,14 @@ void G1Arguments::initialize() {
   // when concurrent marking is initialized.
   // Its value will be based upon the number of parallel marking threads.
   // But we do set the maximum mark stack size here.
+  // forcus 并发标记阶段标记栈的最大容量
+  /*
+   * g1 gc在并发标记阶段用来存储待处理对象引用的数据结构(暂时了解一下)
+   */
   if (FLAG_IS_DEFAULT(MarkStackSizeMax)) {
-    FLAG_SET_DEFAULT(MarkStackSizeMax, 128 * TASKQUEUE_SIZE);
+    FLAG_SET_DEFAULT(MarkStackSizeMax, 128 * TASKQUEUE_SIZE); // forcus 64位: 131072 (128K)
   }
-
+  // forcus 1 / (1 + GCTimeRatio)
   if (FLAG_IS_DEFAULT(GCTimeRatio) || GCTimeRatio == 0) {
     // In G1, we want the default GC overhead goal to be higher than
     // it is for PS, or the heap might be expanded too aggressively.
@@ -111,7 +134,7 @@ void G1Arguments::initialize() {
   // time target < pause interval. If the user does not want this
   // maximum flexibility, they will have to set the pause interval
   // explicitly.
-
+  // forcus MaxGCPauseMillis - G1最核心的参数 - 默认 200ms 暂停时间目标
   if (FLAG_IS_DEFAULT(MaxGCPauseMillis)) {
     // The default pause time target in G1 is 200ms
     FLAG_SET_DEFAULT(MaxGCPauseMillis, 200);
@@ -120,10 +143,11 @@ void G1Arguments::initialize() {
   // Then, if the interval parameter was not set, set it according to
   // the pause time target (this will also deal with the case when the
   // pause time target is the default value).
+  // forcus GCPauseIntervalMillis 默认 201ms，给 G1 最大灵活性，允许它在需要时立即 GC
   if (FLAG_IS_DEFAULT(GCPauseIntervalMillis)) {
     FLAG_SET_DEFAULT(GCPauseIntervalMillis, MaxGCPauseMillis + 1);
   }
-
+  // forcus 启用并行引用处理 多线程时自动启用，并行处理 Soft/Weak/Phantom Reference。
   if (FLAG_IS_DEFAULT(ParallelRefProcEnabled) && ParallelGCThreads > 1) {
     FLAG_SET_DEFAULT(ParallelRefProcEnabled, true);
   }
@@ -131,11 +155,14 @@ void G1Arguments::initialize() {
   log_trace(gc)("MarkStackSize: %uk  MarkStackSizeMax: %uk", (unsigned int) (MarkStackSize / K), (uint) (MarkStackSizeMax / K));
 
   // By default do not let the target stack size to be more than 1/4 of the entries
+  // forcus 设置 GCDrainStackTargetSize 计算（64位）：min(默认值, 131072/4) = min(默认值, 32768)
+  // forcus 用于 GC 工作线程的工作窃取负载均衡
   if (FLAG_IS_DEFAULT(GCDrainStackTargetSize)) {
     FLAG_SET_ERGO(uintx, GCDrainStackTargetSize, MIN2(GCDrainStackTargetSize, (uintx)TASKQUEUE_SIZE / 4));
   }
 
-#ifdef COMPILER2
+#ifdef COMPILER2 // forcus 如果开启了C2编译器,那么启用循环安全点
+  // forcus Loop Strip Mining：在长循环中每 1000 次迭代插入安全点检查，防止长循环阻塞 GC
   // Enable loop strip mining to offer better pause time guarantees
   if (FLAG_IS_DEFAULT(UseCountedLoopSafepoints)) {
     FLAG_SET_DEFAULT(UseCountedLoopSafepoints, true);
@@ -144,7 +171,6 @@ void G1Arguments::initialize() {
     }
   }
 #endif
-
   initialize_verification_types();
 }
 
