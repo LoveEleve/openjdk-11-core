@@ -115,7 +115,7 @@ class PerfMemory : AllStatic {
     friend class VMStructs;
     friend class PerfMemoryTest;
   private:
-    static char*  _start;
+    static char*  _start; // 性能数据内存区域的起始地址
     static char*  _end;
     static char*  _top;
     static size_t _capacity;

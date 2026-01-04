@@ -3749,6 +3749,7 @@ void Threads::initialize_jsr292_core_classes(TRAPS) {
     initialize_class(vmSymbols::java_lang_invoke_MemberName(), CHECK);
     initialize_class(vmSymbols::java_lang_invoke_MethodHandleNatives(), CHECK);
 }
+
 // forcus:非常长的一个方法,涉及了jvm启动的核心内容
 jint Threads::create_vm(JavaVMInitArgs *args, bool *canTryAgain) {
     extern void JDK_Version_init();
@@ -3888,6 +3889,7 @@ jint Threads::create_vm(JavaVMInitArgs *args, bool *canTryAgain) {
 #endif // INCLUDE_JVMCI
 
     // Attach the main thread to this os thread
+    // forcus java主线程 附加到 os线程
     JavaThread *main_thread = new JavaThread();
     main_thread->set_thread_state(_thread_in_vm);
     main_thread->initialize_thread_current();

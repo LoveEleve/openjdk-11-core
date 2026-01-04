@@ -96,7 +96,9 @@ void PerfMemory::initialize() {
   size_t capacity = align_up(PerfDataMemorySize,
                              os::vm_allocation_granularity());
   /*
-   * 打印日志
+   * 打印日志,这里会涉及到两个参数:
+   *  -Xlog:perf+memops=debug:stdout - 将性能相关的debug日志输出到stdout
+      -Xlog:perf+memops=debug:file=/data/workspace/jvm_perf.log  输出到文件中
    */
   log_debug(perf, memops)("PerfDataMemorySize = " SIZE_FORMAT ","
                           " os::vm_allocation_granularity = %d,"
@@ -106,8 +108,22 @@ void PerfMemory::initialize() {
                           capacity);
 
   // allocate PerfData memory region
+  // forcus 通过mmap分配内存(并且是文件映射)
   create_memory_region(capacity);
+  /*
+   *   PerfMemory 区域创建后的数据结构初始化
+   _start                                             _end
+   │                                                  │
+   ▼                                                  ▼
+   ┌──────────────────┬────────────────────────────────┐
+   │  PerfDataPrologue │     性能数据条目区域            │
+   │    (头部元数据)    │  (PerfData entries)           │
+   └──────────────────┴────────────────────────────────┘
+   │                  │                                │
+   └── _prologue      └── _top (初始位置)              └── _capacity
 
+   *
+   */
   if (_start == NULL) {
 
     // the PerfMemory region could not be created as desired. Rather
@@ -137,7 +153,6 @@ void PerfMemory::initialize() {
     _end = _start + _capacity;
     _top = _start + sizeof(PerfDataPrologue);
   }
-
   assert(_prologue != NULL, "prologue pointer must be initialized");
 
 #ifdef VM_LITTLE_ENDIAN

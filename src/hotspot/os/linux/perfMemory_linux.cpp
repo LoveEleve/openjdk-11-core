@@ -988,21 +988,22 @@ static int open_sharedmem_file(const char* filename, int oflags, TRAPS) {
 // created and terminating JVMs by watching the file system name space
 // for files being created or removed.
 //
+// forcus 为性能数据创建共享内存
 static char* mmap_create_shared(size_t size) {
 
   int result;
   int fd;
   char* mapAddress;
 
-  int vmid = os::current_process_id();
+  int vmid = os::current_process_id(); // 获取当前进程 PID
 
-  char* user_name = get_user_name(geteuid());
+  char* user_name = get_user_name(geteuid()); // 获取当前用户名称
 
   if (user_name == NULL)
     return NULL;
 
-  char* dirname = get_user_tmp_dir(user_name, vmid, -1);
-  char* filename = get_sharedmem_filename(dirname, vmid, -1);
+  char* dirname = get_user_tmp_dir(user_name, vmid, -1); // → /tmp/hsperfdata_<user>
+  char* filename = get_sharedmem_filename(dirname, vmid, -1); // → /tmp/hsperfdata_<user>/<pid>
 
   // get the short filename
   char* short_filename = strrchr(filename, '/');
@@ -1013,11 +1014,11 @@ static char* mmap_create_shared(size_t size) {
   }
 
   // cleanup any stale shared memory files
-  cleanup_sharedmem_resources(dirname);
+  cleanup_sharedmem_resources(dirname); // 清理该目录下已经不存在对应进程的残留文件（比如之前 JVM 崩溃没清理的）
 
   assert(((size > 0) && (size % os::vm_page_size() == 0)),
          "unexpected PerfMemory region size");
-
+  // forcus 创建文件并设置大小
   fd = create_sharedmem_resources(dirname, short_filename, size);
 
   FREE_C_HEAP_ARRAY(char, user_name);
@@ -1027,9 +1028,19 @@ static char* mmap_create_shared(size_t size) {
     FREE_C_HEAP_ARRAY(char, filename);
     return NULL;
   }
-
+  /*
+   * forcus mmap 映射
+   *  mapAddress = (char*)::mmap(
+                                    (char*)0,           // 让内核选择映射地址
+                                    size,               // 映射大小
+                                    PROT_READ|PROT_WRITE, // 可读可写
+                                    MAP_SHARED,         // 共享映射（关键！）
+                                    fd,                 // 文件描述符
+                                    0                   // 文件偏移量
+                                ); // → /tmp/hsperfdata_<user>/<pid>
+   */
   mapAddress = (char*)::mmap((char*)0, size, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
-
+  // forcus 关闭 fd 后映射依然有效！mmap 创建的映射独立于文件描述符存在。
   result = ::close(fd);
   assert(result != OS_ERR, "could not close file");
 
@@ -1046,9 +1057,10 @@ static char* mmap_create_shared(size_t size) {
   backing_store_file_name = filename;
 
   // clear the shared memory region
-  (void)::memset((void*) mapAddress, 0, size);
+  (void)::memset((void*) mapAddress, 0, size); // 清零
 
   // it does not go through os api, the operation has to record from here
+  // forcus  NMT 内存追踪
   MemTracker::record_virtual_memory_reserve_and_commit((address)mapAddress, size, CURRENT_PC, mtInternal);
 
   return mapAddress;
@@ -1241,14 +1253,30 @@ static void mmap_attach_shared(const char* user, int vmid, PerfMemory::PerfMemor
 // data for the JVM. The memory may be created in standard or
 // shared memory.
 //
+// forcus 性能数据内存区域的创建逻辑 - 核心就是为 JVM性能监控数据分配内存
+/*
+ * 这里有两种内存模式:
+ *  - 共享内存 (create_shared_memory):
+ *      forcus 其他进程（如 jstat, jconsole, VisualVM）可以通过内存映射文件访问这块区域，实现零拷贝读取 JVM 性能数据
+ *  - 标准内存 (create_standard_memory): 普通堆内存，只有当前 JVM 进程可访问
+ */
 void PerfMemory::create_memory_region(size_t size) {
-
+  // forcus PerfDisableSharedMem开关,默认为false(也即是开启了共享内存的)
   if (PerfDisableSharedMem) {
     // do not share the memory for the performance data.
     _start = create_standard_memory(size);
   }
   else {
+      /*
+       * mmap(xxx)分配共享内存
+       * 这块内存存储 JVM 运行时指标（GC 次数、线程数、类加载数等），
+       * 是 jstat -gc <pid> 等监控命令能工作的基础。
+       * 共享内存方式下，监控工具直接 mmap 这块区域，无需 JVM 参与，开销极低。
+       *
+       * -- 会创建一个映射文件(在jvm退出时会自动删除,默认大小为32KB) - 默认的路径为:/tmp/hsperfdata_<username>/<pid>
+       */
     _start = create_shared_memory(size);
+    // forcus 降级,共享内存创建失败,那么降级为标准内存分配(一般是不会的)
     if (_start == NULL) {
 
       // creation of the shared memory region failed, attempt
@@ -1262,7 +1290,8 @@ void PerfMemory::create_memory_region(size_t size) {
     }
   }
 
-  if (_start != NULL) _capacity = size;
+  if (_start != NULL)
+      _capacity = size; //forcus 保存性能数据内存的大小 -> _capacity
 
 }
 
