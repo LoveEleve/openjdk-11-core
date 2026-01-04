@@ -200,7 +200,23 @@ static bool check_signals = true;
 // Signal number used to suspend/resume a thread
 
 // do not use any signal number less than SIGSEGV, see 4355769
+// forcus 用于挂起/恢复的信号编号，默认是 SIGUSR2（通常是12）
 static int SR_signum = SIGUSR2;
+// forcus 信号集(是一个位图-bitmap,用来表示一组信号)
+/*
+ * 1.数据结构
+ *   0 = 该信号不在信号集中
+ *   1 = 该信号在信号集中(比如SIGUSR2就在 == bitmap[12] = 1 )
+ *   0 1 2 3 4 .. 12 ... 64
+ *   0 0 0 0 0 .. 1 ... 0
+ * 2.信号集相关操作函数
+ *  - int sigemptyset(sigset_t *set); 清空信号集（所有位设为0）
+ *  - int sigfillset(sigset_t *set); 填满信号集（所有位设为1）
+ *  - int sigaddset(sigset_t *set, int signo); 添加一个信号到集合
+ *  - int sigdelset(sigset_t *set, int signo); 从集合中删除一个信号
+ *  - int sigismember(const sigset_t *set, int signo); 检查信号是否在集合中
+ *
+ */
 sigset_t SR_sigset;
 
 // utility functions
@@ -559,8 +575,21 @@ extern "C" void breakpoint() {
 // signal support
 
 debug_only(static bool signal_sets_initialized = false);
+// forcus 两个信号集
+/*
+ * unblocked_sigs：所有线程都需要解除阻塞的信号(不阻塞的信号,立即处理)
+ * vm_sigs：只有VM线程需要解除阻塞的信号(其他线程不会处理这个信号)
+ * 信号定义在 jvm_md.h中
+ */
 static sigset_t unblocked_sigs, vm_sigs;
-
+// forcus 初始化信号集
+/*
+ * 下面会涉及到信号阻塞的概念,什么是信号阻塞/不阻塞呢？
+ *  信号的三种状态: 信号产生 -> 信号投递(如果被阻塞,信号变为pending,等到解除阻塞后再投递) -> 信号处理
+ *   - 阻塞：信号暂时不投递，变成 pending，解除阻塞后会投递
+ *   - 忽略：信号被丢弃，不进行处理
+ *   - 处理：执行自定义 handler，立即响应
+ */
 void os::Linux::signal_sets_init() {
     // Should also have an assertion stating we are still single-threaded.
     assert(!signal_sets_initialized, "Already initialized");
@@ -577,16 +606,47 @@ void os::Linux::signal_sets_init() {
     // (See bug 4345157, and other related bugs).
     // In reality, though, unblocking these signals is really a nop, since
     // these signals are not blocked by default.
+    // forcus 初始化 unblocked_sigs（所有线程解除阻塞的信号）
+    // 这些信号必须解除阻塞，因为 JVM 依赖它们实现核心功能！
     sigemptyset(&unblocked_sigs);
-    sigaddset(&unblocked_sigs, SIGILL);
-    sigaddset(&unblocked_sigs, SIGSEGV);
-    sigaddset(&unblocked_sigs, SIGBUS);
-    sigaddset(&unblocked_sigs, SIGFPE);
+    sigaddset(&unblocked_sigs, SIGILL); // 4 非法指令 → 可能是 JIT 编译问题
+    /*
+     * forcus jvm GC 使用的是这种polling page的机制，而不是第二种 signal 机制
+     * 这里polling page的一般工作流程为:
+     *  GC需要STW的时候,将polling page 设置为不可读
+     *  然后线程在线程安全点(这里jvm会在某些地方插入安全点检查) test(polling page),发现不可读,
+     *  触发SIGSEGV - 执行对应的signal handler - 线程阻塞
+     *      优点:
+     *       - 线程在"安全"的位置停下（不会在操作对象引用的中间停下）
+     *       - 性能好（正常情况下只是一次内存读取）
+     *       - 可预测（只在特定位置检查）
+     *  ==
+     *  但是前面不是已经有了SR_signum机制来停止java线程吗？为什么这里还要有polling page机制呢？
+     *  这种信号能够让java线程在任何时候都停下来,主要的用途为
+     *   - Profiling（如 async-profiler）需要获取线程调用栈
+     *   - JVMTI 调试器需要暂停特定线程
+     *   - 某些无法到达 Safepoint 的场景
+     *
+     */
+    sigaddset(&unblocked_sigs, SIGSEGV); // forcus 11 段错误 -> 实现 NullPointerException / 实现 StackOverflowError / Safepoint polling
+    sigaddset(&unblocked_sigs, SIGBUS); // 7 总线错误 → 内存对齐问题
+    sigaddset(&unblocked_sigs, SIGFPE); // 8 浮点异常 → ArithmeticException
 #if defined(PPC64)
     sigaddset(&unblocked_sigs, SIGTRAP);
 #endif
-    sigaddset(&unblocked_sigs, SR_signum);
+    sigaddset(&unblocked_sigs, SR_signum); // 12 SIGUSR2 → 线程挂起/恢复
+    // forcus 添加 Shutdown 信号（可选）
+    /*
+     * Runtime.getRuntime().addShutdownHook(new Thread(() -> {        │   │
+│  │      System.out.println("JVM 正在关闭，执行清理工作...");         │   │
+│  │      // 关闭数据库连接、保存状态等                                │   │
+│  │  }));
 
+        │  │  当收到 SIGTERM/SIGINT/SIGHUP 时：                               │   │
+│  │    1. JVM 捕获信号                                              │   │
+│  │    2. 执行所有注册的 Shutdown Hook                               │   │
+│  │    3. 优雅退出
+     */
     if (!ReduceSignalUsage) {
         if (!os::Posix::is_sig_ignored(SHUTDOWN1_SIGNAL)) {
             sigaddset(&unblocked_sigs, SHUTDOWN1_SIGNAL);
@@ -599,9 +659,16 @@ void os::Linux::signal_sets_init() {
         }
     }
     // Fill in signals that are blocked by all but the VM thread.
+    // forcus 初始化 vm_sigs（只有 VMThread 解除阻塞的信号）
+    /*
+     * SIGQUIT 的作用 -- Thread Dump
+     * 当执行 kill -3 <pid> 或按 Ctrl+\ 时，JVM 会打印所有线程的堆栈信息：
+     * 而 Thread Dump 需要暂停所有线程,为了保证安全性,在这里选择让VMThread来做这个事情
+     * 「所有的VM请求都由VMThread来完成」
+     */
     sigemptyset(&vm_sigs);
     if (!ReduceSignalUsage) {
-        sigaddset(&vm_sigs, BREAK_SIGNAL);
+        sigaddset(&vm_sigs, BREAK_SIGNAL); // BREAK_SIGNAL = SIGQUIT (信号 3)
     }
     debug_only(signal_sets_initialized = true);
 
@@ -4781,11 +4848,12 @@ static void suspend_save_context(OSThread *osthread, siginfo_t *siginfo,
 //
 // Currently only ever called on the VMThread and JavaThreads (PC sampling)
 //
+// forcus 信号处理函数
 static void SR_handler(int sig, siginfo_t *siginfo, ucontext_t *context) {
     // Save and restore errno to avoid confusing native code with EINTR
     // after sigsuspend.
-    int old_errno = errno;
-
+    int old_errno = errno; //  errno 是全局错误码，信号处理器可能会修改它,为了不影响被中断的代码，先保存，最后恢复
+    // 信号处理器运行在被中断线程的上下文中, 所以 current 就是被中断的那个线程
     Thread *thread = Thread::current_or_null_safe();
     assert(thread != NULL, "Missing current thread in SR_handler");
 
@@ -4794,36 +4862,44 @@ static void SR_handler(int sig, siginfo_t *siginfo, ucontext_t *context) {
     // has not already terminated (via SR_lock()) - else the following assertion
     // will fail because the thread is no longer a JavaThread as the ~JavaThread
     // destructor has completed.
-
     if (thread->SR_lock() == NULL) {
         return;
     }
-
     assert(thread->is_VM_thread() || thread->is_Java_thread(), "Must be VMThread or JavaThread");
-
     OSThread *osthread = thread->osthread();
-
     os::SuspendResume::State current = osthread->sr.state();
+    // 只有状态是"请求挂起"时才真正挂起,防止信号重复处理或者请求被取消的情况
     if (current == os::SuspendResume::SR_SUSPEND_REQUEST) {
+        // forcus 把 ucontext_t（CPU寄存器状态）保存到 osthread，这样 GC/Profiler 可以获取线程的调用栈
         suspend_save_context(osthread, siginfo, context);
 
         // attempt to switch the state, we assume we had a SUSPEND_REQUEST
+        // 设置状态为 SUSPENDED
         os::SuspendResume::State state = osthread->sr.suspended();
         if (state == os::SuspendResume::SR_SUSPENDED) {
+            // forcus 准备等待
+            // 创建一个信号集，包含当前阻塞的所有信号
+            // 但是把 SR_signum 从中删除（允许接收恢复信号）
             sigset_t suspend_set;  // signals for sigsuspend()
             sigemptyset(&suspend_set);
             // get current set of blocked signals and unblock resume signal
             pthread_sigmask(SIG_BLOCK, NULL, &suspend_set);
             sigdelset(&suspend_set, SR_signum);
-
-            sr_semaphore.signal();
+            // forcus 通知请求方并等待
+            sr_semaphore.signal(); // // 告诉请求方：我已经挂起了
             // wait here until we are resumed
             while (1) {
-                sigsuspend(&suspend_set);
+                /*
+                 * pause() 会等待任意信号，可能被其他信号唤醒
+                 * sigsuspend 可以精确控制只等待 SR_signum信号
+                 * 而且是原子操作，没有竞态条件
+                 */
+                sigsuspend(&suspend_set); // forcus 在这里阻塞等待！
 
                 os::SuspendResume::State result = osthread->sr.running();
+                // 收到信号后检查是否可以恢复
                 if (result == os::SuspendResume::SR_RUNNING) {
-                    sr_semaphore.signal();
+                    sr_semaphore.signal(); // 告诉请求方：我恢复了
                     break;
                 }
             }
@@ -4833,7 +4909,7 @@ static void SR_handler(int sig, siginfo_t *siginfo, ucontext_t *context) {
         } else {
             ShouldNotReachHere();
         }
-
+        // 清理上下文并恢复 errno
         resume_clear_context(osthread);
     } else if (current == os::SuspendResume::SR_RUNNING) {
         // request was cancelled, continue
@@ -4845,17 +4921,66 @@ static void SR_handler(int sig, siginfo_t *siginfo, ucontext_t *context) {
 
     errno = old_errno;
 }
-
+// forcus
+/*
+ *  linux信号基础知识
+ *   - 1. linux常见的信号
+ *    - SIGHUP / SIGINT / SIGKILL / ... / SIGUSR2(用户自定义,jvm使用的是这个)
+ *    - 要解决的问题：java线程正在执行代码，如何让他们立即停下来？-- 就是使用信号机制
+ *      - GC线程(VMThread) -> pthread_kill(SIGUSR2) -> java线程 -> 执行信号处理函数(sg_handle)
+ */
 static int SR_initialize() {
+    // forcus 信号处理相关数据结构
+    /*
+     * struct sigaction {
+            // 信号处理函数（二选一）
+            void (*sa_handler)(int);                              // 简单形式：只接收信号编号
+            void (*sa_sigaction)(int, siginfo_t*, void*);         // forcus 扩展形式：接收详细信息(需要SA_SIGINFO标志,jvm使用的是这种)
+               {
+                void my_handler(int sig, siginfo_t *info, void *ctx)
+                    - sig: 信号编号
+                    - info: 信号的详细信息
+                    - ctx: ucontext_t* // forcus 被中断时的CPU完整状态
+                    {
+                        有了这个信息,jvm可以干什么?
+                            - 知道线程执行到哪条指令了（RIP）
+                            - 遍历调用栈，获取完整的方法调用链（RBP + RSP）
+                            - 检查线程是否在安全点（Safepoint）
+                            - Profiler 工具获取线程快照
+                    }
+               }
+            sigset_t sa_mask;    // 处理该信号期间，额外阻塞哪些信号
+            int sa_flags;        // 标志位，控制信号处理行为
+                {
+                    SA_SIGINFO：使用三参数形式的处理函数，可以获取 siginfo_t 和 ucontext_t forcus
+                    SA_RESTART：被信号中断的系统调用自动重启 forcus
+                        {
+                            Thread-1: executing read()
+                              interrupted by signal -> executing signal handler
+                            Thread-1: executing read() forcus 自动重新调用read()
+                        }
+                    SA_NODEFER：处理信号时不自动阻塞该信号
+                    SA_RESETHAND：处理完后恢复为默认处理方式
+                }
+        };
+     */
     struct sigaction act;
     char *s;
 
     // Get signal number to use for suspend/resume
+    // forcus 允许通过环境变量自定义(但是一般都不会)
+    /*
+     * 在这里信号编号必须大于 SIGSEGV(11) 和 SIGBUS(7)
+     *  - 因为 JVM 内部使用 SIGSEGV 实现：
+     *      - NullPointerException - 访问地址 0 触发 SIGSEGV
+     *      - StackOverflowError - 访问栈保护页触发 SIGSEGV
+     *      - Safepoint polling - 访问受保护页触发 SIGSEGV
+     */
     if ((s = ::getenv("_JAVA_SR_SIGNUM")) != 0) {
         int sig = ::strtol(s, 0, 10);
         if (sig > MAX2(SIGSEGV, SIGBUS) &&  // See 4355769.
             sig < NSIG) {                   // Must be legal signal and fit into sigflags[].
-            SR_signum = sig;
+            SR_signum = sig; // forcus 如果有,那么会赋值给 SR_signum 全局变量
         } else {
             warning("You set _JAVA_SR_SIGNUM=%d. It must be in range [%d, %d]. Using %d instead.",
                     sig, MAX2(SIGSEGV, SIGBUS) + 1, NSIG - 1, SR_signum);
@@ -4865,10 +4990,16 @@ static int SR_initialize() {
     assert(SR_signum > SIGSEGV && SR_signum > SIGBUS,
            "SR_signum must be greater than max(SIGSEGV, SIGBUS), see 4355769");
 
-    sigemptyset(&SR_sigset);
-    sigaddset(&SR_sigset, SR_signum);
+    sigemptyset(&SR_sigset); // forcus 清空信号集
+    sigaddset(&SR_sigset, SR_signum); // forcus 添加信号到信号集(此时SR_sigset中只有SR_signum信号)
 
     // Set up signal handler for suspend/resume
+    // forcus 信号处理器配置
+    /*
+     * - SA_RESTART:被信号中断的系统调用自动重启
+     * - SA_SIGINFO:使用三参数形式的信号处理器，可获取 siginfo_t 和 ucontext_t
+     *  - ucontext_t 包含了线程被中断时的完整 CPU 寄存器状态（PC、SP、通用寄存器等）,这对于获取线程调用栈/SafePoint检查/异常处理都十分重要
+     */
     act.sa_flags = SA_RESTART | SA_SIGINFO;
     act.sa_handler = (void (*)(int)) SR_handler;
 
@@ -4877,8 +5008,30 @@ static int SR_initialize() {
     // supported Linux platforms). Note that LinuxThreads need to block
     // this signal for all threads to work properly. So we don't have
     // to use hard-coded signal number when setting up the mask.
-    pthread_sigmask(SIG_BLOCK, NULL, &act.sa_mask);
+    /*
+     * 基础知识：pthread_sigmask() & sigaction()
+     *  - pthread_sigmask(): 设置信号掩码
+     *  {
+            pthread_sigmask 信号掩码
+            每个线程都有一个信号掩码（signal mask），决定哪些信号被阻塞。
+            阻塞 ≠ 忽略：
+          - 阻塞：信号被暂时挂起，解除阻塞后会被处理
+          - 忽略：信号被丢弃，永远不会处理
+            pthread_sigmask(int how, const sigset_t *set, sigset_t *oldset);
+             - how: SIG_BLOCK/SIG_UNBLOCK/SIG_SETMASK
+             - set: 信号集,要操作的信号集，如果是 NULL 则不修改
+             - oldset: 旧信号集,	保存之前的信号掩码，如果是 NULL 则不保存
+         }
 
+         - int sigaction(int signum, const struct sigaction *act, struct sigaction *oldact);
+             - signum: 要处理的信号编号
+             - act: 新的信号处理配置
+             - oldact: 	保存旧的配置（可以传 NULL）
+            forcus 通常用来更换linux内核内置的默认信号处理器,换成我们自己的,之后的线程收到SIGUSR2，都会执行 SR_handler
+     */
+    // 把当前线程的信号掩码复制到 act.sa_mask
+    pthread_sigmask(SIG_BLOCK, NULL, &act.sa_mask);
+    // forcus 注册信号处理器 == "当任何线程收到 SIGUSR2 信号时，执行 SR_handler 函数"
     if (sigaction(SR_signum, &act, 0) == -1) {
         return -1;
     }
@@ -4998,7 +5151,7 @@ extern "C" JNIEXPORT int JVM_handle_linux_signal(int signo,
                                                  siginfo_t *siginfo,
                                                  void *ucontext,
                                                  int abort_if_unrecognized);
-
+// forcus jvm统一的信号处理函数
 static void signalHandler(int sig, siginfo_t *info, void *uc) {
     assert(info != NULL && uc != NULL, "it must be old kernel");
     int orig_errno = errno;  // Preserve errno value over signal handler.
@@ -5105,18 +5258,49 @@ void os::Linux::set_our_sigflags(int sig, int flags) {
         sigflags[sig] = flags;
     }
 }
-
+// forcus 设置信号处理器
 void os::Linux::set_signal_handler(int sig, bool set_installed) {
     // Check for overwrite.
     struct sigaction oldAct;
+    /*
+     * 该函数一般有3种调用方式:
+     *  - sigaction(SIGSEGV, NULL, &oldact); 只获取当前处理器，不修改
+     *  - sigaction(SIGSEGV, &newact, NULL); 只设置新处理器，不获取旧处理器
+     *  - sigaction(SIGSEGV, &newact, &oldact); 设置新处理器，同时保存旧处理器
+     */
+    /*
+     * {
+     *  sigaction
+     *      内核会填充这个结构体
+            - typedef struct {
+                    int      si_signo;    // 信号编号
+                    int      si_code;     // 信号产生的原因
+                    void    *si_addr;     // forcus 导致错误的内存地址
+                    pid_t    si_pid;      // 发送信号的进程 ID
+                    // ... 更多字段
+                } siginfo_t;
+            - sa_mask 信号掩码
+            {
+                sigfillset(&(sigAct.sa_mask));  // 将所有信号加入掩码
+                作用：在执行信号处理器期间，阻塞掩码中的所有信号。
+                意思是：当我在处理某个信号时，其他所有信号都要排队等待
+            }
+     * }
+     */
+    // 获取当前处理器，不修改 / 执行后，oldAct 中包含当前 SIGSEGV 的处理器信息
     sigaction(sig, (struct sigaction *) NULL, &oldAct);
-
+    /*
+     * 检查已存在的处理器,最终 oldhand 指向当前的处理器函数(也就是handle())
+     */
     void *oldhand = oldAct.sa_sigaction
                     ? CAST_FROM_FN_PTR(void*, oldAct.sa_sigaction)
                     : CAST_FROM_FN_PTR(void*, oldAct.sa_handler);
-    if (oldhand != CAST_FROM_FN_PTR(void*, SIG_DFL) &&
-        oldhand != CAST_FROM_FN_PTR(void*, SIG_IGN) &&
-        oldhand != CAST_FROM_FN_PTR(void*, (sa_sigaction_t) signalHandler)) {
+    // 检查当前处理器是否是"第三方"的,如果是第三方的则需要额外的处理
+    if (oldhand != CAST_FROM_FN_PTR(void*, SIG_DFL) // 默认处理器(进程刚启动的状态,可以安全覆盖)
+        &&
+        oldhand != CAST_FROM_FN_PTR(void*, SIG_IGN) // 某人设置了忽略这个信号,可以安全覆盖
+        &&
+        oldhand != CAST_FROM_FN_PTR(void*, (sa_sigaction_t) signalHandler)) { // JVM 自己的处理器，JVM 之前已经安装过了
         if (AllowUserSignalHandlers || !set_installed) {
             // Do not overwrite; user takes responsibility to forward to us.
             return;
@@ -5130,20 +5314,20 @@ void os::Linux::set_signal_handler(int sig, bool set_installed) {
                   "%#lx for signal %d.", (long) oldhand, sig);
         }
     }
-
-    struct sigaction sigAct;
-    sigfillset(&(sigAct.sa_mask));
-    sigAct.sa_handler = SIG_DFL;
-    if (!set_installed) {
+    // forcus 配置新的sigaction
+    struct sigaction sigAct; // 创建一个新的 sigaction 结构体
+    sigfillset(&(sigAct.sa_mask)); // 设置信号掩码：处理信号时阻塞所有其他信号
+    sigAct.sa_handler = SIG_DFL; // 先设为默认（这行其实会被后面覆盖）
+    if (!set_installed) { // set_installed = true: 安装 JVM 的信号处理器
         sigAct.sa_flags = SA_SIGINFO | SA_RESTART;
     } else {
-        sigAct.sa_sigaction = signalHandler;
-        sigAct.sa_flags = SA_SIGINFO | SA_RESTART;
+        sigAct.sa_sigaction = signalHandler; // forcus 设置 JVM 的统一信号处理函数
+        sigAct.sa_flags = SA_SIGINFO | SA_RESTART; // 使用高级处理器（能获取 siginfo_t 和 ucontext & 被中断的系统调用自动重启
     }
     // Save flags, which are set by ours
     assert(sig > 0 && sig < NSIG, "vm signal out of expected range");
     sigflags[sig] = sigAct.sa_flags;
-
+    // forcus 真正的安装信号处理器
     int ret = sigaction(sig, &sigAct, &oldAct);
     assert(ret == 0, "check");
 
@@ -5155,18 +5339,30 @@ void os::Linux::set_signal_handler(int sig, bool set_installed) {
 
 // install signal handlers for signals that HotSpot needs to
 // handle in order to support Java-level exception handling.
-
+// forcus 统一安装所有 JVM 需要的信号处理器
 void os::Linux::install_signal_handlers() {
+    // forcus signal_handlers_are_installed:全局变量,保证只会安装一次handler
     if (!signal_handlers_are_installed) {
         signal_handlers_are_installed = true;
 
         // signal-chaining
+        // forcus 信号链机制
+        /*
+         * 场景: JNI 代码（如 C/C++ 库）可能也需要安装自己的信号处理器。如果 JVM 直接覆盖，会导致第三方库的信号处理失效。
+         * 解决方案:libjsig.so 库实现了信号链机制：
+         *  大致工作流程:
+         *   信号发生 -> JVM 的 signalHandler() 先处理（如果jvm处理不了的话） -> 第三方库的信号处理器
+         */
         typedef void (*signal_setting_t)();
         signal_setting_t begin_signal_setting = NULL;
         signal_setting_t end_signal_setting = NULL;
+        // forcus 再jsig.c文件中
+        // forcus dlsym() 在所有已加载的共享库中，查找名为"JVM_begin_signal_setting" 的函数
+        // forcus "JVM_begin_signal_setting" ：告诉 libjsig："接下来的 sigaction() 调用是 JVM 的，请真正安装到内核，而不是加入链中"
         begin_signal_setting = CAST_TO_FN_PTR(signal_setting_t,
                                               dlsym(RTLD_DEFAULT, "JVM_begin_signal_setting"));
         if (begin_signal_setting != NULL) {
+            // forcus end_signal_setting() 的作用：告诉 libjsig："JVM 安装完毕，之后其他库的 sigaction(),调用应该加入链中，不要覆盖 JVM 的处理器"
             end_signal_setting = CAST_TO_FN_PTR(signal_setting_t,
                                                 dlsym(RTLD_DEFAULT, "JVM_end_signal_setting"));
             get_signal_action = CAST_TO_FN_PTR(get_signal_t,
@@ -5174,24 +5370,62 @@ void os::Linux::install_signal_handlers() {
             libjsig_is_loaded = true;
             assert(UseSignalChaining, "should enable signal-chaining");
         }
+        /*
+         * libjsig.so 拦截（intercept）了 sigaction() 系统调用
+         *  当任何代码调用 sigaction() 时：
+         *      - libjsig 记录下这个处理器
+         *      - 不真正安装到内核，而是加入"链"中
+         *      - 只有 JVM 的处理器真正安装到内核
+         *  当信号发生时：
+         *      - 内核调用 JVM 的处理器
+         *      - JVM 处理器检查是否能处理
+         *      - 不能处理 → 查询 libjsig 获取链上的下一个处理器
+         *      - 调用链上的下一个处理器
+         */
         if (libjsig_is_loaded) {
             // Tell libjsig jvm is setting signal handlers
-            (*begin_signal_setting)();
+            (*begin_signal_setting)(); // forcus "JVM_begin_signal_setting"
         }
-
+        // forcus set_signal_handler() 安装各个信号处理器
+        /*
+         *  forcus SIGSEGV
+         *   - null访问 - NullPointerException
+         *   - 栈保护页 - StackOverflowError
+         *   - Safepoint polling page  - GC 暂停
+         */
         set_signal_handler(SIGSEGV, true);
+        /*
+         *  forcus SIGPIPE
+         *   - 写入已关闭的管道/socket : 忽略，让 write() 返回错误而不是杀死进程
+         */
         set_signal_handler(SIGPIPE, true);
+        /*
+         * forcus SIGBUS
+         *  - 内存对齐错误、mmap 文件被截断 : MappedByteBuffer 相关异常处理
+         */
         set_signal_handler(SIGBUS, true);
+        /*
+         * forcus SIGILL/SIGFPE
+         *  - 执行非法 CPU 指令 : 	硬件异常处理
+         */
         set_signal_handler(SIGILL, true);
+        /*
+         * forcus SIGFPE
+         *  - 算术错误（整数除零）: 10 / 0 → ArithmeticException
+         */
         set_signal_handler(SIGFPE, true);
 #if defined(PPC64)
         set_signal_handler(SIGTRAP, true);
 #endif
+        /*
+         * forcus SIGXFSZ
+         *  - 	文件大小超过 ulimit : 忽略，让 write() 返回错误
+         */
         set_signal_handler(SIGXFSZ, true);
 
         if (libjsig_is_loaded) {
             // Tell libjsig jvm finishes setting signal handlers
-            (*end_signal_setting)();
+            (*end_signal_setting)(); // forcus "JVM_end_signal_setting"
         }
 
         // We don't activate signal checker if libjsig is in place, we trust ourselves
@@ -5574,23 +5808,27 @@ jint os::init_2(void) {
      * posix通用初始化,跳转不过去,方法在os_posix.cpp中实现,但是不重要,因为该方法只是打印了一些日志
      */
     os::Posix::init_2();
-
+    // forcus 时钟相关
     Linux::fast_thread_clock_init();
 
     // initialize suspend/resume support - must do this before signal_sets_init()
+    // forcus 初始化suspend/resume支持(很重要,涉及到了STW,Profiling(获取调用栈)，信号处理)
     if (SR_initialize() != 0) {
         perror("SR_initialize failed");
         return JNI_ERR;
     }
-
+    // forcus 初始化两个信号集，用于控制 JVM 中各线程的信号处理行为
     Linux::signal_sets_init();
+    // forcus 统一安装所有jvm需要的信号处理器
     Linux::install_signal_handlers();
     // Initialize data for jdk.internal.misc.Signal
+    // forcus not 为 Java 的 sun.misc.Signal / jdk.internal.misc.Signal API 提供底层支持
     if (!ReduceSignalUsage) {
         jdk_misc_signal_init();
     }
 
     // Check and sets minimum stack sizes against command line options
+    // forcus 栈大小配置 + Guard Zone
     if (Posix::set_minimum_stack_sizes() == JNI_ERR) {
         return JNI_ERR;
     }
@@ -5606,12 +5844,12 @@ jint os::init_2(void) {
         Linux::capture_initial_stack(JavaThread::stack_size_at_create());
     }
 #endif
-
+    // 打印libc和libpthread的版本信息
     Linux::libpthread_init();
     Linux::sched_getcpu_init();
     log_info(os)("HotSpot is running with %s, %s",
                  Linux::libc_version(), Linux::libpthread_version());
-
+    // NUMA相关,暂时不关心
     if (UseNUMA) {
         if (!Linux::libnuma_init()) {
             UseNUMA = false;
@@ -5640,7 +5878,7 @@ jint os::init_2(void) {
             UseNUMA = true;
         }
     }
-
+    // forcus 文件描述符上限
     if (MaxFDLimit) {
         // set the number of file descriptors to max. print out error
         // if getrlimit/setrlimit fails but continue regardless.
@@ -5680,8 +5918,9 @@ jint os::init_2(void) {
     }
 
     // initialize thread priority policy
+    // 线程优先级相关
     prio_init();
-
+    // forcus Core Dump 包含哪些内存映射
     if (!FLAG_IS_DEFAULT(AllocateHeapAt)) {
         set_coredump_filter(DAX_SHARED_BIT);
     }

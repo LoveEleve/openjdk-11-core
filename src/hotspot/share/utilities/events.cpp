@@ -63,11 +63,11 @@ void Events::print() {
 }
 
 void Events::init() {
-  if (LogEvents) {
-    _messages = new StringEventLog("Events");
-    _exceptions = new ExtendedStringEventLog("Internal exceptions");
-    _redefinitions = new StringEventLog("Classes redefined");
-    _deopt_messages = new StringEventLog("Deoptimization events");
+  if (LogEvents) { // 默认为true
+    _messages = new StringEventLog("Events"); // forcus 记录各种jvm内部操作
+    _exceptions = new ExtendedStringEventLog("Internal exceptions"); // forcus 记录jvm内部抛出的异常(非java异常)
+    _redefinitions = new StringEventLog("Classes redefined"); // forcus 记录热替换 / JVMTI类重定义事件
+    _deopt_messages = new StringEventLog("Deoptimization events"); // forcus 记录JIT编译逆优化事件
   }
 }
 

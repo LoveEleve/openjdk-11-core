@@ -264,6 +264,7 @@ enum {
   trap_page_fault = 0xE
 };
 
+// forcus jvm的统一信号处理函数 - 十分重要(当然也很复杂)
 extern "C" JNIEXPORT int
 JVM_handle_linux_signal(int sig,
                         siginfo_t* info,

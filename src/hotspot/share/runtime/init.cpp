@@ -88,12 +88,12 @@ void perfMemory_exit();
 void ostream_exit();
 
 void vm_init_globals() {
-  check_ThreadShadow();
-  basic_types_init();
-  eventlog_init();
-  mutex_init();
-  chunkpool_init();
-  perfMemory_init();
+  check_ThreadShadow();// 忽略
+  basic_types_init(); // forcus 类型大小设置(比如开启了指针压缩,那么对象引用就用4字节来表示)
+  eventlog_init(); // forcus 事件初始化
+  mutex_init(); // forcus 初始化互斥锁(jvm运行时所需的60+全局锁)
+  chunkpool_init(); // forcus 初始化chunk池(和netty很类似)
+  perfMemory_init(); // forcus 性能数据初始化
   SuspendibleThreadSet_init();
 }
 

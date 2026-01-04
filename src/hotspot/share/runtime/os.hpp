@@ -104,7 +104,7 @@ class os: AllStatic {
 
  private:
   static OSThread*          _starting_thread;
-  static address            _polling_page;
+  static address            _polling_page; // forcus jvm polling page
   static volatile int32_t * _mem_serialize_page;
   static uintptr_t          _serialize_page_mask;
  public:

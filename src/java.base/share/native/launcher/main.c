@@ -91,60 +91,44 @@ WinMain(HINSTANCE inst, HINSTANCE previnst, LPSTR cmdline, int cmdshow)
     const jboolean const_javaw = JNI_TRUE;
 
     __initenv = _environ;
+
 #else /* JAVAW */
-/*
-    这个是 main()的传参:
-    以 java -cp /data/workspace/demo/src com.wjcoder.Main -Xint 为例
-        - argc:参数的个数 - 5
-        - argv:参数数组 
-            {
-                0 - java
-                1 - -cp
-                2 - /data/workspace/demo/src
-                3 - com.wjcoder.Main
-                4 - -Xint
-            }    
-*/
 JNIEXPORT int
-main(int argc, char **argv) {
-    int margc; // 主参数个数
-    char **margv; // 主参数数组
-    int jargc; // Java虚拟机参数个数
-    char **jargv; // Java虚拟机参数数组
-    const jboolean const_javaw = JNI_FALSE; // linux下默认为false
+main(int argc, char **argv)
+{
+    int margc;
+    char** margv;
+    int jargc;
+    char** jargv;
+    const jboolean const_javaw = JNI_FALSE;
 #endif /* JAVAW */
     {
         int i, main_jargc, extra_jargc;
         JLI_List list;
-        /*
-            const_jargs:编译时定义的java参数(java命令通常为空)
-            const_extra_jargs:额外的Java参数
-            对于Java-Launcher来说,这里可以跳过
-        */
+
         main_jargc = (sizeof(const_jargs) / sizeof(char *)) > 1
-                     ? sizeof(const_jargs) / sizeof(char *)
-                     : 0; // ignore the null terminator index
+            ? sizeof(const_jargs) / sizeof(char *)
+            : 0; // ignore the null terminator index
 
         extra_jargc = (sizeof(const_extra_jargs) / sizeof(char *)) > 1
-                      ? sizeof(const_extra_jargs) / sizeof(char *)
-                      : 0; // ignore the null terminator index
-        // skip
-        if (main_jargc > 0 && extra_jargc > 0) { // combine extra java args
+            ? sizeof(const_extra_jargs) / sizeof(char *)
+            : 0; // ignore the null terminator index
+
+        if (main_jargc > 0 && extra_jargc > 0) { // combine extra and main
             jargc = main_jargc + extra_jargc;
             list = JLI_List_new(jargc + 1);
 
-            for (i = 0; i < extra_jargc; i++) {
+            for (i = 0 ; i < extra_jargc; i++) {
                 JLI_List_add(list, JLI_StringDup(const_extra_jargs[i]));
             }
 
-            for (i = 0; i < main_jargc; i++) {
+            for (i = 0 ; i < main_jargc ; i++) {
                 JLI_List_add(list, JLI_StringDup(const_jargs[i]));
             }
 
-            // terminate the list
             JLI_List_add(list, NULL);
             jargv = list->elements;
-        } else if (extra_jargc > 0) { // should never happen
+        } else if (extra_jargc > 0) { // should not happen
             fprintf(stderr, "EXTRA_JAVA_ARGS defined without JAVA_ARGS");
             abort();
         } else { // no extra args, business as usual
@@ -152,6 +136,7 @@ main(int argc, char **argv) {
             jargv = (char **) const_jargs;
         }
     }
+
     JLI_InitArgProcessing(jargc > 0, const_disable_argfile);
 
 #ifdef _WIN32
@@ -179,14 +164,12 @@ main(int argc, char **argv) {
 #else /* *NIXES */
     {
         // accommodate the NULL at the end
-        // 构建参数列表
         JLI_List args = JLI_List_new(argc + 1);
         int i = 0;
+
         // Add first arg, which is the app name
-        // 添加程序名称
         JLI_List_add(args, JLI_StringDup(argv[0]));
         // Append JDK_JAVA_OPTIONS
-        // 处理 JDK_JAVA_OPTIONS 环境变量
         if (JLI_AddArgsFromEnvVar(args, JDK_JAVA_OPTIONS)) {
             // JLI_SetTraceLauncher is not called yet
             // Show _JAVA_OPTIONS content along with JDK_JAVA_OPTIONS to aid diagnosis
@@ -197,7 +180,6 @@ main(int argc, char **argv) {
                 }
             }
         }
-        // 遍历剩余命令行参数
         // Iterate the rest of command line
         for (i = 1; i < argc; i++) {
             JLI_List argsInFile = JLI_PreprocessArg(argv[i], JNI_TRUE);
@@ -215,31 +197,18 @@ main(int argc, char **argv) {
             }
         }
         margc = args->size;
-        // add the NULL pointer at argv[argc]
+        // add the NULL pointer at the end
         JLI_List_add(args, NULL);
         margv = args->elements;
     }
 #endif /* WIN32 */
-    /*
-        java -Xint -cp /data/workspace/demo/src com.wjcoder.Main 为例
-        margc : 5
-        margv: {
-            0 - java
-            1 - -cp
-            2 - /data/workspace/demo/src
-            3 - com.wjcoder.Main
-            4 - -Xint
-        }
-    */
-    return JLI_Launch(margc,  margv,  // 主参数(包含程序名,环境变量,用户参数)
-                      jargc,(const char **) jargv, // Java虚拟机参数（编译时定义）
-                      0, NULL, // 应用类路径参数（这里为空）
-                      VERSION_STRING, // JDK版本信息
-                      DOT_VERSION,  // 点分版本号
-                      (const_progname != NULL) ? const_progname : *margv, // 程序名称 java
-                      (const_launcher != NULL) ? const_launcher : *margv, // 启动器名称 openjdk
-                      jargc > 0, // 是否有预定义Java参数
-                      const_cpwildcard, // 是否支持类路径通配符
-                      const_javaw, // Linux下不是javaw
-                      0); // 保留参数
+    return JLI_Launch(margc, margv,
+                   jargc, (const char**) jargv,
+                   0, NULL,
+                   VERSION_STRING,
+                   DOT_VERSION,
+                   (const_progname != NULL) ? const_progname : *margv,
+                   (const_launcher != NULL) ? const_launcher : *margv,
+                   jargc > 0,
+                   const_cpwildcard, const_javaw, 0);
 }

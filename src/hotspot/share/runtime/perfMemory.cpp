@@ -57,9 +57,9 @@ bool                     PerfMemory::_destroyed = false;
 
 void perfMemory_init() {
 
-  if (!UsePerfData) return;
+  if (!UsePerfData) return; // 默认都会开启
 
-  PerfMemory::initialize();
+  PerfMemory::initialize(); // forcus
 }
 
 void perfMemory_exit() {
@@ -88,14 +88,16 @@ void perfMemory_exit() {
 }
 
 void PerfMemory::initialize() {
-
+  // 只能被初始化一次
   if (is_initialized())
     // initialization already performed
     return;
-
+  // forcus 获取性能数据内存区大小,默认是32KB
   size_t capacity = align_up(PerfDataMemorySize,
                              os::vm_allocation_granularity());
-
+  /*
+   * 打印日志
+   */
   log_debug(perf, memops)("PerfDataMemorySize = " SIZE_FORMAT ","
                           " os::vm_allocation_granularity = %d,"
                           " adjusted size = " SIZE_FORMAT,

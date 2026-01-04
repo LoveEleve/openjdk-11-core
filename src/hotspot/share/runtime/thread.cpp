@@ -3838,32 +3838,44 @@ jint Threads::create_vm(JavaVMInitArgs *args, bool *canTryAgain) {
         initialize_assert_poison();
     }
 #endif // CAN_SHOW_REGISTERS_ON_ASSERT
-
+    // forcus 分配polling page(openjdk11和openjdk8不太一样)
     SafepointMechanism::initialize();
-
+    // 针对numa场景的参数微调,可以跳过
     jint adjust_after_os_result = Arguments::adjust_after_os();
     if (adjust_after_os_result != JNI_OK) return adjust_after_os_result;
 
     // Initialize output stream logging
+    // 初始化 JVM 的日志文件输出 (-XX:DumpLoadedClassList=classes.txt - 运行应用，记录加载的类 )
     ostream_init_log();
 
     // Convert -Xrun to -agentlib: if there is no JVM_OnLoad
     // Must be before create_vm_init_agents()
+    // forcus Agent相关(版本兼容 - 可以不关注)
     if (Arguments::init_libraries_at_startup()) {
         convert_vm_init_libraries_to_agents();
     }
 
     // Launch -agentlib/-agentpath and converted -Xrun agents
+    // forcus Agent相关
+    /*
+     * Arguments::init_agents_at_startup(): 判断_agentList属性是否为空,
+     * 而_agentList属性是在JVM启动时的参数解析阶段赋值的
+     * 比如：这些参数会向 _agentList 添加 AgentLibrary
+     *  java -agentlib:jdwp=transport=dt_socket,server=y ...
+        java -agentpath:/path/to/libasyncProfiler.so=start ...
+     */
     if (Arguments::init_agents_at_startup()) {
+        // forcus-1 暂时还不了解Agent是什么,后续了解过后再来补充
         create_vm_init_agents();
     }
 
     // Initialize Threads state
-    _thread_list = NULL;
-    _number_of_threads = 0;
+    _thread_list = NULL; // forcus 线程链表
+    _number_of_threads = 0; // 线程数
     _number_of_non_daemon_threads = 0;
 
     // Initialize global data structures and create system classes in heap
+    // forcus 初始化 "全局数据结构"
     vm_init_globals();
 
 #if INCLUDE_JVMCI

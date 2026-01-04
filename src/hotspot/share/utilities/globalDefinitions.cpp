@@ -157,6 +157,7 @@ void basic_types_init() {
 
   // Set the size of basic types here (after argument parsing but before
   // stub generation).
+  // forcus 如果开启了指针压缩,那么对象引用大小为4字节
   if (UseCompressedOops) {
     // Size info for oops within java objects is fixed
     heapOopSize        = jintSize;

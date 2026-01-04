@@ -498,3 +498,653 @@
 67^done
 (gdb) 
 68^exit
+=cmd-param-changed,param="logging enabled",value="on"
+=cmd-param-changed,param="breakpoint pending",value="on"
+=cmd-param-changed,param="print pretty",value="on"
+(gdb) 
+1^done
+(gdb) 
+2^done
+(gdb) 
+3^done
+(gdb) 
+4^done
+(gdb) 
+5^done
+(gdb) 
+6^done
+(gdb) 
+7^done
+(gdb) 
+8^done
+(gdb) 
+9^done
+(gdb) 
+10^done,value="off"
+(gdb) 
+&"handle SIGSTOP stop nopass\n"
+~"Signal        Stop\tPrint\tPass to program\tDescription\n"
+~"SIGSTOP       Yes\tYes\tNo\t\tStopped (signal)\n"
+11^done
+(gdb) 
+&"python import gdb; print(gdb.VERSION);\n"
+~"14.1\n"
+12^done
+(gdb) 
+&"info pretty-printer\n"
+~"global pretty-printers:\n"
+~"  builtin\n"
+~"    mpx_bound128\n"
+13^done
+(gdb) 
+&"python import sys; sys.dont_write_bytecode = True; sys.path.insert(0, \"/codev/ide/CL/clion-2024.1.1/bin/gdb/renderers\"); from default.printers import register_default_printers; register_default_printers(None); from libstdcxx.v6.printers import register_libstdcxx_printers; register_libstdcxx_printers(None); from default.libstdcxx_printers import patch_libstdcxx_printers_module; patch_libstdcxx_printers_module(); \n"
+14^done
+(gdb) 
+15^done
+(gdb) 
+&"python from default.commands import register_commands; register_commands();\n"
+16^done
+(gdb) 
+17^done
+(gdb) 
+18^done
+(gdb) 
+19^done
+(gdb) 
+20^done
+(gdb) 
+21^done
+(gdb) 
+&"maintenance info sections\n"
+~"Exec file: `/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/java', file type elf64-x86-64.\n"
+~" [0]      0x00000318->0x00000334 at 0x00000318: .interp ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [1]      0x00000338->0x00000378 at 0x00000338: .note.gnu.property ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [2]      0x00000378->0x0000039c at 0x00000378: .note.gnu.build-id ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [3]      0x0000039c->0x000003bc at 0x0000039c: .note.ABI-tag ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [4]      0x000003c0->0x0000045c at 0x000003c0: .hash ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [5]      0x00000460->0x00000484 at 0x00000460: .gnu.hash ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [6]      0x00000488->0x00000668 at 0x00000488: .dynsym ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [7]      0x00000668->0x000007eb at 0x00000668: .dynstr ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [8]      0x000007ec->0x00000814 at 0x000007ec: .gnu.version ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [9]      0x00000818->0x00000858 at 0x00000818: .gnu.version_r ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [10]     0x00000858->0x00000a20 at 0x00000858: .rela.dyn ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [11]     0x00000a20->0x00000b70 at 0x00000a20: .rela.plt ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [12]     0x00001000->0x0000101b at 0x00001000: .init ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [13]     0x00001020->0x00001110 at 0x00001020: .plt ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [14]     0x00001110->0x000015b8 at 0x00001110: .text ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [15]     0x000015b8->0x000015c5 at 0x000015b8: .fini ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [16]     0x00002000->0x0000210d at 0x00002000: .rodata ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [17]     0x00002110->0x00002134 at 0x00002110: .eh_frame_hdr ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [18]     0x00002138->0x000021b4 at 0x00002138: .eh_frame ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [19]     0x00003d10->0x00003d18 at 0x00002d10: .init_array ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [20]     0x00003d18->0x00003d20 at 0x00002d18: .fini_array ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [21]     0x00003d20->0x00003f50 at 0x00002d20: .dynamic ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [22]     0x00003f50->0x00004000 at 0x00002f50: .got ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [23]     0x00004000->0x00004080 at 0x00003000: .data ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [24]     0x00004080->0x00004098 at 0x00003080: .bss ALLOC\n"
+~" [25]     0x00000000->0x00000090 at 0x00003080: .comment READONLY HAS_CONTENTS\n"
+~" [26]     0x00006098->0x000061dc at 0x00003110: .gnu.build.attributes READONLY HAS_CONTENTS\n"
+~" [27]     0x00000000->0x00000014 at 0x00003254: .gnu_debuglink READONLY HAS_CONTENTS\n"
+22^done
+(gdb) 
+23^done
+(gdb) 
+=thread-group-started,id="i1",pid="788075"
+=thread-created,id="1",group-id="i1"
+=library-loaded,id="/lib64/ld-linux-x86-64.so.2",target-name="/lib64/ld-linux-x86-64.so.2",host-name="/lib64/ld-linux-x86-64.so.2",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7fca000",to="0x00007ffff7ff0beb"}]
+24^running
+*running,thread-id="all"
+(gdb) 
+=library-loaded,id="/lib64/libtdsp.so",target-name="/lib64/libtdsp.so",host-name="/lib64/libtdsp.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7c00ee0",to="0x00007ffff7c02888"}]
+=library-loaded,id="/lib64/libonion.so",target-name="/lib64/libonion.so",host-name="/lib64/libonion.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7a01060",to="0x00007ffff7a024f8"}]
+=library-loaded,id="/lib64/libz.so.1",target-name="/lib64/libz.so.1",host-name="/lib64/libz.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7fa0650",to="0x00007ffff7faddeb"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7f89620",to="0x00007ffff7f96370"}]
+=library-loaded,id="/lib64/libc.so.6",target-name="/lib64/libc.so.6",host-name="/lib64/libc.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7832780",to="0x00007ffff7997eed"}]
+=library-loaded,id="/lib64/libdl.so.2",target-name="/lib64/libdl.so.2",host-name="/lib64/libdl.so.2",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7f80050",to="0x00007ffff7f80115"}]
+~"[Thread debugging using libthread_db enabled]\n"
+~"Using host libthread_db library \"/lib64/libthread_db.so.1\".\n"
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff59070c0",to="0x00007ffff6a96e52"}]
+=library-loaded,id="/lib64/libstdc++.so.6",target-name="/lib64/libstdc++.so.6",host-name="/lib64/libstdc++.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff52a23c0",to="0x00007ffff53ac192"}]
+=library-loaded,id="/lib64/libm.so.6",target-name="/lib64/libm.so.6",host-name="/lib64/libm.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7ea93e0",to="0x00007ffff7f1f9e8"}]
+=library-loaded,id="/lib64/libgcc_s.so.1",target-name="/lib64/libgcc_s.so.1",host-name="/lib64/libgcc_s.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e7c670",to="0x00007ffff7e926e5"}]
+=thread-created,id="2",group-id="i1"
+~"[New Thread 0x7ffff780b6c0 (LWP 788117)]\n"
+*running,thread-id="2"
+=library-loaded,id="/lib64/librt.so.1",target-name="/lib64/librt.so.1",host-name="/lib64/librt.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e750a0",to="0x00007ffff7e752a8"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e62390",to="0x00007ffff7e6dd9d"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e34df0",to="0x00007ffff7e528b2"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e1c210",to="0x00007ffff7e21003"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e0f320",to="0x00007ffff7e1562f"}]
+=thread-created,id="3",group-id="i1"
+~"[New Thread 0x7ffff51ff6c0 (LWP 788118)]\n"
+*running,thread-id="3"
+=thread-created,id="4",group-id="i1"
+~"[New Thread 0x7fffd450f6c0 (LWP 788121)]\n"
+*running,thread-id="4"
+=thread-created,id="5",group-id="i1"
+~"[New Thread 0x7fffd440d6c0 (LWP 788122)]\n"
+*running,thread-id="5"
+=thread-created,id="6",group-id="i1"
+~"[New Thread 0x7fffcdafa6c0 (LWP 788125)]\n"
+*running,thread-id="6"
+=thread-created,id="7",group-id="i1"
+~"[New Thread 0x7fffcd9f86c0 (LWP 788126)]\n"
+*running,thread-id="7"
+=thread-created,id="8",group-id="i1"
+~"[New Thread 0x7fffcd0f66c0 (LWP 788127)]\n"
+*running,thread-id="8"
+=thread-created,id="9",group-id="i1"
+~"[New Thread 0x7fffccff46c0 (LWP 788128)]\n"
+*running,thread-id="9"
+=thread-created,id="10",group-id="i1"
+~"[New Thread 0x7fffccef46c0 (LWP 788129)]\n"
+*running,thread-id="10"
+=thread-created,id="11",group-id="i1"
+~"[New Thread 0x7fffccd9c6c0 (LWP 788130)]\n"
+*running,thread-id="11"
+=thread-created,id="12",group-id="i1"
+~"[New Thread 0x7fffcc9ff6c0 (LWP 788131)]\n"
+*running,thread-id="12"
+=thread-created,id="13",group-id="i1"
+~"[New Thread 0x7fffcc8ff6c0 (LWP 788132)]\n"
+*running,thread-id="13"
+=thread-created,id="14",group-id="i1"
+~"[New Thread 0x7fffcc7ff6c0 (LWP 788133)]\n"
+*running,thread-id="14"
+=thread-created,id="15",group-id="i1"
+~"[New Thread 0x7fffcc6ff6c0 (LWP 788134)]\n"
+*running,thread-id="15"
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libnio.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libnio.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libnio.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff76b7830",to="0x00007ffff76c0803"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libnet.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libnet.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libnet.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff54526d0",to="0x00007ffff5464bb2"}]
+=thread-created,id="16",group-id="i1"
+~"[New Thread 0x7fffcc5ff6c0 (LWP 788135)]\n"
+*running,thread-id="16"
+=thread-created,id="17",group-id="i1"
+~"[New Thread 0x7fffcc4ff6c0 (LWP 788136)]\n"
+*running,thread-id="17"
+=thread-created,id="18",group-id="i1"
+~"[New Thread 0x7fffcc3ff6c0 (LWP 788137)]\n"
+*running,thread-id="18"
+=thread-created,id="19",group-id="i1"
+~"[New Thread 0x7fffcc2ff6c0 (LWP 788140)]\n"
+*running,thread-id="19"
+~"[Thread 0x7fffcc2ff6c0 (LWP 788140) exited]\n"
+=thread-exited,id="19",group-id="i1"
+~"[Thread 0x7fffcd9f86c0 (LWP 788126) exited]\n"
+=thread-exited,id="7",group-id="i1"
+~"[Thread 0x7fffcdafa6c0 (LWP 788125) exited]\n"
+=thread-exited,id="6",group-id="i1"
+~"[Thread 0x7fffd450f6c0 (LWP 788121) exited]\n"
+=thread-exited,id="4",group-id="i1"
+~"[Thread 0x7fffccd9c6c0 (LWP 788130) exited]\n"
+=thread-exited,id="11",group-id="i1"
+~"[Thread 0x7fffcd0f66c0 (LWP 788127) exited]\n"
+=thread-exited,id="8",group-id="i1"
+~"[Thread 0x7ffff780b6c0 (LWP 788117) exited]\n"
+=thread-exited,id="2",group-id="i1"
+~"[Thread 0x7fffcc9ff6c0 (LWP 788131) exited]\n"
+=thread-exited,id="12",group-id="i1"
+~"[Thread 0x7fffcc3ff6c0 (LWP 788137) exited]\n"
+=thread-exited,id="18",group-id="i1"
+~"[Thread 0x7fffcc4ff6c0 (LWP 788136) exited]\n"
+=thread-exited,id="17",group-id="i1"
+~"[Thread 0x7fffcc5ff6c0 (LWP 788135) exited]\n"
+=thread-exited,id="16",group-id="i1"
+~"[Thread 0x7fffcc6ff6c0 (LWP 788134) exited]\n"
+=thread-exited,id="15",group-id="i1"
+~"[Thread 0x7fffcc7ff6c0 (LWP 788133) exited]\n"
+=thread-exited,id="14",group-id="i1"
+~"[Thread 0x7fffcc8ff6c0 (LWP 788132) exited]\n"
+=thread-exited,id="13",group-id="i1"
+~"[Thread 0x7fffccef46c0 (LWP 788129) exited]\n"
+=thread-exited,id="10",group-id="i1"
+~"[Thread 0x7fffd440d6c0 (LWP 788122) exited]\n"
+=thread-exited,id="5",group-id="i1"
+~"[Thread 0x7ffff51ff6c0 (LWP 788118) exited]\n"
+=thread-exited,id="3",group-id="i1"
+~"[Thread 0x7ffff7f7c740 (LWP 788075) exited]\n"
+=thread-exited,id="1",group-id="i1"
+~"[Thread 0x7fffccff46c0 (LWP 788128) exited]\n"
+=thread-exited,id="9",group-id="i1"
+=thread-created,id="20",group-id="i1"
+~"[New process 788075]\n"
+~"[Inferior 1 (process 788075) exited normally]\n"
+=thread-exited,id="20",group-id="i1"
+=thread-group-exited,id="i1",exit-code="0"
+*stopped,reason="exited-normally"
+(gdb) 
+0^done
+(gdb) 
+25^exit
+=cmd-param-changed,param="logging enabled",value="on"
+=cmd-param-changed,param="breakpoint pending",value="on"
+=cmd-param-changed,param="print pretty",value="on"
+(gdb) 
+1^done
+(gdb) 
+2^done
+(gdb) 
+3^done
+(gdb) 
+4^done
+(gdb) 
+5^done
+(gdb) 
+6^done
+(gdb) 
+7^done
+(gdb) 
+8^done
+(gdb) 
+9^done
+(gdb) 
+10^done,value="off"
+(gdb) 
+&"handle SIGSTOP stop nopass\n"
+~"Signal        Stop\tPrint\tPass to program\tDescription\n"
+~"SIGSTOP       Yes\tYes\tNo\t\tStopped (signal)\n"
+11^done
+(gdb) 
+&"python import gdb; print(gdb.VERSION);\n"
+~"14.1\n"
+12^done
+(gdb) 
+&"info pretty-printer\n"
+~"global pretty-printers:\n"
+~"  builtin\n"
+~"    mpx_bound128\n"
+13^done
+(gdb) 
+&"python import sys; sys.dont_write_bytecode = True; sys.path.insert(0, \"/codev/ide/CL/clion-2024.1.1/bin/gdb/renderers\"); from default.printers import register_default_printers; register_default_printers(None); from libstdcxx.v6.printers import register_libstdcxx_printers; register_libstdcxx_printers(None); from default.libstdcxx_printers import patch_libstdcxx_printers_module; patch_libstdcxx_printers_module(); \n"
+14^done
+(gdb) 
+15^done
+(gdb) 
+&"python from default.commands import register_commands; register_commands();\n"
+16^done
+(gdb) 
+17^done
+(gdb) 
+&"No source file named /data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp.\n"
+18^done,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",addr="<PENDING>",pending="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp:161",times="0",original-location="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp:161"}
+(gdb) 
+19^done
+(gdb) 
+20^done
+(gdb) 
+21^done
+(gdb) 
+22^done
+(gdb) 
+&"maintenance info sections\n"
+~"Exec file: `/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/java', file type elf64-x86-64.\n"
+~" [0]      0x00000318->0x00000334 at 0x00000318: .interp ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [1]      0x00000338->0x00000378 at 0x00000338: .note.gnu.property ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [2]      0x00000378->0x0000039c at 0x00000378: .note.gnu.build-id ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [3]      0x0000039c->0x000003bc at 0x0000039c: .note.ABI-tag ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [4]      0x000003c0->0x0000045c at 0x000003c0: .hash ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [5]      0x00000460->0x00000484 at 0x00000460: .gnu.hash ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [6]      0x00000488->0x00000668 at 0x00000488: .dynsym ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [7]      0x00000668->0x000007eb at 0x00000668: .dynstr ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [8]      0x000007ec->0x00000814 at 0x000007ec: .gnu.version ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [9]      0x00000818->0x00000858 at 0x00000818: .gnu.version_r ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [10]     0x00000858->0x00000a20 at 0x00000858: .rela.dyn ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [11]     0x00000a20->0x00000b70 at 0x00000a20: .rela.plt ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [12]     0x00001000->0x0000101b at 0x00001000: .init ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [13]     0x00001020->0x00001110 at 0x00001020: .plt ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [14]     0x00001110->0x000015b8 at 0x00001110: .text ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [15]     0x000015b8->0x000015c5 at 0x000015b8: .fini ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [16]     0x00002000->0x0000210d at 0x00002000: .rodata ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [17]     0x00002110->0x00002134 at 0x00002110: .eh_frame_hdr ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [18]     0x00002138->0x000021b4 at 0x00002138: .eh_frame ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [19]     0x00003d10->0x00003d18 at 0x00002d10: .init_array ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [20]     0x00003d18->0x00003d20 at 0x00002d18: .fini_array ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [21]     0x00003d20->0x00003f50 at 0x00002d20: .dynamic ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [22]     0x00003f50->0x00004000 at 0x00002f50: .got ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [23]     0x00004000->0x00004080 at 0x00003000: .data ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [24]     0x00004080->0x00004098 at 0x00003080: .bss ALLOC\n"
+~" [25]     0x00000000->0x00000090 at 0x00003080: .comment READONLY HAS_CONTENTS\n"
+~" [26]     0x00006098->0x000061dc at 0x00003110: .gnu.build.attributes READONLY HAS_CONTENTS\n"
+~" [27]     0x00000000->0x00000014 at 0x00003254: .gnu_debuglink READONLY HAS_CONTENTS\n"
+23^done
+(gdb) 
+24^done
+(gdb) 
+=thread-group-started,id="i1",pid="789247"
+=thread-created,id="1",group-id="i1"
+=library-loaded,id="/lib64/ld-linux-x86-64.so.2",target-name="/lib64/ld-linux-x86-64.so.2",host-name="/lib64/ld-linux-x86-64.so.2",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7fca000",to="0x00007ffff7ff0beb"}]
+25^running
+*running,thread-id="all"
+(gdb) 
+=library-loaded,id="/lib64/libtdsp.so",target-name="/lib64/libtdsp.so",host-name="/lib64/libtdsp.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7c00ee0",to="0x00007ffff7c02888"}]
+=library-loaded,id="/lib64/libonion.so",target-name="/lib64/libonion.so",host-name="/lib64/libonion.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7a01060",to="0x00007ffff7a024f8"}]
+=library-loaded,id="/lib64/libz.so.1",target-name="/lib64/libz.so.1",host-name="/lib64/libz.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7fa0650",to="0x00007ffff7faddeb"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7f89620",to="0x00007ffff7f96370"}]
+=library-loaded,id="/lib64/libc.so.6",target-name="/lib64/libc.so.6",host-name="/lib64/libc.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7832780",to="0x00007ffff7997eed"}]
+=library-loaded,id="/lib64/libdl.so.2",target-name="/lib64/libdl.so.2",host-name="/lib64/libdl.so.2",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7f80050",to="0x00007ffff7f80115"}]
+~"[Thread debugging using libthread_db enabled]\n"
+~"Using host libthread_db library \"/lib64/libthread_db.so.1\".\n"
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff59070c0",to="0x00007ffff6a96e52"}]
+=library-loaded,id="/lib64/libstdc++.so.6",target-name="/lib64/libstdc++.so.6",host-name="/lib64/libstdc++.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff52a23c0",to="0x00007ffff53ac192"}]
+=library-loaded,id="/lib64/libm.so.6",target-name="/lib64/libm.so.6",host-name="/lib64/libm.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7ea93e0",to="0x00007ffff7f1f9e8"}]
+=library-loaded,id="/lib64/libgcc_s.so.1",target-name="/lib64/libgcc_s.so.1",host-name="/lib64/libgcc_s.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e7c670",to="0x00007ffff7e926e5"}]
+=breakpoint-modified,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",addr="0x00007ffff617be38",func="basic_types_init()",file="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",line="161",thread-groups=["i1"],times="0",original-location="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp:161"}
+=thread-created,id="2",group-id="i1"
+~"[New Thread 0x7ffff780b6c0 (LWP 789310)]\n"
+*running,thread-id="2"
+=library-loaded,id="/lib64/librt.so.1",target-name="/lib64/librt.so.1",host-name="/lib64/librt.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e750a0",to="0x00007ffff7e752a8"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e62390",to="0x00007ffff7e6dd9d"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e34df0",to="0x00007ffff7e528b2"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e1c210",to="0x00007ffff7e21003"}]
+=breakpoint-modified,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",addr="0x00007ffff617be38",func="basic_types_init()",file="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",line="161",thread-groups=["i1"],times="1",original-location="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp:161"}
+~"[Switching to Thread 0x7ffff780b6c0 (LWP 789310)]\n"
+~"\n"
+~"Thread 2 \"java\" hit Breakpoint 1, basic_types_init () at /data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp:161\n"
+~"161\t  if (UseCompressedOops) {\n"
+*stopped,reason="breakpoint-hit",disp="keep",bkptno="1",frame={addr="0x00007ffff617be38",func="basic_types_init",args=[],file="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",line="161",arch="i386:x86-64"},thread-id="2",stopped-threads="all",core="5"
+(gdb) 
+0^done
+(gdb) 
+26^done,threads=[{id="2",target-id="Thread 0x7ffff780b6c0 (LWP 789310)",name="java",frame={level="0",addr="0x00007ffff617be38",func="basic_types_init",args=[],file="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",line="161",arch="i386:x86-64"},state="stopped",core="5"}]
+(gdb) 
+27^done,value="replay"
+(gdb) 
+28^done
+(gdb) 
+29^done
+(gdb) 
+30^done,value="att"
+(gdb) 
+31^done,value="auto"
+(gdb) 
+~"The target architecture is set to \"auto\" (currently \"i386:x86-64\").\n"
+32^done
+(gdb) 
+33^done,register-names=["rax","rbx","rcx","rdx","rsi","rdi","rbp","rsp","r8","r9","r10","r11","r12","r13","r14","r15","rip","eflags","cs","ss","ds","es","fs","gs","st0","st1","st2","st3","st4","st5","st6","st7","fctrl","fstat","ftag","fiseg","fioff","foseg","fooff","fop","xmm0","xmm1","xmm2","xmm3","xmm4","xmm5","xmm6","xmm7","xmm8","xmm9","xmm10","xmm11","xmm12","xmm13","xmm14","xmm15","mxcsr","ymm0h","ymm1h","ymm2h","ymm3h","ymm4h","ymm5h","ymm6h","ymm7h","ymm8h","ymm9h","ymm10h","ymm11h","ymm12h","ymm13h","ymm14h","ymm15h","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","fs_base","gs_base","orig_rax","al","bl","cl","dl","sil","dil","bpl","spl","r8l","r9l","r10l","r11l","r12l","r13l","r14l","r15l","ah","bh","ch","dh","ax","bx","cx","dx","si","di","bp","","r8w","r9w","r10w","r11w","r12w","r13w","r14w","r15w","eax","ebx","ecx","edx","esi","edi","ebp","esp","r8d","r9d","r10d","r11d","r12d","r13d","r14d","r15d","ymm0","ymm1","ymm2","ymm3","ymm4","ymm5","ymm6","ymm7","ymm8","ymm9","ymm10","ymm11","ymm12","ymm13","ymm14","ymm15"]
+(gdb) 
+34^done,stack=[frame={level="0",addr="0x00007ffff617be38",func="basic_types_init",file="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",line="161",arch="i386:x86-64"},frame={level="1",addr="0x00007ffff61efd57",func="vm_init_globals",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",line="92",arch="i386:x86-64"},frame={level="2",addr="0x00007ffff692b064",func="Threads::create_vm",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",line="3879",arch="i386:x86-64"},frame={level="3",addr="0x00007ffff63118c0",func="JNI_CreateJavaVM_inner",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4010",arch="i386:x86-64"},frame={level="4",addr="0x00007ffff6311c30",func="JNI_CreateJavaVM",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4103",arch="i386:x86-64"},frame={level="5",addr="0x00007ffff7f8e5c1",func="InitializeJVM",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="1545",arch="i386:x86-64"},frame={level="6",addr="0x00007ffff7f8afb1",func="JavaMain",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="428",arch="i386:x86-64"},frame={level="7",addr="0x00007ffff7f92e01",func="ThreadJavaMain",file="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",fullname="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",line="765",arch="i386:x86-64"},frame={level="8",addr="0x00007ffff789b3ee",func="start_thread",from="/lib64/libc.so.6",arch="i386:x86-64"},frame={level="9",addr="0x00007ffff7922b3c",func="clone3",from="/lib64/libc.so.6",arch="i386:x86-64"}]
+(gdb) 
+35^done,value="0x7ffff780ab30"
+(gdb) 
+36^done,variables=[{name="num_type_chars"}],filtered="1"
+(gdb) 
+~"type = int\n"
+37^done
+(gdb) 
+38^done,name="var1_num_type_chars",numchild="0",value="11",type="int",thread-id="2",has_more="0"
+0^done
+(gdb) 
+39^running
+*running,thread-id="all"
+(gdb) 
+*stopped,reason="end-stepping-range",frame={addr="0x00007ffff617be46",func="basic_types_init",args=[],file="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",line="163",arch="i386:x86-64"},thread-id="2",stopped-threads="all",core="5"
+(gdb) 
+40^done,threads=[{id="2",target-id="Thread 0x7ffff780b6c0 (LWP 789310)",name="java",frame={level="0",addr="0x00007ffff617be46",func="basic_types_init",args=[],file="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",line="163",arch="i386:x86-64"},state="stopped",core="5"}]
+(gdb) 
+41^done,ndeleted="1"
+(gdb) 
+42^done,stack=[frame={level="0",addr="0x00007ffff617be46",func="basic_types_init",file="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",line="163",arch="i386:x86-64"},frame={level="1",addr="0x00007ffff61efd57",func="vm_init_globals",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",line="92",arch="i386:x86-64"},frame={level="2",addr="0x00007ffff692b064",func="Threads::create_vm",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",line="3879",arch="i386:x86-64"},frame={level="3",addr="0x00007ffff63118c0",func="JNI_CreateJavaVM_inner",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4010",arch="i386:x86-64"},frame={level="4",addr="0x00007ffff6311c30",func="JNI_CreateJavaVM",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4103",arch="i386:x86-64"},frame={level="5",addr="0x00007ffff7f8e5c1",func="InitializeJVM",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="1545",arch="i386:x86-64"},frame={level="6",addr="0x00007ffff7f8afb1",func="JavaMain",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="428",arch="i386:x86-64"},frame={level="7",addr="0x00007ffff7f92e01",func="ThreadJavaMain",file="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",fullname="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",line="765",arch="i386:x86-64"},frame={level="8",addr="0x00007ffff789b3ee",func="start_thread",from="/lib64/libc.so.6",arch="i386:x86-64"},frame={level="9",addr="0x00007ffff7922b3c",func="clone3",from="/lib64/libc.so.6",arch="i386:x86-64"}]
+(gdb) 
+43^done,value="0x7ffff780ab30"
+(gdb) 
+44^done,variables=[{name="num_type_chars"}],filtered="1"
+(gdb) 
+~"type = int\n"
+45^done
+(gdb) 
+46^done,name="var1_num_type_chars",numchild="0",value="11",type="int",thread-id="2",has_more="0"
+0^done
+(gdb) 
+47^running
+*running,thread-id="all"
+(gdb) 
+*stopped,reason="end-stepping-range",frame={addr="0x00007ffff617be50",func="basic_types_init",args=[],file="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",line="164",arch="i386:x86-64"},thread-id="2",stopped-threads="all",core="1"
+(gdb) 
+48^done,threads=[{id="2",target-id="Thread 0x7ffff780b6c0 (LWP 789310)",name="java",frame={level="0",addr="0x00007ffff617be50",func="basic_types_init",args=[],file="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",line="164",arch="i386:x86-64"},state="stopped",core="1"}]
+(gdb) 
+49^done,ndeleted="1"
+(gdb) 
+50^done,stack=[frame={level="0",addr="0x00007ffff617be50",func="basic_types_init",file="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/utilities/globalDefinitions.cpp",line="164",arch="i386:x86-64"},frame={level="1",addr="0x00007ffff61efd57",func="vm_init_globals",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",line="92",arch="i386:x86-64"},frame={level="2",addr="0x00007ffff692b064",func="Threads::create_vm",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",line="3879",arch="i386:x86-64"},frame={level="3",addr="0x00007ffff63118c0",func="JNI_CreateJavaVM_inner",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4010",arch="i386:x86-64"},frame={level="4",addr="0x00007ffff6311c30",func="JNI_CreateJavaVM",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4103",arch="i386:x86-64"},frame={level="5",addr="0x00007ffff7f8e5c1",func="InitializeJVM",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="1545",arch="i386:x86-64"},frame={level="6",addr="0x00007ffff7f8afb1",func="JavaMain",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="428",arch="i386:x86-64"},frame={level="7",addr="0x00007ffff7f92e01",func="ThreadJavaMain",file="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",fullname="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",line="765",arch="i386:x86-64"},frame={level="8",addr="0x00007ffff789b3ee",func="start_thread",from="/lib64/libc.so.6",arch="i386:x86-64"},frame={level="9",addr="0x00007ffff7922b3c",func="clone3",from="/lib64/libc.so.6",arch="i386:x86-64"}]
+(gdb) 
+51^done,value="0x7ffff780ab30"
+(gdb) 
+52^done,variables=[{name="num_type_chars"}],filtered="1"
+(gdb) 
+~"type = int\n"
+53^done
+(gdb) 
+54^done,name="var1_num_type_chars",numchild="0",value="11",type="int",thread-id="2",has_more="0"
+0^done
+(gdb) 
+55^done,name="var2_heapOopSize",numchild="0",value="4",type="int",has_more="0"
+0^done
+(gdb) 
+56^done
+(gdb) 
+&"kill\n"
+~"Kill the program being debugged? (y or n) [answered Y; input not from terminal]\n"
+=thread-exited,id="1",group-id="i1"
+=thread-exited,id="2",group-id="i1"
+=thread-group-exited,id="i1"
+~"[Inferior 1 (process 789247) killed]\n"
+57^done
+(gdb) 
+58^exit
+=cmd-param-changed,param="logging enabled",value="on"
+=cmd-param-changed,param="breakpoint pending",value="on"
+=cmd-param-changed,param="print pretty",value="on"
+(gdb) 
+1^done
+(gdb) 
+2^done
+(gdb) 
+3^done
+(gdb) 
+4^done
+(gdb) 
+5^done
+(gdb) 
+6^done
+(gdb) 
+7^done
+(gdb) 
+8^done
+(gdb) 
+9^done
+(gdb) 
+10^done,value="off"
+(gdb) 
+&"handle SIGSTOP stop nopass\n"
+~"Signal        Stop\tPrint\tPass to program\tDescription\n"
+~"SIGSTOP       Yes\tYes\tNo\t\tStopped (signal)\n"
+11^done
+(gdb) 
+&"python import gdb; print(gdb.VERSION);\n"
+~"14.1\n"
+12^done
+(gdb) 
+&"info pretty-printer\n"
+~"global pretty-printers:\n"
+~"  builtin\n"
+~"    mpx_bound128\n"
+13^done
+(gdb) 
+&"python import sys; sys.dont_write_bytecode = True; sys.path.insert(0, \"/codev/ide/CL/clion-2024.1.1/bin/gdb/renderers\"); from default.printers import register_default_printers; register_default_printers(None); from libstdcxx.v6.printers import register_libstdcxx_printers; register_libstdcxx_printers(None); from default.libstdcxx_printers import patch_libstdcxx_printers_module; patch_libstdcxx_printers_module(); \n"
+14^done
+(gdb) 
+15^done
+(gdb) 
+&"python from default.commands import register_commands; register_commands();\n"
+16^done
+(gdb) 
+17^done
+(gdb) 
+18^done
+(gdb) 
+19^done
+(gdb) 
+20^done
+(gdb) 
+21^done
+(gdb) 
+&"maintenance info sections\n"
+~"Exec file: `/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/java', file type elf64-x86-64.\n"
+~" [0]      0x00000318->0x00000334 at 0x00000318: .interp ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [1]      0x00000338->0x00000378 at 0x00000338: .note.gnu.property ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [2]      0x00000378->0x0000039c at 0x00000378: .note.gnu.build-id ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [3]      0x0000039c->0x000003bc at 0x0000039c: .note.ABI-tag ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [4]      0x000003c0->0x0000045c at 0x000003c0: .hash ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [5]      0x00000460->0x00000484 at 0x00000460: .gnu.hash ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [6]      0x00000488->0x00000668 at 0x00000488: .dynsym ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [7]      0x00000668->0x000007eb at 0x00000668: .dynstr ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [8]      0x000007ec->0x00000814 at 0x000007ec: .gnu.version ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [9]      0x00000818->0x00000858 at 0x00000818: .gnu.version_r ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [10]     0x00000858->0x00000a20 at 0x00000858: .rela.dyn ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [11]     0x00000a20->0x00000b70 at 0x00000a20: .rela.plt ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [12]     0x00001000->0x0000101b at 0x00001000: .init ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [13]     0x00001020->0x00001110 at 0x00001020: .plt ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [14]     0x00001110->0x000015b8 at 0x00001110: .text ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [15]     0x000015b8->0x000015c5 at 0x000015b8: .fini ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [16]     0x00002000->0x0000210d at 0x00002000: .rodata ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [17]     0x00002110->0x00002134 at 0x00002110: .eh_frame_hdr ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [18]     0x00002138->0x000021b4 at 0x00002138: .eh_frame ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [19]     0x00003d10->0x00003d18 at 0x00002d10: .init_array ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [20]     0x00003d18->0x00003d20 at 0x00002d18: .fini_array ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [21]     0x00003d20->0x00003f50 at 0x00002d20: .dynamic ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [22]     0x00003f50->0x00004000 at 0x00002f50: .got ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [23]     0x00004000->0x00004080 at 0x00003000: .data ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [24]     0x00004080->0x00004098 at 0x00003080: .bss ALLOC\n"
+~" [25]     0x00000000->0x00000090 at 0x00003080: .comment READONLY HAS_CONTENTS\n"
+~" [26]     0x00006098->0x000061dc at 0x00003110: .gnu.build.attributes READONLY HAS_CONTENTS\n"
+~" [27]     0x00000000->0x00000014 at 0x00003254: .gnu_debuglink READONLY HAS_CONTENTS\n"
+22^done
+(gdb) 
+23^done
+(gdb) 
+=thread-group-started,id="i1",pid="817077"
+=thread-created,id="1",group-id="i1"
+=library-loaded,id="/lib64/ld-linux-x86-64.so.2",target-name="/lib64/ld-linux-x86-64.so.2",host-name="/lib64/ld-linux-x86-64.so.2",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7fca000",to="0x00007ffff7ff0beb"}]
+24^running
+*running,thread-id="all"
+(gdb) 
+=library-loaded,id="/lib64/libtdsp.so",target-name="/lib64/libtdsp.so",host-name="/lib64/libtdsp.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7c00ee0",to="0x00007ffff7c02888"}]
+=library-loaded,id="/lib64/libonion.so",target-name="/lib64/libonion.so",host-name="/lib64/libonion.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7a01060",to="0x00007ffff7a024f8"}]
+=library-loaded,id="/lib64/libz.so.1",target-name="/lib64/libz.so.1",host-name="/lib64/libz.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7fa0650",to="0x00007ffff7faddeb"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7f89620",to="0x00007ffff7f96370"}]
+=library-loaded,id="/lib64/libc.so.6",target-name="/lib64/libc.so.6",host-name="/lib64/libc.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7832780",to="0x00007ffff7997eed"}]
+=library-loaded,id="/lib64/libdl.so.2",target-name="/lib64/libdl.so.2",host-name="/lib64/libdl.so.2",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7f80050",to="0x00007ffff7f80115"}]
+~"[Thread debugging using libthread_db enabled]\n"
+~"Using host libthread_db library \"/lib64/libthread_db.so.1\".\n"
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff59070c0",to="0x00007ffff6a96e52"}]
+=library-loaded,id="/lib64/libstdc++.so.6",target-name="/lib64/libstdc++.so.6",host-name="/lib64/libstdc++.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff52a23c0",to="0x00007ffff53ac192"}]
+=library-loaded,id="/lib64/libm.so.6",target-name="/lib64/libm.so.6",host-name="/lib64/libm.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7ea93e0",to="0x00007ffff7f1f9e8"}]
+=library-loaded,id="/lib64/libgcc_s.so.1",target-name="/lib64/libgcc_s.so.1",host-name="/lib64/libgcc_s.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e7c670",to="0x00007ffff7e926e5"}]
+=thread-created,id="2",group-id="i1"
+~"[New Thread 0x7ffff780b6c0 (LWP 817115)]\n"
+*running,thread-id="2"
+=library-loaded,id="/lib64/librt.so.1",target-name="/lib64/librt.so.1",host-name="/lib64/librt.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e750a0",to="0x00007ffff7e752a8"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e62390",to="0x00007ffff7e6dd9d"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e34df0",to="0x00007ffff7e528b2"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e1c210",to="0x00007ffff7e21003"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e0f320",to="0x00007ffff7e1562f"}]
+=thread-created,id="3",group-id="i1"
+~"[New Thread 0x7ffff51ff6c0 (LWP 817116)]\n"
+*running,thread-id="3"
+=thread-created,id="4",group-id="i1"
+~"[New Thread 0x7fffd450f6c0 (LWP 817117)]\n"
+*running,thread-id="4"
+=thread-created,id="5",group-id="i1"
+~"[New Thread 0x7fffd440d6c0 (LWP 817118)]\n"
+*running,thread-id="5"
+=thread-created,id="6",group-id="i1"
+~"[New Thread 0x7fffcdafa6c0 (LWP 817119)]\n"
+*running,thread-id="6"
+=thread-created,id="7",group-id="i1"
+~"[New Thread 0x7fffcd9f86c0 (LWP 817120)]\n"
+*running,thread-id="7"
+=thread-created,id="8",group-id="i1"
+~"[New Thread 0x7fffcd0f66c0 (LWP 817121)]\n"
+*running,thread-id="8"
+=thread-created,id="9",group-id="i1"
+~"[New Thread 0x7fffccff46c0 (LWP 817122)]\n"
+*running,thread-id="9"
+=thread-created,id="10",group-id="i1"
+~"[New Thread 0x7fffccef46c0 (LWP 817123)]\n"
+*running,thread-id="10"
+=thread-created,id="11",group-id="i1"
+~"[New Thread 0x7fffccd9c6c0 (LWP 817124)]\n"
+*running,thread-id="11"
+=thread-created,id="12",group-id="i1"
+~"[New Thread 0x7fffcc9ff6c0 (LWP 817125)]\n"
+*running,thread-id="12"
+=thread-created,id="13",group-id="i1"
+~"[New Thread 0x7fffcc8ff6c0 (LWP 817126)]\n"
+*running,thread-id="13"
+=thread-created,id="14",group-id="i1"
+~"[New Thread 0x7fffcc7ff6c0 (LWP 817127)]\n"
+*running,thread-id="14"
+=thread-created,id="15",group-id="i1"
+~"[New Thread 0x7fffcc6ff6c0 (LWP 817128)]\n"
+*running,thread-id="15"
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libnio.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libnio.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libnio.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff76b7830",to="0x00007ffff76c0803"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libnet.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libnet.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libnet.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff54526d0",to="0x00007ffff5464bb2"}]
+=thread-created,id="16",group-id="i1"
+~"[New Thread 0x7fffcc5ff6c0 (LWP 817129)]\n"
+*running,thread-id="16"
+=thread-created,id="17",group-id="i1"
+~"[New Thread 0x7fffcc4ff6c0 (LWP 817131)]\n"
+*running,thread-id="17"
+=thread-created,id="18",group-id="i1"
+~"[New Thread 0x7fffcc3ff6c0 (LWP 817132)]\n"
+*running,thread-id="18"
+=thread-created,id="19",group-id="i1"
+~"[New Thread 0x7fffcc2ff6c0 (LWP 817140)]\n"
+*running,thread-id="19"
+~"[Thread 0x7fffcc2ff6c0 (LWP 817140) exited]\n"
+=thread-exited,id="19",group-id="i1"
+~"[Thread 0x7fffcd9f86c0 (LWP 817120) exited]\n"
+=thread-exited,id="7",group-id="i1"
+~"[Thread 0x7fffcdafa6c0 (LWP 817119) exited]\n"
+=thread-exited,id="6",group-id="i1"
+~"[Thread 0x7fffd450f6c0 (LWP 817117) exited]\n"
+=thread-exited,id="4",group-id="i1"
+~"[Thread 0x7fffccd9c6c0 (LWP 817124) exited]\n"
+=thread-exited,id="11",group-id="i1"
+~"[Thread 0x7fffcd0f66c0 (LWP 817121) exited]\n"
+=thread-exited,id="8",group-id="i1"
+~"[Thread 0x7fffcc4ff6c0 (LWP 817131) exited]\n"
+=thread-exited,id="17",group-id="i1"
+~"[Thread 0x7fffcc5ff6c0 (LWP 817129) exited]\n"
+=thread-exited,id="16",group-id="i1"
+~"[Thread 0x7fffcc6ff6c0 (LWP 817128) exited]\n"
+=thread-exited,id="15",group-id="i1"
+~"[Thread 0x7fffcc7ff6c0 (LWP 817127) exited]\n"
+=thread-exited,id="14",group-id="i1"
+~"[Thread 0x7fffcc8ff6c0 (LWP 817126) exited]\n"
+=thread-exited,id="13",group-id="i1"
+~"[Thread 0x7fffcc9ff6c0 (LWP 817125) exited]\n"
+=thread-exited,id="12",group-id="i1"
+~"[Thread 0x7fffccef46c0 (LWP 817123) exited]\n"
+=thread-exited,id="10",group-id="i1"
+~"[Thread 0x7fffccff46c0 (LWP 817122) exited]\n"
+=thread-exited,id="9",group-id="i1"
+~"[Thread 0x7fffd440d6c0 (LWP 817118) exited]\n"
+=thread-exited,id="5",group-id="i1"
+~"[Thread 0x7ffff51ff6c0 (LWP 817116) exited]\n"
+=thread-exited,id="3",group-id="i1"
+~"[Thread 0x7ffff780b6c0 (LWP 817115) exited]\n"
+=thread-exited,id="2",group-id="i1"
+~"[Thread 0x7ffff7f7c740 (LWP 817077) exited]\n"
+=thread-exited,id="1",group-id="i1"
+~"[Thread 0x7fffcc3ff6c0 (LWP 817132) exited]\n"
+=thread-exited,id="18",group-id="i1"
+=thread-created,id="20",group-id="i1"
+~"[New process 817077]\n"
+~"[Inferior 1 (process 817077) exited with code 01]\n"
+=thread-exited,id="20",group-id="i1"
+=thread-group-exited,id="i1",exit-code="01"
+*stopped,reason="exited",exit-code="01"
+(gdb) 
+0^done
+(gdb) 
+25^exit

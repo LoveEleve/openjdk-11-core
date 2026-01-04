@@ -33,7 +33,12 @@
 SafepointMechanism::PollingType SafepointMechanism::_polling_type = SafepointMechanism::_global_page_poll;
 void* SafepointMechanism::_poll_armed_value;
 void* SafepointMechanism::_poll_disarmed_value;
-
+// forcus 核心点:创建 Safepoint Polling Page（安全点轮询页）
+/*
+ * 两种轮询方式:
+ *  - Thread Local Poll(new): ThreadLocalHandshakes=true(每个线程有自己的轮询地址，支持 Handshake)，jdk11默认
+ *  - Global Page Poll(old): ThreadLocalHandshakes=false 所有线程共享一个轮询页
+ */
 void SafepointMechanism::default_initialize() {
   if (ThreadLocalHandshakes) {
     set_uses_thread_local_poll();
@@ -106,8 +111,8 @@ void SafepointMechanism::initialize_serialize_page() {
     os::set_memory_serialize_page((address)(serialize_page));
   }
 }
-
+// forcus
 void SafepointMechanism::initialize() {
-  pd_initialize();
-  initialize_serialize_page();
+  pd_initialize(); // 平台相关初始化
+  initialize_serialize_page(); // 初始化内存序列化页
 }
