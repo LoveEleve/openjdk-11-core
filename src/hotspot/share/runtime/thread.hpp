@@ -628,8 +628,8 @@ protected:
   GrowableArray<Metadata*>* _metadata_handles;
 
   // Support for stack overflow handling, get_thread, etc.
-  address          _stack_base;
-  size_t           _stack_size;
+  address          _stack_base; // 线程栈的高地址(stack_base)
+  size_t           _stack_size; // 线程栈的大小
   uintptr_t        _self_raw_id;      // used by get_thread (mutable)
   int              _lgrp_id;
 
@@ -1110,7 +1110,7 @@ class JavaThread: public Thread {
   // Precompute the limit of the stack as used in stack overflow checks.
   // We load it from here to simplify the stack overflow check in assembly.
   address          _stack_overflow_limit;
-  address          _reserved_stack_activation;
+  address          _reserved_stack_activation; // == stack_base(高地址)
 
   // Compiler exception handling (NOTE: The _exception_oop is *NOT* the same as _pending_exception. It is
   // used to temp. parsing values into and out of the runtime system during exception handling for compiled
@@ -1691,6 +1691,38 @@ class JavaThread: public Thread {
 
   address stack_overflow_limit() { return _stack_overflow_limit; }
   void set_stack_overflow_limit() {
+      /**
+            stack_end() = stack_base() - stack_size() = bottom + size - size = bottom(栈底,低地址)
+            JavaThread::stack_guard_zone_size() = Red + Yellow + Reserved Zone 总大小
+            JavaThread::stack_shadow_zone_size() = Shadow Zone 大小（用于 stack banging）
+              低地址
+               │
+               ▼
+            P0 +─────────────────────────────+
+               │     glibc guard page        │  ← OS 级保护（可能没有） 用 mprotect 设为不可访问，触发 SIGSEGV
+            P1 +─────────────────────────────+ ← stack_end()
+               │     Red Zone                │  ┐
+               +─────────────────────────────+  │
+               │     Yellow Zone             │  ├─ HotSpot Guard Pages
+               +─────────────────────────────+  │   (硬件保护，mprotect)
+               │     Reserved Zone           │  ┘
+               +─────────────────────────────+ ← stack_reserved_zone_base()
+               │                             │
+               │ ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈ │ ← _stack_overflow_limit ★ _stack_overflow_limit 是 JVM 运行时变量，不是内存区域(Shadow Zone 是"虚拟的"——只是一个大小值，用于计算检测点)
+               │                             │     (软件检测点，不是物理边界)
+               │     Shadow Zone             │
+               │     (逻辑概念，不实际保护)    │
+               │                             │
+               +─────────────────────────────+
+               │                             │
+               │     Normal Stack            │
+               │     (正常可用)               │
+               │                             │
+            P2 +─────────────────────────────+ ← stack_base()
+               │
+               ▼
+            高地址
+       */
     _stack_overflow_limit =
       stack_end() + MAX2(JavaThread::stack_guard_zone_size(), JavaThread::stack_shadow_zone_size());
   }

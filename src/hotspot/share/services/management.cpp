@@ -83,10 +83,10 @@ TimeStamp Management::_stamp;
 
 void management_init() {
 #if INCLUDE_MANAGEMENT
-  Management::init();
-  ThreadService::init();
-  RuntimeService::init();
-  ClassLoadingService::init();
+  Management::init(); // forcus JMX 核心
+  ThreadService::init(); // forcus 线程监控服务
+  RuntimeService::init(); // forcus 运行时服务
+  ClassLoadingService::init(); // forcus 类加载监控
 #else
   ThreadService::init();
 #endif // INCLUDE_MANAGEMENT
@@ -100,20 +100,24 @@ void Management::init() {
   // These counters are for java.lang.management API support.
   // They are created even if -XX:-UsePerfData is set and in
   // that case, they will be allocated on C heap.
-
+  // forcus-1 创建 VM 时间戳计数器
+  /* 查看这些时间戳 jcmd <pid> PerfCounter.print | grep -E "createVm|vmInit"*/
+  /* 同样存储在文件中 /tmp/hsperfdata_<user>/<pid>*/
+  /* VM 创建开始时间 */
   _begin_vm_creation_time =
             PerfDataManager::create_variable(SUN_RT, "createVmBeginTime",
                                              PerfData::U_None, CHECK);
-
+  /* VM 创建结束时间 */
   _end_vm_creation_time =
             PerfDataManager::create_variable(SUN_RT, "createVmEndTime",
                                              PerfData::U_None, CHECK);
-
+  /* VM 初始化完成时间 */
   _vm_init_done_time =
             PerfDataManager::create_variable(SUN_RT, "vmInitDoneTime",
                                              PerfData::U_None, CHECK);
 
   // Initialize optional support
+  // forcus-2 这是一个位域结构「_optional_support」，告诉 Java 层哪些监控功能可用：
   _optional_support.isLowMemoryDetectionSupported = 1;
   _optional_support.isCompilationTimeMonitoringSupported = 1;
   _optional_support.isThreadContentionMonitoringSupported = 1;
@@ -135,10 +139,35 @@ void Management::init() {
   _optional_support.isRemoteDiagnosticCommandsSupported = 1;
 
   // Registration of the diagnostic commands
+  // forcus-3 诊断命令注册（DCmdRegistrant）-- 这是 jcmd 命令的基础设施
+  /*
+   * 基础命令 / VM 信息命令 / GC 相关命令 / 类相关命令 / 线程命令 / 编译器命令 / JMX Agent 命令 / ...
+   * 可以通过jcmd <pid> help来查看所有可用命令
+   * {jcmd是java诊断命令行工具,用于向运行中的JVM发送诊断命令}
+   */
   DCmdRegistrant::register_dcmds();
+  // 注册扩展诊断命令（由各平台或模块提供）默认实现为空
   DCmdRegistrant::register_dcmds_ext();
+  // forcus 命令导出范围（Source）
+  /*
+   * DCmd_Source_Internal: JVM 内部命令,VM 代码直接调用
+   * DCmd_Source_AttachAPI: 通过 Attach API 调用的命令 (jcmd <pid> <command>)
+   * DCmd_Source_MBean: 通过 JMX MBean 调用的命令 (DiagnosticCommandMBean.execute())
+   */
   uint32_t full_export = DCmd_Source_Internal | DCmd_Source_AttachAPI
                          | DCmd_Source_MBean;
+  // forcus 注册VM.native_memory 命令，用于追踪 JVM 本地内存使用。
+  /*
+        # 前提：启动时必须开启 NMT
+        java -XX:NativeMemoryTracking=summary -jar app.jar
+        {
+             NMT 是排查 堆外内存泄漏 的利器，比如：
+                - Metaspace 泄漏
+                - 线程栈过多
+                - JNI 内存泄漏
+                - DirectByteBuffer 泄漏
+        }
+   */
   DCmdFactory::register_DCmdFactory(new DCmdFactoryImpl<NMTDCmd>(full_export, true, false));
 }
 

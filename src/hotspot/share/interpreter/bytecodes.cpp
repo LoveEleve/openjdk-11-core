@@ -38,14 +38,14 @@
 #endif
 #endif
 
-
+// forcus 初始化的静态数据结构
 bool            Bytecodes::_is_initialized = false;
-const char*     Bytecodes::_name          [Bytecodes::number_of_codes];
-BasicType       Bytecodes::_result_type   [Bytecodes::number_of_codes];
-s_char          Bytecodes::_depth         [Bytecodes::number_of_codes];
-u_char          Bytecodes::_lengths       [Bytecodes::number_of_codes];
-Bytecodes::Code Bytecodes::_java_code     [Bytecodes::number_of_codes];
-unsigned short  Bytecodes::_flags         [(1<<BitsPerByte)*2];
+const char*     Bytecodes::_name          [Bytecodes::number_of_codes]; // forcus 指令名称字符串 - eg:"iconst_1", "iadd"
+BasicType       Bytecodes::_result_type   [Bytecodes::number_of_codes]; // forcus 执行后栈顶类型 - eg:T_INT, T_OBJECT
+s_char          Bytecodes::_depth         [Bytecodes::number_of_codes]; // forcus 栈深度变化（正=压栈，负=弹栈）- eg:iadd = -1（弹2压1）
+u_char          Bytecodes::_lengths       [Bytecodes::number_of_codes]; // forcus 低4位=普通长度，高4位=wide长度 - iload = 2, wide iload = 4
+Bytecodes::Code Bytecodes::_java_code     [Bytecodes::number_of_codes]; // forcus 重写字节码对应的原始字节码 - eg:_fast_igetfield → _getfield
+unsigned short  Bytecodes::_flags         [(1<<BitsPerByte)*2]; // forcus 格式标志位（是否有常量池索引等） - _fmt_has_j, _bc_can_trap
 
 #ifdef ASSERT
 bool Bytecodes::check_method(const Method* method, address bcp) {
@@ -264,8 +264,9 @@ int Bytecodes::compute_flags(const char* format, int more_flags) {
     has_size = this_size;
   }
 }
-
+// forcus 它构建了一个完整的字节码属性查询表，供解释器、编译器、验证器等组件使用
 void Bytecodes::initialize() {
+  // 保证只会被初始化一次
   if (_is_initialized) return;
   assert(number_of_codes <= 256, "too many bytecodes");
 
@@ -278,7 +279,7 @@ void Bytecodes::initialize() {
   //
   // Note 2: The result type is T_ILLEGAL for bytecodes where the top of stack
   //         type after execution is not only determined by the bytecode itself.
-
+  // forcus 每个字节码通过def函数来进行注册
   //  Java bytecodes
   //  bytecode               bytecode name           format   wide f.   result tp  stk traps
   def(_nop                 , "nop"                 , "b"    , NULL    , T_VOID   ,  0, false);

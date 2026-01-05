@@ -97,11 +97,19 @@ void vm_init_globals() {
   SuspendibleThreadSet_init();
 }
 
-
+// forcus forcus forcus core core core
+/*
+ * 初始化全局变量
+ */
 jint init_globals() {
   HandleMark hm;
-  management_init();
-  bytecodes_init();
+  /*
+        =========================================
+        基础设施
+        =========================================
+   */
+  management_init(); // forcus 初始化 JMX(Java Management Extensions)管理接口
+  bytecodes_init(); // forcus 初始化字节码表
   classLoader_init1();
   compilationPolicy_init();
   codeCache_init();

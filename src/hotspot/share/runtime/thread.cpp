@@ -181,7 +181,9 @@ void universe_post_module_init();  // must happen after call_initPhase2
 
 #ifndef USE_LIBRARY_BASED_TLS_ONLY
 // Current thread is maintained as a thread-local variable
-THREAD_LOCAL_DECL Thread *Thread::_thr_current = NULL;
+THREAD_LOCAL_DECL Thread
+*
+Thread::_thr_current = NULL;
 #endif
 
 // ======= Thread ========
@@ -198,11 +200,15 @@ void *Thread::allocate(size_t size, bool throw_excpt, MEMFLAGS flags) {
                ((uintptr_t) real_malloc_addr + (uintptr_t) aligned_size),
                "JavaThread alignment code overflowed allocated storage");
         if (aligned_addr != real_malloc_addr) {
-            log_info(biasedlocking)("Aligned thread " INTPTR_FORMAT " to " INTPTR_FORMAT,
-                                    p2i(real_malloc_addr),
-                                    p2i(aligned_addr));
+            log_info(biasedlocking)("Aligned thread "
+            INTPTR_FORMAT
+            " to "
+            INTPTR_FORMAT,
+                    p2i(real_malloc_addr),
+                    p2i(aligned_addr));
         }
-        ((Thread *) aligned_addr)->_real_malloc_address = real_malloc_addr;
+        ((Thread * )
+        aligned_addr)->_real_malloc_address = real_malloc_addr;
         return aligned_addr;
     } else {
         return throw_excpt ? AllocateHeap(size, flags, CURRENT_PC)
@@ -212,7 +218,8 @@ void *Thread::allocate(size_t size, bool throw_excpt, MEMFLAGS flags) {
 
 void Thread::operator delete(void *p) {
     if (UseBiasedLocking) {
-        FreeHeap(((Thread *) p)->_real_malloc_address);
+        FreeHeap(((Thread * )
+        p)->_real_malloc_address);
     } else {
         FreeHeap(p);
     }
@@ -315,8 +322,9 @@ Thread::Thread() {
 #endif // CHECK_UNHANDLED_OOPS
 #ifdef ASSERT
     if (UseBiasedLocking) {
-        assert((((uintptr_t) this) & (markOopDesc::biased_lock_alignment - 1)) == 0,
-               "forced alignment of thread object failed");
+        assert((((uintptr_t)
+        this) &(markOopDesc::biased_lock_alignment - 1)) == 0,
+                "forced alignment of thread object failed");
         assert(this == _real_malloc_address ||
                this == align_up(_real_malloc_address, (int) markOopDesc::biased_lock_alignment),
                "bug in forced alignment of thread objects");
@@ -338,10 +346,10 @@ Thread::Thread() {
 void Thread::initialize_thread_current() {
 #ifndef USE_LIBRARY_BASED_TLS_ONLY
     assert(_thr_current == NULL, "Thread::current already initialized");
-    _thr_current = this;
+    _thr_current = this; // forcus this 指定的是当前JavaThread对象
 #endif
     assert(ThreadLocalStorage::thread() == NULL, "ThreadLocalStorage::thread already initialized");
-    ThreadLocalStorage::set_thread(this);
+    ThreadLocalStorage::set_thread(this); // forcus threadLocal
     assert(Thread::current() == ThreadLocalStorage::thread(), "TLS mismatch!");
 }
 
@@ -352,14 +360,44 @@ void Thread::clear_thread_current() {
 #endif
     ThreadLocalStorage::set_thread(NULL);
 }
-
+/**
+ *
+     * 高地址
+       │
+       ▼
+    ┌─────────────────────┐ ← stack_base (栈顶/起始地址)
+    │                     │
+    │    可用栈空间        │
+    │    (向下增长)        │
+    │         ↓           │
+    │                     │
+    ├─────────────────────┤ ← stack_overflow_limit (黄区)
+    │   Yellow Zone       │   触发可恢复的 StackOverflowError
+    ├─────────────────────┤ ← (红区)
+    │   Red Zone          │   触发不可恢复的崩溃
+    ├─────────────────────┤
+    │   Guard Page        │   操作系统保护页 (不可访问)
+    └─────────────────────┘ ← stack_end / bottom (栈底)
+       │
+       ▼
+    低地址
+*/
+/**
+ * pthread库基础知识：
+ *  - int pthread_getattr_np(pthread_t thread, pthread_attr_t *attr); // 获取线程属性
+ *  - int pthread_attr_getstack(pthread_attr_t *attr, void **stackaddr, size_t *stacksize);  // 从属性中获取栈地址和大小
+ *    {这个返回的是栈底地址，不是栈顶地址,而jvm需要的是stack_base,也就是栈顶}
+    - int pthread_attr_getguardsize(pthread_attr_t *attr, size_t *guardsize); // 获取 guard page 大小
+      {guard page - os在栈顶设置的不可访问的内存页面,访问时触发SIGSEGV,防止栈溢出破坏其他内存区域}
+ */
 void Thread::record_stack_base_and_size() {
     // Note: at this point, Thread object is not yet initialized. Do not rely on
+    /* --注意:此时 Thread 对象还未完全初始化,不要依赖任何成员变量或 Thread::current()--*/
     // any members being initialized. Do not rely on Thread::current() being set.
     // If possible, refrain from doing anything which may crash or assert since
     // quite probably those crash dumps will be useless.
-    set_stack_base(os::current_stack_base());
-    set_stack_size(os::current_stack_size());
+    set_stack_base(os::current_stack_base()); // forcus-1 获取栈顶地址(高地址端)
+    set_stack_size(os::current_stack_size()); // forcus-2 获取栈总大小
 
 #ifdef SOLARIS
                                                                                                                             if (os::is_primordial_thread()) {
@@ -368,9 +406,12 @@ void Thread::record_stack_base_and_size() {
 #endif
 
     // Set stack limits after thread is initialized.
+    // forcus 为JavaThread对象设置栈溢出限制
     if (is_Java_thread()) {
-        ((JavaThread *) this)->set_stack_overflow_limit();
-        ((JavaThread *) this)->set_reserved_stack_activation(stack_base());
+        ((JavaThread * )
+        this)->set_stack_overflow_limit(); // forcus 设置栈溢出边界(当栈指针低于这个指时,jvm就知道快要溢出了)
+        ((JavaThread * )
+        this)->set_reserved_stack_activation(stack_base()); // forcus 初始化为栈顶 stack_base(高地址)
     }
 }
 
@@ -392,10 +433,17 @@ void Thread::call_run() {
 
     JFR_ONLY(Jfr::on_thread_start(this);)
 
-    log_debug(os, thread)("Thread " UINTX_FORMAT " stack dimensions: "
-                          PTR_FORMAT "-" PTR_FORMAT " (" SIZE_FORMAT "k).",
-                          os::current_thread_id(), p2i(stack_base() - stack_size()),
-                          p2i(stack_base()), stack_size() / 1024);
+    log_debug(os, thread)("Thread "
+    UINTX_FORMAT
+    " stack dimensions: "
+    PTR_FORMAT
+    "-"
+    PTR_FORMAT
+    " ("
+    SIZE_FORMAT
+    "k).",
+            os::current_thread_id(), p2i(stack_base() - stack_size()),
+            p2i(stack_base()), stack_size() / 1024);
 
     // Invoke <ChildClass>::run()
     this->run();
@@ -472,7 +520,8 @@ Thread::~Thread() {
         Thread::clear_thread_current();
     }
 
-    CHECK_UNHANDLED_OOPS_ONLY(if (CheckUnhandledOops) delete unhandled_oops();)
+    CHECK_UNHANDLED_OOPS_ONLY(
+    if (CheckUnhandledOops) delete unhandled_oops();)
 }
 
 #ifdef ASSERT
@@ -481,7 +530,7 @@ Thread::~Thread() {
 // thread, has been added the Threads list, the system is not at a
 // safepoint and the Thread is not "protected".
 //
-void Thread::check_for_dangling_thread_pointer(Thread *thread) {
+void Thread::check_for_dangling_thread_pointer(Thread * thread) {
     assert(!thread->is_Java_thread() || Thread::current() == thread ||
            !((JavaThread *) thread)->on_thread_list() ||
            SafepointSynchronize::is_at_safepoint() ||
@@ -499,14 +548,19 @@ ThreadPriority Thread::get_priority(const Thread *const thread) {
     return priority;
 }
 
-void Thread::set_priority(Thread *thread, ThreadPriority priority) {
-    debug_only(check_for_dangling_thread_pointer(thread);)
-    // Can return an error!
-    (void) os::set_priority(thread, priority);
+void Thread::set_priority(Thread * thread, ThreadPriority
+priority) {
+debug_only (check_for_dangling_thread_pointer(thread);
+
+)
+// Can return an error!
+(void)
+os::set_priority(thread, priority
+);
 }
 
 // 启动一个已经创建好的线程,让它真正开始运行
-void Thread::start(Thread *thread) { // 这里的Thread，
+void Thread::start(Thread * thread) { // 这里的Thread，
     // Start is different from resume in that its safety is guaranteed by context or
     // being called from a Java method synchronized on the Thread object.
     if (!DisableStartThread) {
@@ -871,16 +925,20 @@ void JavaThread::record_jump(address target, address instr, const char *file,
 
 #endif // PRODUCT
 
-void Thread::interrupt(Thread *thread) {
+void Thread::interrupt(Thread * thread) {
     debug_only(check_for_dangling_thread_pointer(thread);)
     os::interrupt(thread);
 }
 
-bool Thread::is_interrupted(Thread *thread, bool clear_interrupted) {
-    debug_only(check_for_dangling_thread_pointer(thread);)
-    // Note:  If clear_interrupted==false, this simply fetches and
-    // returns the value of the field osthread()->interrupted().
-    return os::is_interrupted(thread, clear_interrupted);
+bool Thread::is_interrupted(Thread * thread, bool
+clear_interrupted) {
+debug_only(check_for_dangling_thread_pointer(thread);
+)
+// Note:  If clear_interrupted==false, this simply fetches and
+// returns the value of the field osthread()->interrupted().
+return
+os::is_interrupted(thread, clear_interrupted
+);
 }
 
 
@@ -904,7 +962,7 @@ void Thread::oops_do(OopClosure *f, CodeBlobClosure *cf) {
         active_handles()->oops_do(f);
     }
     // Do oop for ThreadShadow
-    f->do_oop((oop *) &_pending_exception);
+    f->do_oop((oop * ) & _pending_exception);
     handle_area()->oops_do(f);
 
     if (MonitorInUseLists) {
@@ -938,20 +996,29 @@ void Thread::print_on(outputStream *st, bool print_extended_info) const {
                   _statistical_info.getElapsedTime() / 1000.0
         );
         if (is_Java_thread() && (PrintExtendedThreadInfo || print_extended_info)) {
-            size_t allocated_bytes = (size_t) const_cast<Thread *>(this)->cooked_allocated_bytes();
-            st->print("allocated=" SIZE_FORMAT "%s ",
-                      byte_size_in_proper_unit(allocated_bytes),
-                      proper_unit_for_byte_size(allocated_bytes)
+            size_t
+                    allocated_bytes = (size_t)
+            const_cast<Thread *>(this)->cooked_allocated_bytes();
+            st->print("allocated="
+            SIZE_FORMAT
+            "%s ",
+                    byte_size_in_proper_unit(allocated_bytes),
+                    proper_unit_for_byte_size(allocated_bytes)
             );
-            st->print("defined_classes=" INT64_FORMAT " ", _statistical_info.getDefineClassCount());
+            st->print("defined_classes="
+            INT64_FORMAT
+            " ", _statistical_info.getDefineClassCount());
         }
 
-        st->print("tid=" INTPTR_FORMAT " ", p2i(this));
+        st->print("tid="
+        INTPTR_FORMAT
+        " ", p2i(this));
         osthread()->print_on(st);
     }
     ThreadsSMRSupport::print_info_on(this, st);
     st->print(" ");
-    debug_only(if (WizardMode) print_owned_locks_on(st);)
+    debug_only(
+    if (WizardMode) print_owned_locks_on(st);)
 }
 
 // Thread::print_on_error() is called by fatal error handler. Don't use
@@ -969,8 +1036,12 @@ void Thread::print_on_error(outputStream *st, char *buf, int buflen) const {
         st->print(" \"%s\"", name());
     }
 
-    st->print(" [stack: " PTR_FORMAT "," PTR_FORMAT "]",
-              p2i(stack_end()), p2i(stack_base()));
+    st->print(" [stack: "
+    PTR_FORMAT
+    ","
+    PTR_FORMAT
+    "]",
+            p2i(stack_end()), p2i(stack_base()));
 
     if (osthread()) {
         st->print(" [id=%d]", osthread()->thread_id());
@@ -1023,7 +1094,7 @@ void Thread::check_for_valid_safepoint_state(bool potential_vm_operation) {
     if (!(_allow_safepoint_count == 0)) {
         fatal("Possible safepoint reached by thread that does not allow it");
     }
-    if (is_Java_thread() && ((JavaThread *) this)->thread_state() != _thread_in_vm) {
+    if (is_Java_thread() && ((JavaThread * ) this)->thread_state() != _thread_in_vm) {
         fatal("LEAF method calling lock?");
     }
 
@@ -1087,7 +1158,8 @@ bool Thread::is_lock_owned(address adr) const {
 
 bool Thread::set_as_starting_thread() {
     // NOTE: this must be called inside the main thread.
-    return os::create_main_thread((JavaThread *) this);
+    return os::create_main_thread((JavaThread * )
+    this);
 }
 
 static void initialize_class(Symbol *class_name, TRAPS) {
@@ -1101,7 +1173,7 @@ static Handle create_initial_thread_group(TRAPS) {
     Handle system_instance = JavaCalls::construct_new_instance(
             SystemDictionary::ThreadGroup_klass(),
             vmSymbols::void_method_signature(),
-    CHECK_NH);
+            CHECK_NH);
     Universe::set_system_thread_group(system_instance());
 
     Handle string = java_lang_String::create_from_str("main", CHECK_NH);
@@ -1110,7 +1182,7 @@ static Handle create_initial_thread_group(TRAPS) {
             vmSymbols::threadgroup_string_void_signature(),
             system_instance,
             string,
-    CHECK_NH);
+            CHECK_NH);
     return main_instance;
 }
 
@@ -1137,7 +1209,7 @@ static oop create_initial_thread(Handle thread_group, JavaThread *thread,
                             vmSymbols::threadgroup_string_void_signature(),
                             thread_group,
                             string,
-    CHECK_NULL);
+                            CHECK_NULL);
     return thread_oop();
 }
 
@@ -1242,7 +1314,7 @@ static void call_postVMInitHook(TRAPS) {
         JavaValue result(T_VOID);
         JavaCalls::call_static(&result, klass, vmSymbols::run_method_name(),
                                vmSymbols::void_method_signature(),
-        CHECK);
+                               CHECK);
     }
 }
 
@@ -1617,7 +1689,7 @@ void JavaThread::collect_counters(typeArrayOop array) {
 #endif // INCLUDE_JVMCI
 
 // A JavaThread is a normal Java thread
-
+// forcus JavaThread对象初始化
 void JavaThread::initialize() {
     // Initialize fields
 
@@ -1710,6 +1782,7 @@ void JavaThread::initialize() {
     pd_initialize();
 }
 
+// forcus JVM层面的线程抽象
 JavaThread::JavaThread(bool is_attaching_via_jni) :
         Thread() {
     initialize();
@@ -1813,7 +1886,7 @@ JavaThread::~JavaThread() {
         delete old_array;
     }
 
-    GrowableArray<jvmtiDeferredLocalVariableSet *> *deferred = deferred_locals();
+    GrowableArray < jvmtiDeferredLocalVariableSet * > *deferred = deferred_locals();
     if (deferred != NULL) {
         // This can only happen if thread is destroyed before deoptimization occurs.
         assert(deferred->length() != 0, "empty array!");
@@ -2107,9 +2180,11 @@ void JavaThread::exit(bool destroy_vm, ExitType exit_type) {
     // before removing a thread from the list of active threads.
     BarrierSet::barrier_set()->on_thread_detach(this);
 
-    log_info(os, thread)("JavaThread %s (tid: " UINTX_FORMAT ").",
-                         exit_type == JavaThread::normal_exit ? "exiting" : "detaching",
-                         os::current_thread_id());
+    log_info(os, thread)("JavaThread %s (tid: "
+    UINTX_FORMAT
+    ").",
+            exit_type == JavaThread::normal_exit ? "exiting" : "detaching",
+            os::current_thread_id());
 
     if (log_is_enabled(Debug, os, thread, timer)) {
         _timer_exit_phase3.stop();
@@ -2122,15 +2197,19 @@ void JavaThread::exit(bool destroy_vm, ExitType exit_type) {
         _timer_exit_phase4.stop();
         ResourceMark rm(this);
         log_debug(os, thread, timer)("name='%s'"
-                                     ", exit-phase1=" JLONG_FORMAT
-                                     ", exit-phase2=" JLONG_FORMAT
-                                     ", exit-phase3=" JLONG_FORMAT
-                                     ", exit-phase4=" JLONG_FORMAT,
-                                     get_thread_name(),
-                                     _timer_exit_phase1.milliseconds(),
-                                     _timer_exit_phase2.milliseconds(),
-                                     _timer_exit_phase3.milliseconds(),
-                                     _timer_exit_phase4.milliseconds());
+                                     ", exit-phase1="
+        JLONG_FORMAT
+        ", exit-phase2="
+        JLONG_FORMAT
+        ", exit-phase3="
+        JLONG_FORMAT
+        ", exit-phase4="
+        JLONG_FORMAT,
+                get_thread_name(),
+                _timer_exit_phase1.milliseconds(),
+                _timer_exit_phase2.milliseconds(),
+                _timer_exit_phase3.milliseconds(),
+                _timer_exit_phase4.milliseconds());
     }
 }
 
@@ -2161,7 +2240,7 @@ void JavaThread::cleanup_failed_attach_current_thread(bool is_daemon) {
 }
 
 JavaThread *JavaThread::active() {
-    Thread *thread = Thread::current();
+    Thread * thread = Thread::current();
     if (thread->is_Java_thread()) {
         return (JavaThread *) thread;
     } else {
@@ -2256,10 +2335,16 @@ void JavaThread::check_and_handle_async_exceptions(bool check_unsafe_error) {
             if (lt.is_enabled()) {
                 ResourceMark rm;
                 LogStream ls(lt);
-                ls.print("Async. exception installed at runtime exit (" INTPTR_FORMAT ")", p2i(this));
+                ls.print("Async. exception installed at runtime exit ("
+                INTPTR_FORMAT
+                ")", p2i(this));
                 if (has_last_Java_frame()) {
                     frame f = last_frame();
-                    ls.print(" (pc: " INTPTR_FORMAT " sp: " INTPTR_FORMAT " )", p2i(f.pc()), p2i(f.sp()));
+                    ls.print(" (pc: "
+                    INTPTR_FORMAT
+                    " sp: "
+                    INTPTR_FORMAT
+                    " )", p2i(f.pc()), p2i(f.sp()));
                 }
                 ls.print_cr(" of type: %s", _pending_async_exception->klass()->external_name());
             }
@@ -2461,8 +2546,9 @@ int JavaThread::java_suspend_self() {
     }
 
     assert(_anchor.walkable() ||
-           (is_Java_thread() && !((JavaThread *) this)->has_last_Java_frame()),
-           "must have walkable stack");
+           (is_Java_thread() && !((JavaThread * )
+    this)->has_last_Java_frame()),
+    "must have walkable stack");
 
     MutexLockerEx ml(SR_lock(), Mutex::_no_safepoint_check_flag);
 
@@ -2587,7 +2673,8 @@ void JavaThread::check_safepoint_and_suspend_for_native_trans(JavaThread *thread
 // thread state is _thread_in_native_trans.
 void JavaThread::check_special_condition_for_native_trans(JavaThread *thread) {
     // Enable WXWrite: called directly from interpreter native wrapper.
-    MACOS_AARCH64_ONLY(ThreadWXEnable wx(WXWrite, thread));
+    MACOS_AARCH64_ONLY(ThreadWXEnable
+    wx(WXWrite, thread));
 
     check_safepoint_and_suspend_for_native_trans(thread);
 
@@ -2651,7 +2738,8 @@ void JavaThread::create_stack_guard_pages() {
         _stack_guard_state != stack_guard_unused ||
         (DisablePrimordialThreadGuardPages && os::is_primordial_thread())) {
         log_info(os, thread)("Stack guard page creation for thread "
-                             UINTX_FORMAT " disabled", os::current_thread_id());
+        UINTX_FORMAT
+        " disabled", os::current_thread_id());
         return;
     }
     address low_addr = stack_end();
@@ -2672,13 +2760,21 @@ void JavaThread::create_stack_guard_pages() {
         _stack_guard_state = stack_guard_enabled;
     } else {
         log_warning(os, thread)("Attempt to protect stack guard pages failed ("
-                                PTR_FORMAT "-" PTR_FORMAT ").", p2i(low_addr), p2i(low_addr + len));
+        PTR_FORMAT
+        "-"
+        PTR_FORMAT
+        ").", p2i(low_addr), p2i(low_addr + len));
         vm_exit_out_of_memory(len, OOM_MPROTECT_ERROR, "memory to guard stack pages");
     }
 
-    log_debug(os, thread)("Thread " UINTX_FORMAT " stack guard pages activated: "
-                          PTR_FORMAT "-" PTR_FORMAT ".",
-                          os::current_thread_id(), p2i(low_addr), p2i(low_addr + len));
+    log_debug(os, thread)("Thread "
+    UINTX_FORMAT
+    " stack guard pages activated: "
+    PTR_FORMAT
+    "-"
+    PTR_FORMAT
+    ".",
+            os::current_thread_id(), p2i(low_addr), p2i(low_addr + len));
 }
 
 void JavaThread::remove_stack_guard_pages() {
@@ -2692,7 +2788,10 @@ void JavaThread::remove_stack_guard_pages() {
             _stack_guard_state = stack_guard_unused;
         } else {
             log_warning(os, thread)("Attempt to deallocate stack guard pages failed ("
-                                    PTR_FORMAT "-" PTR_FORMAT ").", p2i(low_addr), p2i(low_addr + len));
+            PTR_FORMAT
+            "-"
+            PTR_FORMAT
+            ").", p2i(low_addr), p2i(low_addr + len));
             return;
         }
     } else {
@@ -2701,14 +2800,22 @@ void JavaThread::remove_stack_guard_pages() {
             _stack_guard_state = stack_guard_unused;
         } else {
             log_warning(os, thread)("Attempt to unprotect stack guard pages failed ("
-                                    PTR_FORMAT "-" PTR_FORMAT ").", p2i(low_addr), p2i(low_addr + len));
+            PTR_FORMAT
+            "-"
+            PTR_FORMAT
+            ").", p2i(low_addr), p2i(low_addr + len));
             return;
         }
     }
 
-    log_debug(os, thread)("Thread " UINTX_FORMAT " stack guard pages removed: "
-                          PTR_FORMAT "-" PTR_FORMAT ".",
-                          os::current_thread_id(), p2i(low_addr), p2i(low_addr + len));
+    log_debug(os, thread)("Thread "
+    UINTX_FORMAT
+    " stack guard pages removed: "
+    PTR_FORMAT
+    "-"
+    PTR_FORMAT
+    ".",
+            os::current_thread_id(), p2i(low_addr), p2i(low_addr + len));
 }
 
 void JavaThread::enable_stack_reserved_zone() {
@@ -2906,7 +3013,7 @@ class RememberProcessedThread : public StackObj {
     NamedThread *_cur_thr;
 public:
     RememberProcessedThread(JavaThread *jthr) {
-        Thread *thread = Thread::current();
+        Thread * thread = Thread::current();
         if (thread->is_Named_thread()) {
             _cur_thr = (NamedThread *) thread;
             _cur_thr->set_processed_thread(jthr);
@@ -2967,7 +3074,7 @@ void JavaThread::oops_do(OopClosure *f, CodeBlobClosure *cf) {
     assert(vframe_array_head() == NULL, "deopt in progress at a safepoint!");
     // If we have deferred set_locals there might be oops waiting to be
     // written
-    GrowableArray<jvmtiDeferredLocalVariableSet *> *list = deferred_locals();
+    GrowableArray < jvmtiDeferredLocalVariableSet * > *list = deferred_locals();
     if (list != NULL) {
         for (int i = 0; i < list->length(); i++) {
             list->at(i)->oops_do(f);
@@ -2976,10 +3083,10 @@ void JavaThread::oops_do(OopClosure *f, CodeBlobClosure *cf) {
 
     // Traverse instance variables at the end since the GC may be moving things
     // around using this function
-    f->do_oop((oop *) &_threadObj);
-    f->do_oop((oop *) &_vm_result);
-    f->do_oop((oop *) &_exception_oop);
-    f->do_oop((oop *) &_pending_async_exception);
+    f->do_oop((oop * ) & _threadObj);
+    f->do_oop((oop * ) & _vm_result);
+    f->do_oop((oop * ) & _exception_oop);
+    f->do_oop((oop * ) & _pending_async_exception);
 #if INCLUDE_JVMCI
     f->do_oop((oop *) &_jvmci_reserved_oop0);
 #endif
@@ -3013,7 +3120,8 @@ void JavaThread::metadata_do(void f(Metadata *)) {
         }
     } else if (is_Compiler_thread()) {
         // need to walk ciMetadata in current compile tasks to keep alive.
-        CompilerThread *ct = (CompilerThread *) this;
+        CompilerThread * ct = (CompilerThread * )
+        this;
         if (ct->env() != NULL) {
             ct->env()->metadata_do(f);
         }
@@ -3073,13 +3181,17 @@ void JavaThread::print_on(outputStream *st, bool print_extended_info) const {
     st->print_raw("\" ");
     oop thread_oop = threadObj();
     if (thread_oop != NULL) {
-        st->print("#" INT64_FORMAT " ", (int64_t) java_lang_Thread::thread_id(thread_oop));
+        st->print("#"
+        INT64_FORMAT
+        " ", (int64_t) java_lang_Thread::thread_id(thread_oop));
         if (java_lang_Thread::is_daemon(thread_oop)) st->print("daemon ");
         st->print("prio=%d ", java_lang_Thread::priority(thread_oop));
     }
     Thread::print_on(st, print_extended_info);
     // print guess for valid stack memory region (assume 4K pages); helps lock debugging
-    st->print_cr("[" INTPTR_FORMAT "]", (intptr_t) last_Java_sp() & ~right_n_bits(12));
+    st->print_cr("["
+    INTPTR_FORMAT
+    "]", (intptr_t) last_Java_sp() & ~right_n_bits(12));
     if (thread_oop != NULL) {
         st->print_cr("   java.lang.Thread.State: %s", java_lang_Thread::thread_status_name(thread_oop));
     }
@@ -3088,7 +3200,8 @@ void JavaThread::print_on(outputStream *st, bool print_extended_info) const {
     _safepoint_state->print_on(st);
 #endif // PRODUCT
     if (is_Compiler_thread()) {
-        CompileTask *task = ((CompilerThread *) this)->task();
+        CompileTask * task = ((CompilerThread * )
+        this)->task();
         if (task != NULL) {
             st->print("   Compiling: ");
             task->print(st, NULL, true, false);
@@ -3116,8 +3229,12 @@ void JavaThread::print_on_error(outputStream *st, char *buf, int buflen) const {
     if (osthread()) {
         st->print(", id=%d", osthread()->thread_id());
     }
-    st->print(", stack(" PTR_FORMAT "," PTR_FORMAT ")",
-              p2i(stack_end()), p2i(stack_base()));
+    st->print(", stack("
+    PTR_FORMAT
+    ","
+    PTR_FORMAT
+    ")",
+            p2i(stack_end()), p2i(stack_base()));
     st->print("]");
 
     ThreadsSMRSupport::print_info_on(this, st);
@@ -3147,7 +3264,7 @@ const char *JavaThread::get_thread_name() const {
 #ifdef ASSERT
     // early safepoints can hit while current thread does not yet have TLS
     if (!SafepointSynchronize::is_at_safepoint()) {
-        Thread *cur = Thread::current();
+        Thread * cur = Thread::current();
         if (!(cur->is_Java_thread() && cur == this)) {
             // Current JavaThreads are allowed to get their own name without
             // the Threads_lock.
@@ -3185,7 +3302,8 @@ const char *JavaThread::get_thread_name_string(char *buf, int buflen) const {
 
 
 const char *JavaThread::get_threadgroup_name() const {
-    debug_only(if (JavaThread::current() != this) assert_locked_or_safepoint(Threads_lock);)
+    debug_only(
+    if (JavaThread::current() != this) assert_locked_or_safepoint(Threads_lock);)
     oop thread_obj = threadObj();
     if (thread_obj != NULL) {
         oop thread_group = java_lang_Thread::threadGroup(thread_obj);
@@ -3198,7 +3316,8 @@ const char *JavaThread::get_threadgroup_name() const {
 }
 
 const char *JavaThread::get_parent_name() const {
-    debug_only(if (JavaThread::current() != this) assert_locked_or_safepoint(Threads_lock);)
+    debug_only(
+    if (JavaThread::current() != this) assert_locked_or_safepoint(Threads_lock);)
     oop thread_obj = threadObj();
     if (thread_obj != NULL) {
         oop thread_group = java_lang_Thread::threadGroup(thread_obj);
@@ -3367,15 +3486,18 @@ protected:
     inline void do_oop_work(T *p) {
         oop obj = RawAccess<>::oop_load(p);
         if (obj == NULL) return;
-        tty->print(INTPTR_FORMAT ": ", p2i(p));
+        tty->print(INTPTR_FORMAT
+        ": ", p2i(p));
         if (oopDesc::is_oop_or_null(obj)) {
             if (obj->is_objArray()) {
-                tty->print_cr("valid objArray: " INTPTR_FORMAT, p2i(obj));
+                tty->print_cr("valid objArray: "
+                INTPTR_FORMAT, p2i(obj));
             } else {
                 obj->print();
             }
         } else {
-            tty->print_cr("invalid oop: " INTPTR_FORMAT, p2i(obj));
+            tty->print_cr("invalid oop: "
+            INTPTR_FORMAT, p2i(obj));
         }
         tty->cr();
     }
@@ -3887,18 +4009,34 @@ jint Threads::create_vm(JavaVMInitArgs *args, bool *canTryAgain) {
         JavaThread::_jvmci_old_thread_counters = NULL;
     }
 #endif // INCLUDE_JVMCI
-
     // Attach the main thread to this os thread
     // forcus java主线程 附加到 os线程
-    JavaThread *main_thread = new JavaThread();
-    main_thread->set_thread_state(_thread_in_vm);
-    main_thread->initialize_thread_current();
+    // forcus
+    /**
+     *  注意:执行这里的Thread::createvm()方法是子线程(由init线程通过pthread_create(...,&JavaMain,...))创建的一个线程
+     */
+    JavaThread *main_thread = new JavaThread(); /* 创建JavaThread对象(这是一个C++类,虽然有'Java',有'Thread'，但是他不是Java对象,也不是线程,内部对属性进行了null初始化)*/
+    main_thread->set_thread_state(_thread_in_vm); /* 设置线程状态 - 此时正在执行Thread::create_vm(),所以是thread_in_vm*/
+    main_thread->initialize_thread_current(); /* 绑定到当前"OS线程" - 这里的OS线程是真正跑在linux内核中的线程实体 {到这里,每个线程通过Thread::current()都能获取到其所对应的JavaThread对象} */
     // must do this before set_active_handles
-    main_thread->record_stack_base_and_size();
-    main_thread->register_thread_stack_with_NMT();
-    main_thread->set_active_handles(JNIHandleBlock::allocate_block());
+    main_thread->record_stack_base_and_size(); /* 记录栈基址和栈大小 */
+    /**
+            NMT = Native Memory Tracking，是 JVM 的内存追踪系统，用于：
+               - 追踪 JVM 各部分的内存使用
+               - 通过 jcmd <pid> VM.native_memory 查看内存报告
+               - 诊断内存泄漏
+            生存环境默认是不开启的,会有5-10% 的性能损耗
+     */
+    main_thread->register_thread_stack_with_NMT();/* 将线程栈注册到 NMT (Native Memory Tracking) 系统中 */
+    main_thread->set_active_handles(
+            JNIHandleBlock::allocate_block()); /* 为主线程分配JNI-Handle,用于在native代码中安全的引用Java对象*/ // forcus 将申请的block设置到JavaThread对象的_active_handles属性中去
     MACOS_AARCH64_ONLY(main_thread->init_wx());
-
+    // forcus 将主线程(main_thread,这里指的是前面所说的子线程) 正式的 附加(attach) 到 os线程
+    /*
+     * case:
+     *  - 创建OSThread对象
+     *  - 设置main thread 的 信号相关(阻塞/非阻塞)
+     */
     if (!main_thread->set_as_starting_thread()) {
         vm_shutdown_during_initialization(
                 "Failed necessary internal allocation. Out of swap space");
@@ -3909,9 +4047,11 @@ jint Threads::create_vm(JavaVMInitArgs *args, bool *canTryAgain) {
 
     // Enable guard page *after* os::create_main_thread(), otherwise it would
     // crash Linux VM, see notes in os_linux.cpp.
+    // forcus 在线程栈的低地址创建保护页(guard page) 当栈溢出时触发硬件异常，防止程序继续破坏内存。
     main_thread->create_stack_guard_pages();
 
     // Initialize Java-Level synchronization subsystem
+    // forcus 初始化Java同步子系统的性能监控计数器 (存储在前面创建的PerfMemory共享内存中,可以被jcmd/...查看)
     ObjectMonitor::Initialize();
 
     // Initialize global modules
@@ -3943,7 +4083,7 @@ jint Threads::create_vm(JavaVMInitArgs *args, bool *canTryAgain) {
         TraceTime timer("Start VMThread", TRACETIME_LOG(Info, startuptime));
 
         VMThread::create();
-        Thread *vmthread = VMThread::vm_thread();
+        Thread * vmthread = VMThread::vm_thread();
 
         if (!os::create_thread(vmthread, os::vm_thread)) {
             vm_exit_during_initialization("Cannot create VM thread. "
@@ -3976,7 +4116,7 @@ jint Threads::create_vm(JavaVMInitArgs *args, bool *canTryAgain) {
     // after any initialization logic that might modify the flags.
     Arguments::update_vm_info_property(VM_Version::vm_info_string());
 
-    Thread *THREAD = Thread::current();
+    Thread * THREAD = Thread::current();
 
     // Always call even when there are not JVMTI environments yet, since environments
     // may be attached late and JVMTI must track phases of VM execution
@@ -4166,7 +4306,7 @@ jint Threads::create_vm(JavaVMInitArgs *args, bool *canTryAgain) {
 
 // type for the Agent_OnLoad and JVM_OnLoad entry points
 extern "C" {
-typedef jint (JNICALL *OnLoadEntry_t)(JavaVM *, char *, void *);
+typedef jint (JNICALL * OnLoadEntry_t ) ( JavaVM * , char * , void * ) ;
 }
 
 // Find a command line agent library and return its entry point for
@@ -4305,7 +4445,7 @@ void Threads::create_vm_init_agents() {
 }
 
 extern "C" {
-typedef void (JNICALL *Agent_OnUnload_t)(JavaVM *);
+typedef void (JNICALL * Agent_OnUnload_t ) ( JavaVM * ) ;
 }
 
 void Threads::shutdown_vm_agents() {
@@ -4559,7 +4699,8 @@ void Threads::add(JavaThread *p, bool force_daemon) {
     ThreadsSMRSupport::add_thread(p);
 
     // Possible GC point.
-    Events::log(p, "Thread added: " INTPTR_FORMAT, p2i(p));
+    Events::log(p, "Thread added: "
+    INTPTR_FORMAT, p2i(p));
 }
 
 void Threads::remove(JavaThread *p, bool is_daemon) {
@@ -4611,7 +4752,8 @@ void Threads::remove(JavaThread *p, bool is_daemon) {
     } // unlock Threads_lock
 
     // Since Events::log uses a lock, we grab it outside the Threads_lock
-    Events::log(p, "Thread exited: " INTPTR_FORMAT, p2i(p));
+    Events::log(p, "Thread exited: "
+    INTPTR_FORMAT, p2i(p));
 }
 
 // Operations on the Threads list for GC.  These are not explicitly locked,
@@ -4644,12 +4786,16 @@ void Threads::assert_all_threads_claimed() {
     ALL_JAVA_THREADS(p) {
         const int thread_parity = p->oops_do_parity();
         assert((thread_parity == _thread_claim_parity),
-               "Thread " PTR_FORMAT " has incorrect parity %d != %d", p2i(p), thread_parity, _thread_claim_parity);
+               "Thread "
+        PTR_FORMAT
+        " has incorrect parity %d != %d", p2i(p), thread_parity, _thread_claim_parity);
     }
     VMThread *vmt = VMThread::vm_thread();
     const int thread_parity = vmt->oops_do_parity();
     assert((thread_parity == _thread_claim_parity),
-           "VMThread " PTR_FORMAT " has incorrect parity %d != %d", p2i(vmt), thread_parity, _thread_claim_parity);
+           "VMThread "
+    PTR_FORMAT
+    " has incorrect parity %d != %d", p2i(vmt), thread_parity, _thread_claim_parity);
 }
 
 #endif // ASSERT
@@ -4716,7 +4862,7 @@ void Threads::deoptimized_wrt_marked_nmethods() {
 GrowableArray<JavaThread *> *Threads::get_pending_threads(ThreadsList *t_list,
                                                           int count,
                                                           address monitor) {
-    GrowableArray<JavaThread *> *result = new GrowableArray<JavaThread *>(count);
+    GrowableArray < JavaThread * > *result = new GrowableArray<JavaThread *>(count);
 
     int i = 0;
     DO_JAVA_THREADS(t_list, p) {
@@ -4818,18 +4964,29 @@ void Threads::print_on(outputStream *st, bool print_stacks,
     st->flush();
 }
 
-void Threads::print_on_error(Thread *this_thread, outputStream *st, Thread *current, char *buf,
-                             int buflen, bool *found_current) {
-    if (this_thread != NULL) {
-        bool is_current = (current == this_thread);
-        *found_current = *found_current || is_current;
-        st->print("%s", is_current ? "=>" : "  ");
+void Threads::print_on_error(Thread * this_thread, outputStream * st, Thread * current, char * buf,
+                             int
+buflen,
+bool *found_current
+) {
+if (this_thread != NULL) {
+bool is_current = (current == this_thread);
+*
+found_current = *found_current || is_current;
+st->print("%s", is_current ? "=>" : "  ");
 
-        st->print(PTR_FORMAT, p2i(this_thread));
-        st->print(" ");
-        this_thread->print_on_error(st, buf, buflen);
-        st->cr();
-    }
+st->
+print(PTR_FORMAT, p2i(this_thread)
+);
+st->print(" ");
+this_thread->
+print_on_error(st, buf, buflen
+);
+st->
+
+cr();
+
+}
 }
 
 class PrintOnErrorClosure : public ThreadClosure {
@@ -4875,7 +5032,9 @@ void Threads::print_on_error(outputStream *st, Thread *current, char *buf,
 
     if (!found_current) {
         st->cr();
-        st->print("=>" PTR_FORMAT " (exited) ", p2i(current));
+        st->print("=>"
+        PTR_FORMAT
+        " (exited) ", p2i(current));
         current->print_on_error(st, buf, buflen);
         st->cr();
     }
@@ -5062,7 +5221,7 @@ void Thread::muxAcquire(volatile intptr_t *Lock, const char *LockName) {
                 continue;      // Interference -- *Lock changed -- Just retry
             }
             assert(w & LOCKBIT, "invariant");
-            Self->ListNext = (ParkEvent *) (w & ~LOCKBIT);
+            Self->ListNext = (ParkEvent * )(w & ~LOCKBIT);
             if (Atomic::cmpxchg(intptr_t(Self) | LOCKBIT, Lock, w) == w) break;
         }
 
@@ -5122,7 +5281,7 @@ void Thread::muxAcquireW(volatile intptr_t *Lock, ParkEvent *ev) {
                 continue;      // Interference -- *Lock changed -- Just retry
             }
             assert(w & LOCKBIT, "invariant");
-            ev->ListNext = (ParkEvent *) (w & ~LOCKBIT);
+            ev->ListNext = (ParkEvent * )(w & ~LOCKBIT);
             if (Atomic::cmpxchg(intptr_t(ev) | LOCKBIT, Lock, w) == w) break;
         }
 
@@ -5162,7 +5321,7 @@ void Thread::muxRelease(volatile intptr_t *Lock) {
         const intptr_t w = Atomic::cmpxchg((intptr_t) 0, Lock, LOCKBIT);
         assert(w & LOCKBIT, "invariant");
         if (w == LOCKBIT) return;
-        ParkEvent *const List = (ParkEvent *) (w & ~LOCKBIT);
+        ParkEvent *const List = (ParkEvent * )(w & ~LOCKBIT);
         assert(List != NULL, "invariant");
         assert(List->OnList == intptr_t(Lock), "invariant");
         ParkEvent *const nxt = List->ListNext;

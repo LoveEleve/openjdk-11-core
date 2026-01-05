@@ -691,19 +691,21 @@ sigset_t *os::Linux::vm_signals() {
 void os::Linux::hotspot_sigmask(Thread *thread) {
 
     //Save caller's signal mask before setting VM signal mask
+    // 保存调用者(旧的)的信号掩码
     sigset_t caller_sigmask;
     pthread_sigmask(SIG_BLOCK, NULL, &caller_sigmask);
-
     OSThread *osthread = thread->osthread();
     osthread->set_caller_sigmask(caller_sigmask);
-
+    // forcus-1 解除阻塞 unblocked_signals() 中的信号
     pthread_sigmask(SIG_UNBLOCK, os::Linux::unblocked_signals(), NULL);
-
+    // forcus ReduceSignalUsage默认为false,不可能不使用信号机制的
     if (!ReduceSignalUsage) {
+        // forcus 如果是VMThread,那么不阻塞 vm_sigs
         if (thread->is_VM_thread()) {
             // Only the VM thread handles BREAK_SIGNAL ...
             pthread_sigmask(SIG_UNBLOCK, vm_signals(), NULL);
         } else {
+            // forcus 否则阻塞 vm_sigs
             // ... all other threads block BREAK_SIGNAL
             pthread_sigmask(SIG_BLOCK, vm_signals(), NULL);
         }
@@ -1061,13 +1063,14 @@ bool os::create_main_thread(JavaThread *thread) {
     assert(os::Linux::_main_thread == pthread_self(), "should be called inside main thread");
     return create_attached_thread(thread);
 }
-
+// forcus
 bool os::create_attached_thread(JavaThread *thread) {
 #ifdef ASSERT
     thread->verify_not_published();
 #endif
 
     // Allocate the OSThread object
+    // 创建OSThread对象
     OSThread *osthread = new OSThread(NULL, NULL);
 
     if (osthread == NULL) {
@@ -1075,24 +1078,31 @@ bool os::create_attached_thread(JavaThread *thread) {
     }
 
     // Store pthread info into the OSThread
+    // forcus 设置线程标识
+    /*
+     * os::Linux::gettid():内核线程id
+     * pthread_self():pthread id
+     */
     osthread->set_thread_id(os::Linux::gettid());
     osthread->set_pthread_id(::pthread_self());
 
     // initialize floating point control register
+    // 初始化浮点控制寄存器
     os::Linux::init_thread_fpu_state();
 
     // Initial thread state is RUNNABLE
+    // 设置OSThread的状态为RUNNABLE forcus 遗留代码,不需要关心
     osthread->set_state(RUNNABLE);
-
+    // forcus 将javaThread 关联 osThread对象 (保存在 _osthread 属性中)
     thread->set_osthread(osthread);
-
+    // NUMA相关
     if (UseNUMA) {
         int lgrp_id = os::numa_get_group_id();
         if (lgrp_id != -1) {
             thread->set_lgrp_id(lgrp_id);
         }
     }
-
+    // init thread 暂时不关心
     if (os::is_primordial_thread()) {
         // If current thread is primordial thread, its stack is mapped on demand,
         // see notes about MAP_GROWSDOWN. Here we try to force kernel to map
@@ -1115,6 +1125,13 @@ bool os::create_attached_thread(JavaThread *thread) {
 
     // initialize signal mask for this thread
     // and save the caller's signal mask
+    /*
+     * forcus 初始化信号掩码
+     *  在这里会和前面的关联起来,前面初始化了两个信号集合「static sigset_t unblocked_sigs, vm_sigs;」
+     *  在这里就要对当前main线程进行设置
+     *   - unblocked_sigs：不阻塞该信号集中的信号(也即会响应处理)
+     *   - vm_sigs：阻塞该信号集中的信号(也即不会响应处理) - 因为这个信号是由 VMThread 来处理的(用于Thread-Dump)
+     */
     os::Linux::hotspot_sigmask(thread);
 
     log_info(os, thread)("Thread attached (tid: " UINTX_FORMAT ", pthread id: " UINTX_FORMAT ").",
@@ -6749,14 +6766,17 @@ bool os::start_debugging(char *buf, int buflen) {
 #ifndef ZERO
 
 static void current_stack_region(address *bottom, size_t *size) {
+    // 主线程 - 指定是执行main()方法的线程,由shell创建而来,在这里不关注
     if (os::is_primordial_thread()) {
         // primordial thread needs special handling because pthread_getattr_np()
         // may return bogus value.
         *bottom = os::Linux::initial_thread_stack_bottom();
         *size = os::Linux::initial_thread_stack_size();
-    } else {
+    } else { // forcus 此时执行到这里的应该是子线程,走这里
         pthread_attr_t attr;
-
+        /*
+         * 获取当前线程的属性,pthread_self()是获取当前线程的id
+         */
         int rslt = pthread_getattr_np(pthread_self(), &attr);
 
         // JVM needs to know exact stack location, abort if it fails
@@ -6767,19 +6787,41 @@ static void current_stack_region(address *bottom, size_t *size) {
                 fatal("pthread_getattr_np failed with error = %d", rslt);
             }
         }
-
+        /*
+         * 获取线程的栈地址和大小：bottmo & size
+            pthread 返回的视角：
+              bottom ──→ ┌─────────────────┐ 低地址  stack_end / stack_bottom
+                         │   Guard Page    │      │
+                         ├─────────────────┤      │
+                         │                 │     size
+                         │   栈空间         │      │
+                         │                 │      │
+                         └─────────────────┘ 高地址 (bottom + size) -> 这里通常被称为stack_base
+         */
         if (pthread_attr_getstack(&attr, (void **) bottom, size) != 0) {
             fatal("Cannot locate current stack attributes!");
         }
 
         // Work around NPTL stack guard error.
+        // forcus 修正Guard page, pthread_attr_getstack 返回的范围包含了 Guard Page，但 Guard Page 是不可访问的保护区域，JVM 需要的是实际可用的栈空间：
         size_t guard_size = 0;
-        rslt = pthread_attr_getguardsize(&attr, &guard_size);
+        rslt = pthread_attr_getguardsize(&attr, &guard_size); // 获取guard_size大小
         if (rslt != 0) {
             fatal("pthread_attr_getguardsize failed with error = %d", rslt);
         }
-        *bottom += guard_size;
-        *size -= guard_size;
+        /*
+            修正前 (pthread 返回的)          修正后 (JVM 需要的)
+
+            ┌─────────────────┐
+            │   Guard Page    │ ← bottom     ┌─────────────────┐  ← bottom (上移了)
+            ├─────────────────┤              │                 │
+            │                 │              │   可用栈空间      │
+            │   可用栈空间     │   size       │                  │  size (减小了)
+            │                 │              │                 │
+            └─────────────────┘              └─────────────────
+         */
+        *bottom += guard_size; // 底部上移，跳过 guard page
+        *size -= guard_size;// 大小减小，跳过 guard page
 
         pthread_attr_destroy(&attr);
 
@@ -6792,7 +6834,7 @@ address os::current_stack_base() {
     address bottom;
     size_t size;
     current_stack_region(&bottom, &size);
-    return (bottom + size);
+    return (bottom + size); // forcus bottom + size = stack_base(也就是高地址)
 }
 
 size_t os::current_stack_size() {

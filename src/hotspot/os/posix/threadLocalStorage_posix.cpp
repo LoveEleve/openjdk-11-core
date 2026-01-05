@@ -45,6 +45,8 @@ extern "C" void restore_thread_pointer(void* p) {
  *      ThreadLocal tl = new ThreadLocal(); --> 在这里就是 pthread_key_t _thread_key
  *      tl.set(currentThread); --> 在这里是：pthread_setspecific(_thread_key, thread_A_ptr);  // 存入 0x100 每个线程存储自己的值
  *      Thread currentThread = t1.get() --> 在这里是：pthread_getspecific(_thread_key);
+ *      ==== 经过后面的学习
+ *      ps : 这里好像存储的是 JavaThread对象(每个os线程都会对应一个JavaThread对象)
  */
 void ThreadLocalStorage::init() {
   assert(!_initialized, "initializing TLS more than once!");

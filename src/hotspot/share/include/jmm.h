@@ -55,14 +55,14 @@ enum {
 };
 
 typedef struct {
-  unsigned int isLowMemoryDetectionSupported : 1;
-  unsigned int isCompilationTimeMonitoringSupported : 1;
-  unsigned int isThreadContentionMonitoringSupported : 1;
-  unsigned int isCurrentThreadCpuTimeSupported : 1;
-  unsigned int isOtherThreadCpuTimeSupported : 1;
-  unsigned int isObjectMonitorUsageSupported : 1;
-  unsigned int isSynchronizerUsageSupported : 1;
-  unsigned int isThreadAllocatedMemorySupported : 1;
+  unsigned int isLowMemoryDetectionSupported : 1; // MemoryMXBean
+  unsigned int isCompilationTimeMonitoringSupported : 1; // CompilationMXBean.getTotalCompilationTime()
+  unsigned int isThreadContentionMonitoringSupported : 1; // ThreadMXBean.setThreadContentionMonitoringEnabled()
+  unsigned int isCurrentThreadCpuTimeSupported : 1; // ThreadMXBean.getCurrentThreadCpuTime()
+  unsigned int isOtherThreadCpuTimeSupported : 1; // ThreadMXBean.getThreadCpuTime()
+  unsigned int isObjectMonitorUsageSupported : 1; // ThreadMXBean.getThreadInfo(..., true, ...)
+  unsigned int isSynchronizerUsageSupported : 1; // ThreadMXBean.findDeadlockedThreads()
+  unsigned int isThreadAllocatedMemorySupported : 1; // ThreadMXBean.getThreadAllocatedBytes()
   unsigned int isRemoteDiagnosticCommandsSupported : 1;
   unsigned int : 22;
 } jmmOptionalSupport;

@@ -138,9 +138,9 @@ class JNIHandleBlock : public CHeapObj<mtInternal> {
     block_size_in_oops  = 32                    // Number of handles per handle block
   };
 
-  oop             _handles[block_size_in_oops]; // The handles
-  int             _top;                         // Index of next unused handle
-  JNIHandleBlock* _next;                        // Link to next block
+  oop             _handles[block_size_in_oops]; // The handles forcus 数组大小为32
+  int             _top;                         // Index of next unused handle forcus 指向下一个未使用的handle
+  JNIHandleBlock* _next;                        // Link to next block forcus 多个JNIHandleBlock组成链表
 
   // The following instance variables are only used by the first block in a chain.
   // Having two types of blocks complicates the code and the space overhead in negligible.

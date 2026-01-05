@@ -2244,11 +2244,14 @@ PerfLongVariable * ObjectMonitor::_sync_MonExtant              = NULL;
 // be protected - like so many things - by the MonitorCache_lock.
 
 void ObjectMonitor::Initialize() {
+  // 确保只初始化一次
   static int InitializationCompleted = 0;
   assert(InitializationCompleted == 0, "invariant");
   InitializationCompleted = 1;
-  if (UsePerfData) {
+  //  只有启用性能数据收集时才创建计数器
+  if (UsePerfData) { // 默认为true
     EXCEPTION_MARK;
+  // 定义创建计数器的宏
 #define NEWPERFCOUNTER(n)                                                \
   {                                                                      \
     n = PerfDataManager::create_counter(SUN_RT, #n, PerfData::U_Events,  \
@@ -2259,13 +2262,21 @@ void ObjectMonitor::Initialize() {
     n = PerfDataManager::create_variable(SUN_RT, #n, PerfData::U_Events,  \
                                          CHECK);                          \
   }
-    NEWPERFCOUNTER(_sync_Inflations);
-    NEWPERFCOUNTER(_sync_Deflations);
-    NEWPERFCOUNTER(_sync_ContendedLockAttempts);
-    NEWPERFCOUNTER(_sync_FutileWakeups);
-    NEWPERFCOUNTER(_sync_Parks);
-    NEWPERFCOUNTER(_sync_Notifications);
-    NEWPERFVARIABLE(_sync_MonExtant);
+  // forcus 创建各种性能计数器
+  /*
+   *  这些计数器存储在 PerfMemory共享内存中(之前说过/tmp/hsperfdata_<user>/<pid>)
+   *  可以被jstat等工具读取
+   *   - jcmd <pid> PerfCounter.print
+   *   - jcmd <pid> PerfCounter.print | grep sync
+   *   - hexdump -C /tmp/hsperfdata_root/<pid>
+   */
+    NEWPERFCOUNTER(_sync_Inflations); // 锁膨胀次数
+    NEWPERFCOUNTER(_sync_Deflations); // 锁收缩次数
+    NEWPERFCOUNTER(_sync_ContendedLockAttempts); // 锁竞争尝试次数
+    NEWPERFCOUNTER(_sync_FutileWakeups); // 无效唤醒次数
+    NEWPERFCOUNTER(_sync_Parks);  // 线程挂起次数
+    NEWPERFCOUNTER(_sync_Notifications);// notify 调用次数
+    NEWPERFVARIABLE(_sync_MonExtant);// 当前存活的 Monitor 数量
 #undef NEWPERFCOUNTER
 #undef NEWPERFVARIABLE
   }
