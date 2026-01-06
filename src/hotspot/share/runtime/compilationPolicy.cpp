@@ -59,8 +59,15 @@ bool               CompilationPolicy::_in_vm_startup;
 
 // Determine compilation policy based on command line argument
 void compilationPolicy_init() {
-  CompilationPolicy::set_in_vm_startup(DelayCompilationDuringStartup);
-
+  // forcus 启动期间延迟编译
+  CompilationPolicy::set_in_vm_startup(DelayCompilationDuringStartup); // true
+  // forcus 根据策略选择创建对应的policy对象
+  /*
+   * CompilationPolicyChoice 是一个 JVM 参数，可以通过 -XX:CompilationPolicyChoice=N 设置
+   *  0: SimpleCompPolicy : 仅 C1 或仅 C2
+  *   1: StackWalkCompPolicy : 仅 C2（基于栈扫描）
+  *   2: TieredThresholdPolicy : 分层编译（默认）
+   */
   switch(CompilationPolicyChoice) {
   case 0:
     CompilationPolicy::set_policy(new SimpleCompPolicy());
@@ -74,7 +81,7 @@ void compilationPolicy_init() {
 #endif
     break;
   case 2:
-#ifdef TIERED
+#ifdef TIERED // forcus default c1快速编译 & c2深度优化
     CompilationPolicy::set_policy(new TieredThresholdPolicy());
 #else
     Unimplemented();
@@ -83,6 +90,12 @@ void compilationPolicy_init() {
   default:
     fatal("CompilationPolicyChoice must be in the range: [0-2]");
   }
+  // forcus 调用具体编译策略的initialize()方法进行初始化 (设置各层级的阈值)
+  /*
+   * 暂时跳过,但是主要是做了两件事情
+   *  - 计算编译线程数量(根据CPU核心数,以1:2的比例分给C1和C2)
+   *  - 设置内联阈值(x86: InlineSmallCode = 2000)
+   */
   CompilationPolicy::policy()->initialize();
 }
 

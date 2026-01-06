@@ -157,7 +157,7 @@ bool            Universe::_fully_initialized = false;
 size_t          Universe::_heap_capacity_at_last_gc;
 size_t          Universe::_heap_used_at_last_gc = 0;
 
-CollectedHeap*  Universe::_collectedHeap = NULL;
+CollectedHeap*  Universe::_collectedHeap = NULL; // G1CollectedHeap
 
 NarrowPtrStruct Universe::_narrow_oop = { NULL, 0, true };
 NarrowPtrStruct Universe::_narrow_klass = { NULL, 0, true };
@@ -672,19 +672,25 @@ void* Universe::non_oop_word() {
 
   return (void*)_non_oop_bits;
 }
-
+// forcus forcus forcus core core core
+/*
+     ================================
+     超级重要的方法,被称为Genesis(创世纪)
+     ================================
+ */
 jint universe_init() {
+  // 断言检查(不关心)
   assert(!Universe::_fully_initialized, "called after initialize_vtables");
   guarantee(1 << LogHeapWordSize == sizeof(HeapWord),
          "LogHeapWordSize is incorrect.");
   guarantee(sizeof(oop) >= sizeof(HeapWord), "HeapWord larger than oop?");
   guarantee(sizeof(oop) % sizeof(HeapWord) == 0,
             "oop size is not not a multiple of HeapWord size");
-
+  // forcus 计时开始 可以通过开启 -Xlog:startuptime 来查看启动耗时
   TraceTime timer("Genesis", TRACETIME_LOG(Info, startuptime));
-
+  // forcus 计算JVM需要直接访问的Java类字段偏移量
   JavaClasses::compute_hard_coded_offsets();
-
+  // forcus 初始化堆(G1 GC为例)
   jint status = Universe::initialize_heap();
   if (status != JNI_OK) {
     return status;
@@ -760,10 +766,47 @@ CollectedHeap* Universe::create_heap() {
 // ZeroBased - Use zero based compressed oops with encoding when
 //     NarrowOopHeapBaseMin + heap_size < 32Gb
 // HeapBased - Use compressed oops with heap base + encoding.
-
+// forcus 初始化堆内存
+/*
+ *
+ *
+        在这里会涉及到的核心系统调用
+        // forcus syscall
+        void* mmap(
+            void* addr,      // 期望的起始地址（NULL 让内核选择）
+            size_t length,   // 映射大小
+            int prot,        // 保护标志：PROT_READ | PROT_WRITE
+            int flags,       // 映射标志
+            int fd,          // 文件描述符（匿名映射为 -1）
+            off_t offset     // 文件偏移
+        );
+        // forcus jvm的典型使用
+             void* heap = mmap(
+                requested_address,   // 期望地址（压缩指针优化）
+                heap_size,            // 如 -Xmx4g = 4GB
+                PROT_READ | PROT_WRITE,   // 可读写
+                MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE,  // 私有匿名映射
+                -1,
+                0
+            );
+        // forcus syscall
+        int mprotect( // 用于：设置 Guard Page、提交/取消提交内存
+            void* addr,   // 起始地址
+            size_t len,   // 长度
+            int prot     // 保护标志
+        );
+        // forcus syscall
+        madvise - 给内核提供内存使用建议
+        int madvise(void* addr, size_t length, int advice);
+        // MADV_HUGEPAGE  - 建议使用大页（2MB）
+        // MADV_DONTNEED  - 不再需要，可回收物理页
+        // MADV_WILLNEED  - 即将使用，预读取
+ */
 jint Universe::initialize_heap() {
+   // forcus 创建 G1CollectedHeap 对象
   _collectedHeap = create_heap();
-  jint status = _collectedHeap->initialize();
+  // forcus 真正的初始化堆了
+  jint status = _collectedHeap->initialize(); /*== 核心操作 G1CollectedHeap::initialize() ==*/
   if (status != JNI_OK) {
     return status;
   }
@@ -841,23 +884,32 @@ void Universe::print_compressed_oops_mode(outputStream* st) {
   }
   st->cr();
 }
-
+// forcus
 ReservedSpace Universe::reserve_heap(size_t heap_size, size_t alignment) {
 
   assert(alignment <= Arguments::conservative_max_heap_alignment(),
          "actual alignment " SIZE_FORMAT " must be within maximum heap alignment " SIZE_FORMAT,
          alignment, Arguments::conservative_max_heap_alignment());
-
+  // forcus 对齐堆大小,确保堆大小是 alignment 的整数倍(一般都是的)
   size_t total_reserved = align_up(heap_size, alignment);
   assert(!UseCompressedOops || (total_reserved <= (OopEncodingHeapMax - os::vm_page_size())),
       "heap size is too big for compressed oops");
-
+  // forcus 检查是否开启大页(只有当 -XX:+UseLargePages 开启且对齐满足大页要求时才使用大页)
+  /* 一般是不开启的 */
   bool use_large_pages = UseLargePages && is_aligned(alignment, os::large_page_size());
   assert(!UseLargePages
       || UseParallelGC
       || use_large_pages, "Wrong alignment to use large pages");
 
   // Now create the space.
+  // forcus 真正分配内存的地方 创建 ReservedHeapSpace 对象
+  /*
+        参数:
+            total_reserved: 堆大小
+            alignment: 堆对齐
+            use_large_pages: 是否使用大页 - 一般为false
+            heap_allocation_directory: 指定堆文件位置(很少见) {通过 -XX:AllocateHeapAt=/path 可以把堆分配到特定文件（如 NVMe、持久内存）}
+   */
   ReservedHeapSpace total_rs(total_reserved, alignment, use_large_pages, AllocateHeapAt);
 
   if (total_rs.is_reserved()) {

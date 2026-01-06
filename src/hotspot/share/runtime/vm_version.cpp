@@ -27,10 +27,13 @@
 #include "logging/logStream.hpp"
 #include "memory/resourceArea.hpp"
 #include "runtime/vm_version.hpp"
-
+/*
+ *  forcus 检测CPU特性,让jvm知道当前CPU支持哪些指令集,以便JIT编译器生成最优化的机器码
+ */
 void VM_Version_init() {
+  // 1. 检测 CPU 特性
   VM_Version::initialize();
-
+  // 2. 打印 CPU 信息日志（如果启用）
   if (log_is_enabled(Info, os, cpu)) {
     char buf[1024];
     ResourceMark rm;

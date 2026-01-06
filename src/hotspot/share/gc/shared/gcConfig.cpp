@@ -91,7 +91,7 @@ SHENANDOAHGC_ONLY_ARG(SupportedGC(UseShenandoahGC,    CollectedHeap::Shenandoah,
                                   "Option -XX:-" #option " not supported"); \
   }
 
-GCArguments* GCConfig::_arguments = NULL;
+GCArguments* GCConfig::_arguments = NULL; // forcus 以 G1Arguments 为例
 bool GCConfig::_gc_selected_ergonomically = false;
 
 void GCConfig::fail_if_unsupported_gc_is_selected() {

@@ -184,17 +184,47 @@ address StubRoutines::_safefetchN_continuation_pc        = NULL;
 // The second phase includes all other stubs (which may depend on universe being initialized.)
 
 extern void StubGenerator_generate(CodeBuffer* code, bool all); // only interface to generators
-
+// forcus
+/*
+ * Stub（桩） 是预先生成的汇编代码片段，用于处理 JVM 运行时的关键操作：
+ *  - 调用约定转换
+ *  - 寄存器保存/恢复
+ *  - 异常处理
+ *  - 数组拷贝等高性能操作
+ */
 void StubRoutines::initialize1() {
   if (_code1 == NULL) {
     ResourceMark rm;
+    // 1. 计时
     TraceTime timer("StubRoutines generation 1", TRACETIME_LOG(Info, startuptime));
+    // forcus 2. 分配代码缓冲区(存放在 Code Cache 的 NonNMethodCodeHeap)
+    /*
+        Code Cache
+        ├── NonNMethodCodeHeap
+        │   ├── StubRoutines (1)  ← 第一阶段桩
+        │   ├── StubRoutines (2)  ← 第二阶段桩
+        │   └── 其他运行时代码
+        ├── ProfiledCodeHeap
+        └── NonProfiledCodeHeap
+     */
     _code1 = BufferBlob::create("StubRoutines (1)", code_size1);
     if (_code1 == NULL) {
       vm_exit_out_of_memory(code_size1, OOM_MALLOC_ERROR, "CodeCache: no room for StubRoutines (1)");
     }
+    // forcus 3. 生成桩代码(第一阶段)
+    /*
+     * StubGenerator_generate(&buffer, false) 调用平台特定的 StubGenerator（x86_64）
+          桩代码	                            作用
+        call_stub	                C++ 调用 Java 方法的入口
+        catch_exception	            异常捕获处理
+        forward_exception	        异常转发
+        atomic_xchg	                原子交换操作
+        atomic_cmpxchg	            原子比较交换（CAS）
+        fence	                    内存屏障
+        handler_for_unsafe_access	处理不安全内存访问
+     */
     CodeBuffer buffer(_code1);
-    StubGenerator_generate(&buffer, false);
+    StubGenerator_generate(&buffer, false); // false = 第一阶段
     // When new stubs added we need to make sure there is some space left
     // to catch situation when we should increase size again.
     assert(code_size1 == 0 || buffer.insts_remaining() > 200, "increase code_size1");

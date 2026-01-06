@@ -174,6 +174,7 @@ void G1Arguments::initialize() {
   initialize_verification_types();
 }
 
+// forcus 这里创建了一个 G1CollectedHeap 对象，还没有真正分配堆内存
 CollectedHeap* G1Arguments::create_heap() {
   return create_heap_with_policy<G1CollectedHeap, G1CollectorPolicy>();
 }

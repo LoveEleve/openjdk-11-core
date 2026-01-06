@@ -6114,9 +6114,9 @@ address generate_avx_ghash_processBlocks() {
  public:
   StubGenerator(CodeBuffer* code, bool all) : StubCodeGenerator(code) {
     if (all) {
-      generate_all();
+      generate_all(); // 第二阶段
     } else {
-      generate_initial();
+      generate_initial(); // 第一阶段
     }
   }
 }; // end class declaration

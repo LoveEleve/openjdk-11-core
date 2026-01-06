@@ -110,13 +110,13 @@ jint init_globals() {
    */
   management_init(); // forcus 初始化 JMX(Java Management Extensions)管理接口
   bytecodes_init(); // forcus 初始化字节码表
-  classLoader_init1();
-  compilationPolicy_init();
-  codeCache_init();
-  VM_Version_init();
-  os_init_globals();
-  stubRoutines_init1();
-  jint status = universe_init();  // dependent on codeCache_init and
+  classLoader_init1(); // forcus 类加载初始化-1 (在当前情况下,该方法相当于是一个空方法)
+  compilationPolicy_init(); // forcus 初始化编译策略(决定何时以及如何将热点代码从解释执行切换到JIT编译执行)
+  codeCache_init(); // forcus 初始化代码缓存(codeCache)
+  VM_Version_init(); // forcus 检测CPU特性
+  os_init_globals(); // 空方法
+  stubRoutines_init1(); // forcus 负责生成 JVM 运行时需要的第一批汇编桩代码（Stub Routines）
+  jint status = universe_init();  // dependent on codeCache_init and forcus 最重要的初始化方法之一,负责创建 "宇宙" - 包括 Java堆,元空间,符号表等核心数据结构
                                   // stubRoutines_init1 and metaspace_init.
   if (status != JNI_OK)
     return status;

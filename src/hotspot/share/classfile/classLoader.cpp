@@ -646,6 +646,14 @@ void ClassLoader::trace_class_path(const char* msg, const char* name) {
 }
 
 void ClassLoader::setup_bootstrap_search_path() {
+  // forcus-1 获取系统类路径
+  /*
+   * 这个值取决于构建系统:
+   *  - 正式发布：$JAVA_HOME/lib/modules
+   *  - Exploded build: $JAVA_HOME/modules/java.base (当前为这种情况)
+   *    这个值早在前面初始化过程中就已经赋值过了(os::init_system_properties_values())
+   *    /data/workspace/openjdk11/openjdk-11/build/linux-x86_64-normal-server-slowdebug/jdk/modules/java.base
+   */
   const char* sys_class_path = Arguments::get_sysclasspath();
   if (PrintSharedArchiveAndExit) {
     // Don't print sys_class_path - this is the bootcp of this current VM process, not necessarily
@@ -658,6 +666,7 @@ void ClassLoader::setup_bootstrap_search_path() {
     _shared_paths_misc_info->add_boot_classpath(sys_class_path);
   }
 #endif
+  // forcus 设置搜索路径
   setup_boot_search_path(sys_class_path);
 }
 
@@ -823,6 +832,8 @@ bool ClassLoader::is_in_patch_mod_entries(Symbol* module_name) {
 }
 
 // Set up the _jrt_entry if present and boot append path
+// forcus 设置搜索路径
+// /data/workspace/openjdk11/openjdk-11/build/linux-x86_64-normal-server-slowdebug/jdk/modules/java.base
 void ClassLoader::setup_boot_search_path(const char *class_path) {
   int len = (int)strlen(class_path);
   int end = 0;
@@ -837,7 +848,9 @@ void ClassLoader::setup_boot_search_path(const char *class_path) {
 #endif
 
   // Iterate over class path entries
+  // forcus 遍历类路径条目（以 ':' 分隔）
   for (int start = 0; start < len; start = end) {
+    // 提取单个路径
     while (class_path[end] && class_path[end] != os::path_separator()[0]) {
       end++;
     }
@@ -846,7 +859,7 @@ void ClassLoader::setup_boot_search_path(const char *class_path) {
     char* path = NEW_RESOURCE_ARRAY(char, end - start + 1);
     strncpy(path, &class_path[start], end - start);
     path[end - start] = '\0';
-
+    // 第一个条目：核心路径
     if (set_base_piece) {
       // The first time through the bootstrap_search setup, it must be determined
       // what the base or core piece of the boot loader search is.  Either a java runtime
@@ -870,12 +883,14 @@ void ClassLoader::setup_boot_search_path(const char *class_path) {
         vm_exit_during_initialization("Unable to establish the boot loader search path", path);
       }
       set_base_piece = false;
-    } else {
+    }
+    else {
       // Every entry on the system boot class path after the initial base piece,
       // which is set by os::set_boot_path(), is considered an appended entry.
+      // 后续条目：追加到类路径列表（如 -Xbootclasspath/a:xxx）
       update_class_path_entry_list(path, false, true);
     }
-
+    // 跳过分隔符 ':'
     while (class_path[end] == os::path_separator()[0]) {
       end++;
     }
@@ -1151,15 +1166,19 @@ void ClassLoader::print_bootclasspath() {
   }
   tty->print_cr("]");
 }
-
+/*
+ *
+ */
 void ClassLoader::load_zip_library() {
   assert(ZipOpen == NULL, "should not load zip library twice");
   // First make sure native library is loaded
+  // forcus-1 加载libjava.so
   os::native_java_library();
   // Load zip library
   char path[JVM_MAXPATHLEN];
   char ebuf[1024];
   void* handle = NULL;
+  // forcus-2 加载libzip.so
   if (os::dll_locate_lib(path, sizeof(path), Arguments::get_dll_dir(), "zip")) {
     handle = os::dll_load(path, ebuf, sizeof ebuf);
   }
@@ -1167,6 +1186,7 @@ void ClassLoader::load_zip_library() {
     vm_exit_during_initialization("Unable to load ZIP library", path);
   }
   // Lookup zip entry points
+  // forcus-3 查找 zip函数入口点
   ZipOpen      = CAST_TO_FN_PTR(ZipOpen_t, os::dll_lookup(handle, "ZIP_Open"));
   ZipClose     = CAST_TO_FN_PTR(ZipClose_t, os::dll_lookup(handle, "ZIP_Close"));
   FindEntry    = CAST_TO_FN_PTR(FindEntry_t, os::dll_lookup(handle, "ZIP_FindEntry"));
@@ -1186,6 +1206,7 @@ void ClassLoader::load_zip_library() {
   }
 
   // Lookup canonicalize entry in libjava.dll
+  // forcus-4 从libjava.so中查找 canonicalize函数入口点(路径规范化函数)
   void *javalib_handle = os::native_java_library();
   CanonicalizeEntry = CAST_TO_FN_PTR(canonicalize_fn_t, os::dll_lookup(javalib_handle, "Canonicalize"));
   // This lookup only works on 1.3. Do not check for non-null here
@@ -1659,9 +1680,11 @@ void ClassLoader::record_result(InstanceKlass* ik, const ClassFileStream* stream
 
 void ClassLoader::initialize() {
   EXCEPTION_MARK;
-
+  // forcus-1 性能数据
   if (UsePerfData) {
     // jvmstat performance counters
+    // forcus 创建 PerfData计数器
+    /* 时间计数器 */
     NEWPERFTICKCOUNTER(_perf_accumulated_time, SUN_CLS, "time");
     NEWPERFTICKCOUNTER(_perf_class_init_time, SUN_CLS, "classInitTime");
     NEWPERFTICKCOUNTER(_perf_class_init_selftime, SUN_CLS, "classInitTime.self");
@@ -1712,6 +1735,7 @@ void ClassLoader::initialize() {
   }
 
   // lookup zip library entry points
+  // forcus-2 加载zip库
   load_zip_library();
   // jimage library entry points are loaded below, in lookup_vm_options
 #if INCLUDE_CDS
@@ -1720,6 +1744,10 @@ void ClassLoader::initialize() {
     _shared_paths_misc_info = new SharedPathsMiscInfo();
   }
 #endif
+  // forcus 设置引导类搜索路径
+  /*
+   * Bootstrap ClassLoader(引导类加载器,没有Java类表示,在jvm中由ClassLoader类实现)
+   */
   setup_bootstrap_search_path();
 }
 

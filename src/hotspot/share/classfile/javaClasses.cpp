@@ -4441,6 +4441,24 @@ static int member_offset(int hardcoded_offset) {
 // Compute hard-coded offsets
 // Invoked before SystemDictionary::initialize, so pre-loaded classes
 // are not available to determine the offset_of_static_fields.
+// forcus Java 类字段偏移量计算详解
+/*
+ *  背景:
+        JVM 是用 C++ 写的，但它要操作的是 Java 对象。比如：
+            Integer num = 42;  // 这是一个包装类对象(Java代码)
+            在内存中,这个num的内存布局大概为
+            ┌─────────────────────────────────────┐
+            │ 对象头 (Mark Word)     │ 8 字节    │  ← 偏移 0
+            ├─────────────────────────────────────┤
+            │ 类指针 (Klass*)        │ 4/8 字节  │  ← 偏移 8
+            ├─────────────────────────────────────┤
+            │ int value = 42         │ 4 字节    │  ← 偏移 12 或 16（这就是这里要计算的）
+            └─────────────────────────────────────┘
+       而 JVM 的 GC、拆箱优化等 C++ 代码需要直接读写这个 value 字段，但它不知道这个字段在对象内存中的具体位置（偏移量）
+       在这里以Integer为例: 因为在Integer类中(java的类),value是在第0个字段,所以这里的hardcoded_offset = 0
+       value_offset = (hardcoded_offset * heapOopSize) + instanceOopDesc::base_offset_in_bytes()
+         也即: 字段偏移量 = (字段序号*引用大小) + 对象头大小 = 0*4 + 12(压缩指针) = 12字节
+ */
 void JavaClasses::compute_hard_coded_offsets() {
 
   // java_lang_boxing_object

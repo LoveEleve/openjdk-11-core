@@ -517,7 +517,7 @@ const int KlassAlignment           = KlassAlignmentInBytes / HeapWordSize;
 const  uint64_t UnscaledOopHeapMax = (uint64_t(max_juint) + 1);
 // Maximal size of heap where compressed oops can be used. Also upper bound for heap
 // placement for zero based compression algorithm: UnscaledOopHeapMax << LogMinObjAlignmentInBytes.
-extern uint64_t OopEncodingHeapMax;
+extern uint64_t OopEncodingHeapMax; // forcus 32GB(压缩指针能够寻址的最大堆内存大小)
 
 // Maximal size of compressed class space. Above this limit compression is not possible.
 // Also upper bound for placement of zero based class space. (Class space is further limited

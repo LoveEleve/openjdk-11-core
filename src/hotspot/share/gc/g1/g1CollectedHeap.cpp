@@ -1529,7 +1529,7 @@ jint G1CollectedHeap::initialize_young_gen_sampling_thread() {
   }
   return JNI_OK;
 }
-
+// forcus 核心操作,G1堆初始化
 jint G1CollectedHeap::initialize() {
   os::enable_vtime();
 
@@ -1543,10 +1543,10 @@ jint G1CollectedHeap::initialize() {
   // cases incorrectly returns the size in wordSize units rather than
   // HeapWordSize).
   guarantee(HeapWordSize == wordSize, "HeapWordSize must equal wordSize");
-
-  size_t init_byte_size = collector_policy()->initial_heap_byte_size();
-  size_t max_byte_size = collector_policy()->max_heap_byte_size();
-  size_t heap_alignment = collector_policy()->heap_alignment();
+  // forcus 获取堆大小参数
+  size_t init_byte_size = collector_policy()->initial_heap_byte_size(); // -Xms(默认值为物理内存的1/64)
+  size_t max_byte_size = collector_policy()->max_heap_byte_size(); // -Xmx(默认为物理内存的1/4) 这两个通常是相等的(-Xms = -Xmx)
+  size_t heap_alignment = collector_policy()->heap_alignment(); // 堆对齐大小
 
   // Ensure that the sizes are properly aligned.
   Universe::check_alignment(init_byte_size, HeapRegion::GrainBytes, "g1 heap");
@@ -1565,9 +1565,35 @@ jint G1CollectedHeap::initialize() {
   // address that was requested (i.e. the preferred heap base).
   // If this happens then we could end up using a non-optimal
   // compressed oops mode.
-
-  ReservedSpace heap_rs = Universe::reserve_heap(max_byte_size,
-                                                 heap_alignment);
+  // forcus 预留虚拟内存
+  /*
+        void* mmap(
+            void* addr,      // 期望的起始地址（NULL 让内核选择）
+            size_t length,   // 映射大小
+            int prot,        // 保护标志：PROT_READ | PROT_WRITE | PROT_EXEC
+            int flags,       // 映射标志
+            int fd,          // 文件描述符（匿名映射为 -1）
+            off_t offset     // 文件偏移
+        );
+        ----->
+        // JVM 预留堆内存的典型调用
+        mmap(
+            preferred_addr,           // 期望的地址（为了压缩指针优化）
+            max_heap_size,            // -Xmx 指定的大小
+            PROT_NONE,                // 先不可访问！只是预留地址空间
+            MAP_PRIVATE | MAP_ANONYMOUS | MAP_NORESERVE, // 私有映射，写时复制 & 匿名映射，不关联文件 & 不预留 swap 空间（允许过量分配）
+            -1,                       // 匿名映射，不关联文件
+            0
+        );
+   */
+  /*
+        压缩指针模式:
+         Unscaled : 堆内存 < 4GB,解码/编码直接截断,不需要计算(64位的地址直接取低32位就可以) (无需计算)
+         ZeroBased : 堆内存 <= 32GB,64位的地址需要向右移动3位(因为对象的地址都是8字节对齐的),移动后取低32位 (一次位运算)
+         HeapBased (基址偏移)：堆内存 > 32GB (暂时不关心,这是基于base来寻址的) (加减法 + 移位)
+   */
+  ReservedSpace heap_rs = Universe::reserve_heap(max_byte_size, // G1堆大小(-Xms/-Xmx)
+                                                 heap_alignment); // 堆对齐大小
 
   initialize_reserved_region((HeapWord*)heap_rs.base(), (HeapWord*)(heap_rs.base() + heap_rs.size()));
 

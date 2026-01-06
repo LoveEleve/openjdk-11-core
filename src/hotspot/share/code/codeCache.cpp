@@ -1087,8 +1087,16 @@ void CodeCache::initialize() {
   // This was originally just a check of the alignment, causing failure, instead, round
   // the code cache to the page size.  In particular, Solaris is moving to a larger
   // default page size.
+  // 对齐扩展大小到页面大小 32K
   CodeCacheExpansionSize = align_up(CodeCacheExpansionSize, os::vm_page_size());
-
+  // forcus 分段模式(默认)
+  /*
+   * SegmentedCodeCache = true
+   *  不同类型的代码分开管理,减少碎片化
+   *  - NonNMethodCodeHeap : 存放运行时桩、适配器(不回收)
+   *  - ProfiledCodeHeap : C1 编译的代码（带 profiling）- 可能被替换
+   *  - NonProfiledCodeHeap : C2 编译的代码 - 最终优化版本
+   */
   if (SegmentedCodeCache) {
     // Use multiple code heaps
     initialize_heaps();
@@ -1103,18 +1111,24 @@ void CodeCache::initialize() {
 
   // Initialize ICache flush mechanism
   // This service is needed for os::register_code_area
+  // forcus 初始化指令缓存刷新机制
+  /*
+        当 JIT 编译生成新代码后，需要刷新 CPU 的指令缓存，确保 CPU 执行的是最新的机器码而不是缓存的旧指令
+        {因为现代CPU的L1/L2缓存可能分为了指令缓存和数据缓存,在这里要确保新生成的代码能被CPU正常执行,而不是还在执行旧的代码}
+   */
   icache_init();
 
   // Give OS a chance to register generated code area.
   // This is used on Windows 64 bit platforms to register
   // Structured Exception Handlers for our generated code.
+  // linux上为空实现
   os::register_code_area((char*)low_bound(), (char*)high_bound());
 }
 
 void codeCache_init() {
-  CodeCache::initialize();
+  CodeCache::initialize(); // forcus
   // Load AOT libraries and add AOT code heaps.
-  AOTLoader::initialize();
+  AOTLoader::initialize(); // 默认不开启
 }
 
 //------------------------------------------------------------------------------------------------
