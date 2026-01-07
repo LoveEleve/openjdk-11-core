@@ -332,10 +332,12 @@ void ReservedHeapSpace::establish_noaccess_prefix() {
 // might still fulfill the wishes of the caller.
 // Assures the memory is aligned to 'alignment'.
 // NOTE: If ReservedHeapSpace already points to some reserved memory this is freed, first.
+//
 void ReservedHeapSpace::try_reserve_heap(size_t size,
                                          size_t alignment,
-                                         bool large,
-                                         char *requested_address) {
+                                         bool large, // 是否使用大页,默认为false
+                                         char *requested_address) { // 期望OS分配内存的地方
+    // 这里通常是因为OS分配的地址不符合预期,所以需要释放掉,第一次_base都是为null的
     if (_base != NULL) {
         // We tried before, but we didn't like the address delivered.
         release();
@@ -346,6 +348,7 @@ void ReservedHeapSpace::try_reserve_heap(size_t size,
     // If there is a backing file directory for this space then whether
     // large pages are allocated is up to the filesystem of the backing file.
     // So we ignore the UseLargePages flag in this case.
+    // 默认为false,暂时不需要关心
     bool special = large && !os::can_commit_large_page_memory();
     if (special && _fd_for_heap != -1) {
         special = false;
@@ -355,12 +358,12 @@ void ReservedHeapSpace::try_reserve_heap(size_t size,
         }
     }
     char *base = NULL;
-
+    // -Xlog:gc+heap+coops=trace
     log_trace(gc, heap, coops)("Trying to allocate at address " PTR_FORMAT
                                " heap of size " SIZE_FORMAT_HEX,
                                p2i(requested_address),
                                size);
-
+    // 不关心大页逻辑
     if (special) {
         base = os::reserve_memory_special(size, alignment, requested_address, false);
 
@@ -373,7 +376,7 @@ void ReservedHeapSpace::try_reserve_heap(size_t size,
             _special = true;
         }
     }
-
+    // forcus
     if (base == NULL) {
         // Failed; try to reserve regular memory below
         if (UseLargePages && (!FLAG_IS_DEFAULT(UseLargePages) ||
@@ -388,11 +391,12 @@ void ReservedHeapSpace::try_reserve_heap(size_t size,
         // If the memory was requested at a particular address, use
         // os::attempt_reserve_memory_at() to avoid over mapping something
         // important.  If available space is not detected, return NULL.
-
+        // forcus 如果jvm希望OS在某个地址分配内存(在这种情况下是会指定的)
+        /* 下面的 _fd_for_heap通常为-1 */
         if (requested_address != 0) {
-            base = os::attempt_reserve_memory_at(size, requested_address, _fd_for_heap);
+            base = os::attempt_reserve_memory_at(size, requested_address, _fd_for_heap); // forcus mmap() - 期望在 requested_address 地址分配
         } else {
-            base = os::reserve_memory(size, NULL, alignment, _fd_for_heap);
+            base = os::reserve_memory(size, NULL, alignment, _fd_for_heap); // forcus mmap() - 让os自己选择地址
         }
     }
     if (base == NULL) { return; }
@@ -435,22 +439,40 @@ void ReservedHeapSpace::try_reserve_range(char *highest_start,
      * 那么从 highest_start 开始，每次向后移动 2MB(也即朝lowest_start位置移动)，最多能尝试 (highest_start - lowest_start) / attach_point_alignment + 1(边界也算一次)次
      */
     const uint64_t num_attempts_possible = (attach_range / attach_point_alignment) + 1;
-    // HeapSearchSteps 默认值是 3，限制尝试次数
+    // HeapSearchSteps 默认值是 3，限制尝试次数(在这里取两者的最小值,一般计算出来的是不会比3小的),所以在这里一般都是3
+    // forcus 默认尝试次数
     const uint64_t num_attempts_to_try = MIN2((uint64_t) HeapSearchSteps, num_attempts_possible);
     // 计算每次移动的步长
+    /*
+     *  在这里分为两种情况:
+     *   - attach_range = highest_start - lowest_start(这代表堆大小=2GB),那么尝试的次数只有1次,也就是从2GB的位置开始分配堆内存(2GB -> 4GB)
+     *   - attach_range > 0(这是通常的情况)：把搜索范围均匀分成 num_attempts_to_try 份
+     *      比如 heap_size = 1GB , lowest_start = 2GB , highest_start = 4GB - 1GB = 3GB attach_range = 3-2GB = 1GB
+     *      在上面计算出来的默认尝试次数 num_attempts_to_try = 3
+     *      那么 stepSize = align(1GB / 3,2MB) = 342MB
+     *      也即第一次从3GB位置开始分配1GB的堆内存,如果失败了,那么下次就从(3GB-342MB=2.66GB)的位置开始分配1GB的内存
+     */
     const size_t stepsize = (attach_range == 0) ? // Only one try.
                             (size_t) highest_start : align_up(attach_range / num_attempts_to_try,
                                                               attach_point_alignment);
 
     // Try attach points from top to bottom.
-    // 从高地址向低地址尝试
-    char *attach_point = highest_start;
-    while (attach_point >= lowest_start && // 防止地址回绕
-           attach_point <= highest_start &&  // Avoid wrap around.
-           ((_base == NULL) || // 还没分配成功
-            (_base < aligned_heap_base_min_address || _base + size > upper_bound))) { // 或分配位置不合适
-        try_reserve_heap(size, alignment, large, attach_point); // 向低地址移动
-        attach_point -= stepsize;
+    // forcus 从高地址向低地址尝试分配地址 - 使用stepSize来将尝试次数限制在了3次
+    /*
+     * 这里介绍一下条件4
+     *  当jvm通过mmap()想要在3GB的位置分配1GB的堆内存时,比如 mmap((void*)3GB, 1GB, PROT_NONE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+        此时linux内核可能不会在3GB的地方分配(因为OS会根据实际情况来分配,当然如果能分配成功那是最好了)
+        而这里就是用来处理：linux内核没有按照我们要求的位置来分配内存时的场景
+         - _base < aligned_heap_base_min_address ：os选择的地址太低了(< 2GB),这肯定不行
+         - _base + size > upper_bound ：os选择的地址太高了(导致堆内存的末尾地址超过了4GB),这肯定也不行,因为内存访问不到
+     */
+    char *attach_point = highest_start; // 从最高地址开始尝试(在这里假设为3GB)
+    while (attach_point >= lowest_start && // 条件1 - 还没有搜索到最低地址
+           attach_point <= highest_start &&  // Avoid wrap around. 条件2 - 防止减法溢出导致地址回绕
+           ((_base == NULL) || // 条件3 - 还没分配成功
+            (_base < aligned_heap_base_min_address || _base + size > upper_bound))) { // forcus 条件4 - 分配成功,但是位置不在有效范围内
+        try_reserve_heap(size, alignment, large, attach_point); // forcus 真正尝试分配内存的地方
+        attach_point -= stepsize; // 向低地址移动
     }
 }
 

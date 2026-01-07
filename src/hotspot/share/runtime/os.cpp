@@ -1803,13 +1803,14 @@ char* os::reserve_memory(size_t bytes, char* addr, size_t alignment_hint,
 
 char* os::attempt_reserve_memory_at(size_t bytes, char* addr, int file_desc) {
   char* result = NULL;
+  // 这个if通常不会进入
   if (file_desc != -1) {
     result = pd_attempt_reserve_memory_at(bytes, addr, file_desc);
     if (result != NULL) {
       MemTracker::record_virtual_memory_reserve_and_commit((address)result, bytes, CALLER_PC);
     }
-  } else {
-    result = pd_attempt_reserve_memory_at(bytes, addr);
+  } else { // forcus 在指定的位置分配内存
+    result = pd_attempt_reserve_memory_at(bytes, addr); // forcus
     if (result != NULL) {
       MemTracker::record_virtual_memory_reserve((address)result, bytes, CALLER_PC);
     }

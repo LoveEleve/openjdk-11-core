@@ -4644,16 +4644,22 @@ char *os::pd_attempt_reserve_memory_at(size_t bytes, char *requested_addr) {
 
     // Linux mmap allows caller to pass an address as hint; give it a try first,
     // if kernel honors the hint then we can return immediately.
+    // forcus 在指定的 requested_addr 地址上分配内存
     char *addr = anon_mmap(requested_addr, bytes, false);
     if (addr == requested_addr) {
+        // forcus 如果内核允许(尊重)jvm的要求,也即分配的地址 和 jvm期望的地址相同,那么返回
         return requested_addr;
     }
 
     if (addr != NULL) {
         // mmap() is successful but it fails to reserve at the requested address
+        // forcus 如果内核没有允许(尊重)jvm的要求,那么需要将刚才分配的内存释放
         anon_munmap(addr, bytes);
     }
-
+    /*
+     * 占位策略 - max_tries(尝试次数)
+     * 如果linux内核没有返回jvm想要的值
+     */
     int i;
     for (i = 0; i < max_tries; ++i) {
         base[i] = reserve_memory(bytes);

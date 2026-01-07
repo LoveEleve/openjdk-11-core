@@ -1,86 +1,97 @@
 <mxfile host="65bd71144e">
     <diagram id="MaloUzJlONj0Se2GEySu" name="第 1 页">
-        <mxGraphModel dx="857" dy="830" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="none" math="0" shadow="0">
+        <mxGraphModel dx="526" dy="830" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="none" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;shadow=1;" vertex="1" parent="1">
+                <mxCell id="2" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;shadow=1;" parent="1" vertex="1">
                     <mxGeometry x="80" y="470" width="410" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;shadow=1;" vertex="1" parent="1">
+                <mxCell id="4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;shadow=1;" parent="1" vertex="1">
                     <mxGeometry x="80" y="470" width="410" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="5" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e51400;strokeColor=#B20000;fontColor=#ffffff;shadow=1;" vertex="1" parent="1">
+                <mxCell id="5" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e51400;strokeColor=#B20000;fontColor=#ffffff;shadow=1;" parent="1" vertex="1">
                     <mxGeometry x="80" y="470" width="70" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="6" value="" style="endArrow=classic;html=1;entryX=1;entryY=0;entryDx=0;entryDy=0;shadow=1;" edge="1" parent="1" target="5">
+                <mxCell id="6" value="" style="endArrow=classic;html=1;entryX=1;entryY=0;entryDx=0;entryDy=0;shadow=1;" parent="1" target="5" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="150" y="400" as="sourcePoint"/>
                         <mxPoint x="150" y="360" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="7" value="&lt;font face=&quot;Times New Roman&quot;&gt;&lt;b&gt;2GB&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=1;" vertex="1" parent="1">
+                <mxCell id="7" value="&lt;font face=&quot;Times New Roman&quot;&gt;&lt;b&gt;2GB&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=1;" parent="1" vertex="1">
                     <mxGeometry x="130" y="380" width="40" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="9" value="&lt;font face=&quot;Times New Roman&quot;&gt;1.lowest_start：4GB - heap_size&amp;nbsp;&lt;/font&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;2.&lt;/font&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;&lt;font face=&quot;Times New Roman&quot;&gt;highest_start:这里应该指的是&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;; background-color: transparent;&quot;&gt;堆起始地址查找范围的最大值&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;3.&lt;/font&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;; background-color: transparent;&quot;&gt;lowest_start:这里应该指的是堆&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;; background-color: transparent;&quot;&gt;起始地址查找范围的最小值&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;; background-color: transparent;&quot;&gt;{也即,堆&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;; background-color: transparent;&quot;&gt;起始地址的范围是在[&lt;b&gt;lowest_start , highest_start]&lt;/b&gt;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;;&quot;&gt;}&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;; background-color: transparent;&quot;&gt;4.heap_size = 堆大小(在这种情况必须是&amp;lt;=2GB,因为这里分析的情况就是这种)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;; background-color: transparent;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;; background-color: transparent;&quot;&gt;==&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;在这里假设堆的大小为1GB,那么highest_start = 4GB - 1GB = 3GB&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeColor=default;shadow=1;" vertex="1" parent="1">
+                <mxCell id="9" value="&lt;font face=&quot;Times New Roman&quot;&gt;1.lowest_start：4GB - heap_size&amp;nbsp;&lt;/font&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;2.&lt;/font&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;&lt;font face=&quot;Times New Roman&quot;&gt;highest_start:这里应该指的是&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;; background-color: transparent;&quot;&gt;堆起始地址查找范围的最大值&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;3.&lt;/font&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;; background-color: transparent;&quot;&gt;lowest_start:这里应该指的是堆&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;; background-color: transparent;&quot;&gt;起始地址查找范围的最小值&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;; background-color: transparent;&quot;&gt;{也即,堆&lt;/span&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;; background-color: transparent;&quot;&gt;起始地址的范围是在[&lt;b&gt;lowest_start , highest_start]&lt;/b&gt;&lt;/span&gt;&lt;span style=&quot;background-color: transparent; color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;;&quot;&gt;}&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;; background-color: transparent;&quot;&gt;4.heap_size = 堆大小(在这种情况必须是&amp;lt;=2GB,因为这里分析的情况就是这种)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;; background-color: transparent;&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;; background-color: transparent;&quot;&gt;==&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;在这里假设堆的大小为1GB,那么highest_start = 4GB - 1GB = 3GB&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeColor=default;shadow=1;" parent="1" vertex="1">
                     <mxGeometry x="110" y="150" width="440" height="170" as="geometry"/>
                 </mxCell>
-                <mxCell id="10" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e51400;strokeColor=#B20000;fontColor=#ffffff;shadow=1;" vertex="1" parent="1">
+                <mxCell id="10" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e51400;strokeColor=#B20000;fontColor=#ffffff;shadow=1;" parent="1" vertex="1">
                     <mxGeometry x="335" y="470" width="10" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="11" value="" style="endArrow=classic;html=1;entryX=1;entryY=0;entryDx=0;entryDy=0;shadow=1;" edge="1" parent="1">
+                <mxCell id="11" value="" style="endArrow=classic;html=1;entryX=1;entryY=0;entryDx=0;entryDy=0;shadow=1;" parent="1" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="340" y="400" as="sourcePoint"/>
                         <mxPoint x="340" y="470" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="12" value="&lt;font face=&quot;Times New Roman&quot;&gt;&lt;b&gt;4GB&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=1;" vertex="1" parent="1">
+                <mxCell id="12" value="&lt;font face=&quot;Times New Roman&quot;&gt;&lt;b&gt;4GB&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=1;" parent="1" vertex="1">
                     <mxGeometry x="320" y="380" width="40" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="13" value="&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(251, 251, 251); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;lowest_start&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;shadow=1;" vertex="1" parent="1">
+                <mxCell id="13" value="&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(251, 251, 251); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;lowest_start&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;shadow=1;" parent="1" vertex="1">
                     <mxGeometry x="130" y="360" width="60" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="14" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e51400;strokeColor=#B20000;fontColor=#ffffff;shadow=1;" vertex="1" parent="1">
+                <mxCell id="14" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e51400;strokeColor=#B20000;fontColor=#ffffff;shadow=1;" parent="1" vertex="1">
                     <mxGeometry x="280" y="470" width="10" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="15" value="" style="endArrow=classic;html=1;entryX=1;entryY=0;entryDx=0;entryDy=0;shadow=1;" edge="1" parent="1">
+                <mxCell id="15" value="" style="endArrow=classic;html=1;entryX=1;entryY=0;entryDx=0;entryDy=0;shadow=1;" parent="1" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="285" y="400" as="sourcePoint"/>
                         <mxPoint x="285" y="470" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="16" value="&lt;font face=&quot;Times New Roman&quot;&gt;&lt;b&gt;3GB&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=1;" vertex="1" parent="1">
+                <mxCell id="16" value="&lt;font face=&quot;Times New Roman&quot;&gt;&lt;b&gt;3GB&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;shadow=1;" parent="1" vertex="1">
                     <mxGeometry x="265" y="380" width="40" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="17" value="&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(251, 251, 251); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;highest_start&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;shadow=1;" vertex="1" parent="1">
+                <mxCell id="17" value="&lt;span style=&quot;color: rgb(63, 63, 63); font-family: &amp;quot;Times New Roman&amp;quot;; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(251, 251, 251); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;highest_start&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;shadow=1;" parent="1" vertex="1">
                     <mxGeometry x="255" y="360" width="60" height="30" as="geometry"/>
                 </mxCell>
-                <mxCell id="18" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;rotation=-90;shadow=1;" vertex="1" parent="1">
+                <mxCell id="18" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;rotation=-90;shadow=1;" parent="1" vertex="1">
                     <mxGeometry x="210" y="480" width="20" height="130" as="geometry"/>
                 </mxCell>
-                <mxCell id="19" value="&lt;font face=&quot;Times New Roman&quot;&gt;堆起始地址的范围&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;shadow=1;" vertex="1" parent="1">
+                <mxCell id="19" value="&lt;font face=&quot;Times New Roman&quot;&gt;堆起始地址的范围&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;shadow=1;" parent="1" vertex="1">
                     <mxGeometry x="170" y="555" width="100" height="25" as="geometry"/>
                 </mxCell>
-                <mxCell id="20" value="HEAP" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e3c800;strokeColor=#B09500;fontColor=#000000;shadow=1;" vertex="1" parent="1">
+                <mxCell id="20" value="HEAP" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e3c800;strokeColor=#B09500;fontColor=#000000;shadow=1;" parent="1" vertex="1">
                     <mxGeometry x="285" y="537.5" width="60" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="21" value="HEAP" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e3c800;strokeColor=#B09500;fontColor=#000000;shadow=1;" vertex="1" parent="1">
+                <mxCell id="21" value="HEAP" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e3c800;strokeColor=#B09500;fontColor=#000000;shadow=1;" parent="1" vertex="1">
                     <mxGeometry x="225" y="610" width="60" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="22" value="HEAP" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e3c800;strokeColor=#B09500;fontColor=#000000;shadow=1;" vertex="1" parent="1">
+                <mxCell id="22" value="HEAP" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e3c800;strokeColor=#B09500;fontColor=#000000;shadow=1;" parent="1" vertex="1">
                     <mxGeometry x="165" y="680" width="60" height="60" as="geometry"/>
                 </mxCell>
-                <mxCell id="23" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;rotation=-180;size=0.5;shadow=1;" vertex="1" parent="1">
+                <mxCell id="23" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;rotation=-180;size=0.5;shadow=1;" parent="1" vertex="1">
                     <mxGeometry x="360" y="537.5" width="20" height="207.5" as="geometry"/>
                 </mxCell>
-                <mxCell id="25" value="" style="endArrow=classic;html=1;shadow=1;" edge="1" parent="1">
+                <mxCell id="25" value="" style="endArrow=classic;html=1;shadow=1;" parent="1" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
                         <mxPoint x="480" y="550" as="sourcePoint"/>
                         <mxPoint x="290" y="530" as="targetPoint"/>
                     </mxGeometry>
                 </mxCell>
-                <mxCell id="26" value="&lt;font face=&quot;Times New Roman&quot;&gt;从这个位置开始找,&lt;/font&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;也即以3GB为起始位置,看下 3GB -&amp;gt; 4GB，能否分配成功&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;如果失败,继续向后找堆的起始位置「当然尝试也是有次数限制的」&lt;/font&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeColor=default;shadow=1;" vertex="1" parent="1">
+                <mxCell id="26" value="&lt;font face=&quot;Times New Roman&quot;&gt;从这个位置开始找,&lt;/font&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;也即以3GB为起始位置,看下 3GB -&amp;gt; 4GB，能否分配成功&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Times New Roman&quot;&gt;如果失败,继续向后找堆的起始位置「当然尝试也是有次数限制的」&lt;/font&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeColor=default;shadow=1;" parent="1" vertex="1">
                     <mxGeometry x="480" y="550" width="410" height="60" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="1qhDBzXzqXs43QIrndDa" name="第 2 页">
+        <mxGraphModel dx="526" dy="830" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="u4jaYhh6gPUVvDfwKLEY-1" value="额" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="140" y="260" width="120" height="60" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

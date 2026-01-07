@@ -2549,3 +2549,218 @@
 60^done
 (gdb) 
 61^exit
+=cmd-param-changed,param="logging enabled",value="on"
+=cmd-param-changed,param="breakpoint pending",value="on"
+=cmd-param-changed,param="print pretty",value="on"
+(gdb) 
+1^done
+(gdb) 
+2^done
+(gdb) 
+3^done
+(gdb) 
+4^done
+(gdb) 
+5^done
+(gdb) 
+6^done
+(gdb) 
+7^done
+(gdb) 
+8^done
+(gdb) 
+9^done
+(gdb) 
+10^done,value="off"
+(gdb) 
+&"handle SIGSTOP stop nopass\n"
+~"Signal        Stop\tPrint\tPass to program\tDescription\n"
+~"SIGSTOP       Yes\tYes\tNo\t\tStopped (signal)\n"
+11^done
+(gdb) 
+&"python import gdb; print(gdb.VERSION);\n"
+~"14.1\n"
+12^done
+(gdb) 
+&"info pretty-printer\n"
+~"global pretty-printers:\n"
+~"  builtin\n"
+~"    mpx_bound128\n"
+13^done
+(gdb) 
+&"python import sys; sys.dont_write_bytecode = True; sys.path.insert(0, \"/codev/ide/CL/clion-2024.1.1/bin/gdb/renderers\"); from default.printers import register_default_printers; register_default_printers(None); from libstdcxx.v6.printers import register_libstdcxx_printers; register_libstdcxx_printers(None); from default.libstdcxx_printers import patch_libstdcxx_printers_module; patch_libstdcxx_printers_module(); \n"
+14^done
+(gdb) 
+15^done
+(gdb) 
+&"python from default.commands import register_commands; register_commands();\n"
+16^done
+(gdb) 
+17^done
+(gdb) 
+&"No source file named /data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp.\n"
+18^done,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",addr="<PENDING>",pending="/data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp:380",times="0",original-location="/data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp:380"}
+(gdb) 
+19^done
+(gdb) 
+20^done
+(gdb) 
+21^done
+(gdb) 
+22^done
+(gdb) 
+&"maintenance info sections\n"
+~"Exec file: `/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/java', file type elf64-x86-64.\n"
+~" [0]      0x00000318->0x00000334 at 0x00000318: .interp ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [1]      0x00000338->0x00000378 at 0x00000338: .note.gnu.property ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [2]      0x00000378->0x0000039c at 0x00000378: .note.gnu.build-id ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [3]      0x0000039c->0x000003bc at 0x0000039c: .note.ABI-tag ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [4]      0x000003c0->0x0000045c at 0x000003c0: .hash ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [5]      0x00000460->0x00000484 at 0x00000460: .gnu.hash ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [6]      0x00000488->0x00000668 at 0x00000488: .dynsym ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [7]      0x00000668->0x000007eb at 0x00000668: .dynstr ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [8]      0x000007ec->0x00000814 at 0x000007ec: .gnu.version ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [9]      0x00000818->0x00000858 at 0x00000818: .gnu.version_r ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [10]     0x00000858->0x00000a20 at 0x00000858: .rela.dyn ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [11]     0x00000a20->0x00000b70 at 0x00000a20: .rela.plt ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [12]     0x00001000->0x0000101b at 0x00001000: .init ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [13]     0x00001020->0x00001110 at 0x00001020: .plt ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [14]     0x00001110->0x000015b8 at 0x00001110: .text ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [15]     0x000015b8->0x000015c5 at 0x000015b8: .fini ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [16]     0x00002000->0x0000210d at 0x00002000: .rodata ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [17]     0x00002110->0x00002134 at 0x00002110: .eh_frame_hdr ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [18]     0x00002138->0x000021b4 at 0x00002138: .eh_frame ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [19]     0x00003d10->0x00003d18 at 0x00002d10: .init_array ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [20]     0x00003d18->0x00003d20 at 0x00002d18: .fini_array ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [21]     0x00003d20->0x00003f50 at 0x00002d20: .dynamic ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [22]     0x00003f50->0x00004000 at 0x00002f50: .got ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [23]     0x00004000->0x00004080 at 0x00003000: .data ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [24]     0x00004080->0x00004098 at 0x00003080: .bss ALLOC\n"
+~" [25]     0x00000000->0x00000090 at 0x00003080: .comment READONLY HAS_CONTENTS\n"
+~" [26]     0x00006098->0x000061dc at 0x00003110: .gnu.build.attributes READONLY HAS_CONTENTS\n"
+~" [27]     0x00000000->0x00000030 at 0x00003254: .debug_aranges READONLY HAS_CONTENTS\n"
+~" [28]     0x00000000->0x00000881 at 0x00003284: .debug_info READONLY HAS_CONTENTS\n"
+~" [29]     0x00000000->0x00000181 at 0x00003b05: .debug_abbrev READONLY HAS_CONTENTS\n"
+~" [30]     0x00000000->0x00000201 at 0x00003c86: .debug_line READONLY HAS_CONTENTS\n"
+~" [31]     0x00000000->0x0000054e at 0x00003e87: .debug_str READONLY HAS_CONTENTS\n"
+~" [32]     0x00000000->0x000002f7 at 0x000043d5: .debug_line_str READONLY HAS_CONTENTS\n"
+23^done
+(gdb) 
+24^done
+(gdb) 
+=thread-group-started,id="i1",pid="378796"
+=thread-created,id="1",group-id="i1"
+=library-loaded,id="/lib64/ld-linux-x86-64.so.2",target-name="/lib64/ld-linux-x86-64.so.2",host-name="/lib64/ld-linux-x86-64.so.2",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7fca000",to="0x00007ffff7ff0beb"}]
+25^running
+*running,thread-id="all"
+(gdb) 
+=library-loaded,id="/lib64/libtdsp.so",target-name="/lib64/libtdsp.so",host-name="/lib64/libtdsp.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7c00ee0",to="0x00007ffff7c02888"}]
+=library-loaded,id="/lib64/libonion.so",target-name="/lib64/libonion.so",host-name="/lib64/libonion.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7a01060",to="0x00007ffff7a024f8"}]
+=library-loaded,id="/lib64/libz.so.1",target-name="/lib64/libz.so.1",host-name="/lib64/libz.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7fa0650",to="0x00007ffff7faddeb"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7f89620",to="0x00007ffff7f96370"}]
+=library-loaded,id="/lib64/libc.so.6",target-name="/lib64/libc.so.6",host-name="/lib64/libc.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7832780",to="0x00007ffff7997eed"}]
+=library-loaded,id="/lib64/libdl.so.2",target-name="/lib64/libdl.so.2",host-name="/lib64/libdl.so.2",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7f80050",to="0x00007ffff7f80115"}]
+~"[Thread debugging using libthread_db enabled]\n"
+~"Using host libthread_db library \"/lib64/libthread_db.so.1\".\n"
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff59070c0",to="0x00007ffff6a96e52"}]
+=library-loaded,id="/lib64/libstdc++.so.6",target-name="/lib64/libstdc++.so.6",host-name="/lib64/libstdc++.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff52a23c0",to="0x00007ffff53ac192"}]
+=library-loaded,id="/lib64/libm.so.6",target-name="/lib64/libm.so.6",host-name="/lib64/libm.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7ea93e0",to="0x00007ffff7f1f9e8"}]
+=library-loaded,id="/lib64/libgcc_s.so.1",target-name="/lib64/libgcc_s.so.1",host-name="/lib64/libgcc_s.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e7c670",to="0x00007ffff7e926e5"}]
+=breakpoint-modified,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",addr="0x00007ffff69ae111",func="ReservedHeapSpace::try_reserve_heap(unsigned long, unsigned long, bool, char*)",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp",line="380",thread-groups=["i1"],times="0",original-location="/data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp:380"}
+=thread-created,id="2",group-id="i1"
+~"[New Thread 0x7ffff780b6c0 (LWP 378894)]\n"
+*running,thread-id="2"
+=library-loaded,id="/lib64/librt.so.1",target-name="/lib64/librt.so.1",host-name="/lib64/librt.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e750a0",to="0x00007ffff7e752a8"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e62390",to="0x00007ffff7e6dd9d"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e34df0",to="0x00007ffff7e528b2"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e1c210",to="0x00007ffff7e21003"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e0f320",to="0x00007ffff7e1562f"}]
+=thread-created,id="3",group-id="i1"
+~"[New Thread 0x7ffff55ff6c0 (LWP 378895)]\n"
+*running,thread-id="3"
+=breakpoint-modified,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",addr="0x00007ffff69ae111",func="ReservedHeapSpace::try_reserve_heap(unsigned long, unsigned long, bool, char*)",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp",line="380",thread-groups=["i1"],times="1",original-location="/data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp:380"}
+~"[Switching to Thread 0x7ffff780b6c0 (LWP 378894)]\n"
+~"\n"
+~"Thread 2 \"java\" hit Breakpoint 1, ReservedHeapSpace::try_reserve_heap (this=0x7ffff780a5f0, size=1073741824, alignment=2097152, large=false, requested_address=0xc0000000 <error: Cannot access memory at address 0xc0000000>) at /data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp:380\n"
+~"380\t    if (base == NULL) {\n"
+*stopped,reason="breakpoint-hit",disp="keep",bkptno="1",frame={addr="0x00007ffff69ae111",func="ReservedHeapSpace::try_reserve_heap",args=[{name="this",value="0x7ffff780a5f0"},{name="size",value="1073741824"},{name="alignment",value="2097152"},{name="large",value="false"},{name="requested_address",value="0xc0000000 <error: Cannot access memory at address 0xc0000000>"}],file="/data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp",line="380",arch="i386:x86-64"},thread-id="2",stopped-threads="all",core="0"
+(gdb) 
+0^done
+(gdb) 
+26^done,threads=[{id="2",target-id="Thread 0x7ffff780b6c0 (LWP 378894)",name="java",frame={level="0",addr="0x00007ffff69ae111",func="ReservedHeapSpace::try_reserve_heap",args=[{name="this",value="0x7ffff780a5f0"},{name="size",value="1073741824"},{name="alignment",value="2097152"},{name="large",value="false"},{name="requested_address",value="0xc0000000 <error: Cannot access memory at address 0xc0000000>"}],file="/data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp",line="380",arch="i386:x86-64"},state="stopped",core="0"}]
+(gdb) 
+27^done,value="replay"
+(gdb) 
+28^done
+(gdb) 
+29^done
+(gdb) 
+30^done,value="att"
+(gdb) 
+31^done,value="auto"
+(gdb) 
+~"The target architecture is set to \"auto\" (currently \"i386:x86-64\").\n"
+32^done
+(gdb) 
+33^done,register-names=["rax","rbx","rcx","rdx","rsi","rdi","rbp","rsp","r8","r9","r10","r11","r12","r13","r14","r15","rip","eflags","cs","ss","ds","es","fs","gs","st0","st1","st2","st3","st4","st5","st6","st7","fctrl","fstat","ftag","fiseg","fioff","foseg","fooff","fop","xmm0","xmm1","xmm2","xmm3","xmm4","xmm5","xmm6","xmm7","xmm8","xmm9","xmm10","xmm11","xmm12","xmm13","xmm14","xmm15","mxcsr","ymm0h","ymm1h","ymm2h","ymm3h","ymm4h","ymm5h","ymm6h","ymm7h","ymm8h","ymm9h","ymm10h","ymm11h","ymm12h","ymm13h","ymm14h","ymm15h","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","fs_base","gs_base","orig_rax","al","bl","cl","dl","sil","dil","bpl","spl","r8l","r9l","r10l","r11l","r12l","r13l","r14l","r15l","ah","bh","ch","dh","ax","bx","cx","dx","si","di","bp","","r8w","r9w","r10w","r11w","r12w","r13w","r14w","r15w","eax","ebx","ecx","edx","esi","edi","ebp","esp","r8d","r9d","r10d","r11d","r12d","r13d","r14d","r15d","ymm0","ymm1","ymm2","ymm3","ymm4","ymm5","ymm6","ymm7","ymm8","ymm9","ymm10","ymm11","ymm12","ymm13","ymm14","ymm15"]
+(gdb) 
+34^done,stack=[frame={level="0",addr="0x00007ffff69ae111",func="ReservedHeapSpace::try_reserve_heap",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp",line="380",arch="i386:x86-64"},frame={level="1",addr="0x00007ffff69ae2e9",func="ReservedHeapSpace::try_reserve_range",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp",line="473",arch="i386:x86-64"},frame={level="2",addr="0x00007ffff69ae837",func="ReservedHeapSpace::initialize_compressed_heap",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp",line="615",arch="i386:x86-64"},frame={level="3",addr="0x00007ffff69aed15",func="ReservedHeapSpace::ReservedHeapSpace",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp",line="709",arch="i386:x86-64"},frame={level="4",addr="0x00007ffff695ffa9",func="Universe::reserve_heap",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="913",arch="i386:x86-64"},frame={level="5",addr="0x00007ffff6094e15",func="G1CollectedHeap::initialize",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1595",arch="i386:x86-64"},frame={level="6",addr="0x00007ffff695f80a",func="Universe::initialize_heap",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="809",arch="i386:x86-64"},frame={level="7",addr="0x00007ffff695f540",func="universe_init",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="694",arch="i386:x86-64"},frame={level="8",addr="0x00007ffff61efdb5",func="init_globals",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",line="119",arch="i386:x86-64"},frame={level="9",addr="0x00007ffff692b1b6",func="Threads::create_vm",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",line="4058",arch="i386:x86-64"},frame={level="10",addr="0x00007ffff63118c0",func="JNI_CreateJavaVM_inner",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4010",arch="i386:x86-64"},frame={level="11",addr="0x00007ffff6311c30",func="JNI_CreateJavaVM",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4103",arch="i386:x86-64"},frame={level="12",addr="0x00007ffff7f8e5c1",func="InitializeJVM",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="1545",arch="i386:x86-64"},frame={level="13",addr="0x00007ffff7f8afb1",func="JavaMain",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="428",arch="i386:x86-64"},frame={level="14",addr="0x00007ffff7f92e01",func="ThreadJavaMain",file="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",fullname="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",line="765",arch="i386:x86-64"},frame={level="15",addr="0x00007ffff789b3ee",func="start_thread",from="/lib64/libc.so.6",arch="i386:x86-64"},frame={level="16",addr="0x00007ffff7922b3c",func="clone3",from="/lib64/libc.so.6",arch="i386:x86-64"}]
+(gdb) 
+35^done,value="0x7ffff780a310"
+(gdb) 
+36^done,variables=[{name="this"},{name="size"},{name="alignment"},{name="large"},{name="requested_address"},{name="special"},{name="base"}],filtered="0"
+(gdb) 
+~"type = ReservedHeapSpace * const\n"
+37^done
+(gdb) 
+~"type = size_t\n"
+38^done
+(gdb) 
+~"type = size_t\n"
+39^done
+(gdb) 
+~"type = bool\n"
+40^done
+(gdb) 
+~"type = char *\n"
+41^done
+(gdb) 
+~"type = bool\n"
+42^done
+(gdb) 
+~"type = char *\n"
+43^done
+(gdb) 
+44^done,name="var1_this",numchild="1",value="0x7ffff780a5f0",type="ReservedHeapSpace * const",thread-id="2",has_more="0"
+0^done
+(gdb) 
+45^done,name="var2_size",numchild="0",value="1073741824",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+46^done,name="var3_alignment",numchild="0",value="2097152",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+47^done,name="var4_large",numchild="0",value="false",type="bool",thread-id="2",has_more="0"
+0^done
+(gdb) 
+48^done,name="var5_requested_address",numchild="1",value="0xc0000000 <error: Cannot access memory at address 0xc0000000>",type="char *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+49^done,name="var6_special",numchild="0",value="false",type="bool",thread-id="2",has_more="0"
+0^done
+(gdb) 
+50^done,name="var7_base",numchild="1",value="0x0",type="char *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+51^done,numchild="1",children=[child={name="var5_requested_address.*requested_address",exp="*requested_address",numchild="0",value="",type="char",thread-id="2"}],has_more="0"
+(gdb) 
+&"kill\n"
+~"Kill the program being debugged? (y or n) [answered Y; input not from terminal]\n"
+=thread-exited,id="1",group-id="i1"
+=thread-exited,id="2",group-id="i1"
+=thread-exited,id="3",group-id="i1"
+=thread-group-exited,id="i1"
+~"[Inferior 1 (process 378796) killed]\n"
+52^done
+(gdb) 
+53^exit
