@@ -430,6 +430,10 @@ void ReservedHeapSpace::try_reserve_range(char *highest_start,
     // Cap num_attempts at possible number.
     // At least one is possible even for 0 sized attach range.
     // 计算理论上最多能尝试多少个位置
+    /*
+     * 这里假设 lowest_start = 2GB, highest_start = 34GB, attach_point_alignment = 2MB, size = 1GB
+     * 那么从 highest_start 开始，每次向后移动 2MB(也即朝lowest_start位置移动)，最多能尝试 (highest_start - lowest_start) / attach_point_alignment + 1(边界也算一次)次
+     */
     const uint64_t num_attempts_possible = (attach_range / attach_point_alignment) + 1;
     // HeapSearchSteps 默认值是 3，限制尝试次数
     const uint64_t num_attempts_to_try = MIN2((uint64_t) HeapSearchSteps, num_attempts_possible);
