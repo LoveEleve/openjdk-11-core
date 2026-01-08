@@ -399,19 +399,21 @@ void ReservedHeapSpace::try_reserve_heap(size_t size,
             base = os::reserve_memory(size, NULL, alignment, _fd_for_heap); // forcus mmap() - 让os自己选择地址
         }
     }
-    if (base == NULL) { return; }
+    if (base == NULL) { return; } // forcus 此次从3GB位置开始分配1GB堆内存的行为失败,返回null,继续从(3GB-533MB)的位置开始尝试分配
 
+    // forcus 否则分配成功
     // Done
     _base = base;
     _size = size;
     _alignment = alignment;
 
     // If heap is reserved with a backing file, the entire space has been committed. So set the _special flag to true
+    // 一般堆内存不会是文件映射,暂时不关心
     if (_fd_for_heap != -1) {
         _special = true;
     }
 
-    // Check alignment constraints
+    // Check alignment constraints 一般都是对齐的
     if ((((size_t) base) & (alignment - 1)) != 0) {
         // Base not aligned, retry.
         release();
@@ -585,7 +587,9 @@ void ReservedHeapSpace::initialize_compressed_heap(const size_t size, size_t ali
 
         // Attempt to allocate so that we can run without base and scale (32-Bit unscaled compressed oops).
         // Give it several tries from top of range to bottom.
-        // forcus aligned_heap_base_min_address(2GB) + size <= 4GB  尝试 Unscaled模式(0~4GB) ==> 也即 堆大小 <= 2GB 时才会 尝试 Unscaled模式
+        // note Unscaled模式
+        // forcus aligned_heap_base_min_address(2GB) + size <= 4GB  尝试 Unscaled 模式(0~4GB) ==> 也即 堆大小 <= 2GB 时才会 尝试 Unscaled模式
+        // 涉及到图解-1/2
         if (aligned_heap_base_min_address + size <= (char *) UnscaledOopHeapMax) {
 
             // Calc address range within we try to attach (range of possible start addresses).
@@ -626,40 +630,90 @@ void ReservedHeapSpace::initialize_compressed_heap(const size_t size, size_t ali
         // zerobased: Attempt to allocate in the lower 32G.
         // But leave room for the compressed class pointers, which is allocated above
         // the heap.
-        char *zerobased_max = (char *) OopEncodingHeapMax;
+
+        char *zerobased_max = (char *) OopEncodingHeapMax; // 32GB
+        // forcus 为 Compressed Class Space 预留空间
+        /*
+         * 为什么要处理这个呢？因为压缩类指针也需要在32GB内存范围内,所以在这里堆的上界 = 32GB - Classspace
+         */
         const size_t class_space = align_up(CompressedClassSpaceSize, alignment);
         // For small heaps, save some space for compressed class pointer
         // space so it can be decoded with no base.
-        if (UseCompressedClassPointers && !UseSharedSpaces &&
-            OopEncodingHeapMax <= KlassEncodingMetaspaceMax &&
-            (uint64_t) (aligned_heap_base_min_address + size + class_space) <= KlassEncodingMetaspaceMax) {
+        // 如果堆+类空间能放进 32GB，就预留类空间
+        /*
+         * 这里涉及到了很多参数~~,但是不要着急,慢慢分析
+         *  1.涉及到的常量值
+         *   - OopEncodingHeapMax : 32GB - 压缩对象指针的最大范围
+         *   - KlassEncodingMetaspaceMax : 32GB - 压缩类指针的最大范围
+         *   - CompressedClassSpaceSize : 1GB(默认) - 类元数据空间大小
+         *   - aligned_heap_base_min_address : 2GB - 堆的最低起始地址
+         *   这段代码想要表达的意思就是: 如果堆和类空间都要在 32GB 内，那堆最多只能用到 31GB，留 1GB 给类空间
+         *   note java -Xlog:gc+metaspace=info 启动时加上该参数可以看到Klass Space的空间
+         */
+        if (UseCompressedClassPointers &&  // 条件1: 启用了压缩类指针(默认为true)
+            !UseSharedSpaces && // 条件2: 没有使用CDS(类数据共享,一般都不会使用)
+            OopEncodingHeapMax <= KlassEncodingMetaspaceMax && // 条件3: 压缩对象指针的最大范围 <= 压缩类指针的最大范围
+            (uint64_t) (aligned_heap_base_min_address + size + class_space) <= KlassEncodingMetaspaceMax) { // 条件4: 2GB + 堆大小 + 类空间 <= 32GB
+            // forcus 以上条件都满足的时候,那么堆上界 = 32GB - 1GB = 31GB
             zerobased_max = (char *) OopEncodingHeapMax - class_space;
         }
 
-        // Give it several tries from top of range to bottom.
+        // Give it several tries from top of range to bottom
+        // note ZeroBased 模式
+        /*
+         * 三个条件：
+         *  - aligned_heap_base_min_address + size <= zerobased_max(堆上界地址：31GB，但是下界为2GB,所以这里 heap_size <= 29GB):
+         *     - 2GB + heap_size <= 31GB 「也即堆内存大小 <= 29GB」
+         *  - _base == NULL || _base + size > zerobased_max: Unscaled模式分配失败 或者 成功了但是分配的位置不理想(应该不会出现这种情况)
+         *
+         *  note 小堆也可能走到下面的逻辑,因为可能每次分配的位置都不理想
+         */
         if (aligned_heap_base_min_address + size <= zerobased_max &&    // Zerobased theoretical possible.
             ((_base == NULL) ||                        // No previous try succeeded.
              (_base + size > zerobased_max))) {        // Unscaled delivered an arbitrary address.
 
-            // Calc address range within we try to attach (range of possible start addresses).
+            // Calc address range within we try to attach (range of possible start addresses)
+            // forcus 计算搜索范围(这里假设堆内存大小为16GB) ,那么查找的起始地址为: 31GB - 8GB = 23GB
             char *const highest_start = align_down(zerobased_max - size, attach_point_alignment);
             // Need to be careful about size being guaranteed to be less
             // than UnscaledOopHeapMax due to type constraints.
+            // forcus 堆起始地址的最低位置：2GB
             char *lowest_start = aligned_heap_base_min_address;
+            /*
+             * 避开 Unscaled 区域
+             *  - 如果是小堆(比如1GB),在上面的 Unscaled模式下已经尝试过了 2GB~4GB范围了，那么在这里就需要避开这个范围
+             *   - unscaled_end = 4GB - 1GB = 3GB
+             *    - lowest_start = MAX2(2GB, 3GB) = 3GB note 此时堆的下界为3GB,而不是2GB了
+             *  - 如果是大堆(8GB)
+             *   - unscaled_end = 4GB - 8GB = -4GB(溢出变为超大值)
+             *   - 那么 unscaled_end < UnscaledOopHeapMax? → false，不进入 if - 此时的 lowest_start = 2GB note 也即堆的下界依旧可以为2GB
+             */
             uint64_t unscaled_end = UnscaledOopHeapMax - size;
             if (unscaled_end < UnscaledOopHeapMax) { // unscaled_end wrapped if size is large
                 lowest_start = MAX2(lowest_start, (char *) unscaled_end);
             }
             lowest_start = align_up(lowest_start, attach_point_alignment);
+            // forcus 同 Unscaled 模式，不再赘述
+            // note 图解-3
             try_reserve_range(highest_start, lowest_start, attach_point_alignment,
                               aligned_heap_base_min_address, zerobased_max, size, alignment, large);
         }
 
+        /*
+         * note Disjoint 模式
+         * 如果前面两种模式都分配失败了(走下面的基本情况就是大堆(>=29GB)) -- 这种情况暂时可以不用了解
+         */
         // Now we go for heaps with base != 0.  We need a noaccess prefix to efficiently
         // implement null checks.
+        // forcus 当堆不在32GB以内时,需要添加保护页(base!=0,这里的base不是上面的_base,而是指寻址方式)
+        // noaccess_prefix = 保护页大小
         noaccess_prefix = noaccess_prefix_size(alignment);
 
         // Try to attach at addresses that are aligned to OopEncodingHeapMax. Disjointbase mode.
+        // forcus 获取 Disjoint 地址列表 - 32的倍数(最小值就是为32*2GB)
+        /*
+         * 为什么是32的倍数呢(最小就是32*2GB)
+         */
         char **addresses = get_attach_addresses_for_disjoint_mode();
         int i = 0;
         while (addresses[i] &&                                 // End of array not yet reached.

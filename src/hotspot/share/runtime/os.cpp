@@ -1811,11 +1811,12 @@ char* os::attempt_reserve_memory_at(size_t bytes, char* addr, int file_desc) {
     }
   } else { // forcus 在指定的位置分配内存
     result = pd_attempt_reserve_memory_at(bytes, addr); // forcus
+    // 如果分配内存成功,那么记录(NMT - jvm内存追踪系统,用于诊断内存使用)
     if (result != NULL) {
       MemTracker::record_virtual_memory_reserve((address)result, bytes, CALLER_PC);
     }
   }
-  return result;
+  return result; // 返回通过mmap()分配的内存
 }
 
 void os::split_reserved_memory(char *base, size_t size,

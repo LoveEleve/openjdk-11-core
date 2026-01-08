@@ -32,8 +32,8 @@
 class ReservedSpace {
   friend class VMStructs;
  protected:
-  char*  _base;
-  size_t _size;
+  char*  _base; // 内存起始地址
+  size_t _size; // 堆内存大小
   size_t _noaccess_prefix;
   size_t _alignment;
   bool   _special;

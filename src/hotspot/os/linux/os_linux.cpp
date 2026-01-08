@@ -4658,11 +4658,12 @@ char *os::pd_attempt_reserve_memory_at(size_t bytes, char *requested_addr) {
     }
     /*
      * 占位策略 - max_tries(尝试次数)
-     * 如果linux内核没有返回jvm想要的值
+     * 如果linux内核没有返回jvm想要的值,那么对于linux返回的地址,jvm先不释放掉(占位),而是继续希望在指定位置(requested_addr)上分配内存
+     * 图解-1.2
      */
     int i;
-    for (i = 0; i < max_tries; ++i) {
-        base[i] = reserve_memory(bytes);
+    for (i = 0; i < max_tries; ++i) { // 最多尝试10次
+        base[i] = reserve_memory(bytes); // 分配内存
 
         if (base[i] != NULL) {
             // Is this the block we wanted?
