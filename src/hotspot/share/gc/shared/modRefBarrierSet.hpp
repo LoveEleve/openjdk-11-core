@@ -35,7 +35,7 @@ protected:
   ModRefBarrierSet(BarrierSetAssembler* barrier_set_assembler,
                    BarrierSetC1* barrier_set_c1,
                    BarrierSetC2* barrier_set_c2,
-                   const BarrierSet::FakeRtti& fake_rtti)
+                   const BarrierSet::FakeRtti& fake_rtti)  // forcus 继续向上调用
     : BarrierSet(barrier_set_assembler,
                  barrier_set_c1,
                  barrier_set_c2,

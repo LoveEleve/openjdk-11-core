@@ -96,10 +96,10 @@ protected:
              BarrierSetC1* barrier_set_c1,
              BarrierSetC2* barrier_set_c2,
              const FakeRtti& fake_rtti) :
-    _fake_rtti(fake_rtti),
-    _barrier_set_assembler(barrier_set_assembler),
-    _barrier_set_c1(barrier_set_c1),
-    _barrier_set_c2(barrier_set_c2) {}
+    _fake_rtti(fake_rtti),  // 运行时类型信息 - 运行时类型标识，包含 G1BarrierSet + CardTableBarrierSet + ModRef 标签
+    _barrier_set_assembler(barrier_set_assembler), // 汇编器 - 生成屏障汇编代码（解释器、Stub）
+    _barrier_set_c1(barrier_set_c1), // C1编译器支持 - C1 JIT编译器的屏障代码生成
+    _barrier_set_c2(barrier_set_c2) {} // C2编译器支持 - C2 JIT编译器的屏障代码生成
   ~BarrierSet() { }
 
   template <class BarrierSetAssemblerT>

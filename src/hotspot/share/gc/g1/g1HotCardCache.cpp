@@ -28,6 +28,13 @@
 #include "gc/g1/g1HotCardCache.hpp"
 #include "runtime/atomic.hpp"
 
+/*
+ * 构造函数:
+ *   _g1h(g1h):指向 G1CollectedHeap 的指针
+ *   _hot_cache:热卡缓存数组（后续 initialize 分配）
+ *   _use_cache:是否启用缓存（后续 initialize 设置）
+ *   _card_counts:卡计数器，记录每张卡被修改的次数
+ */
 G1HotCardCache::G1HotCardCache(G1CollectedHeap *g1h):
   _g1h(g1h), _hot_cache(NULL), _use_cache(false), _card_counts(g1h) {}
 

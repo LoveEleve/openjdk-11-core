@@ -43,7 +43,7 @@ class PtrQueue {
   PtrQueue& operator=(const PtrQueue&);
 
   // The ptr queue set to which this queue belongs.
-  PtrQueueSet* const _qset;
+  PtrQueueSet* const _qset; // _qset 是一个指针，指向全局的 SATBMarkQueueSet
 
   // Whether updates should be logged.
   bool _active;

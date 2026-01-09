@@ -32,11 +32,14 @@ BarrierSet* BarrierSet::_barrier_set = NULL;
 
 void BarrierSet::set_barrier_set(BarrierSet* barrier_set) {
   assert(_barrier_set == NULL, "Already initialized");
+  // forcus 设置全局变量_barrier_set
   _barrier_set = barrier_set;
 
   // The barrier set was not initialized when the this thread (the main thread)
   // was created, so the call to BarrierSet::on_thread_create() had to be deferred
   // until we have a barrier set. Now we have a barrier set, so we make the call.
+  // forcus 为主线程创建 G1ThreadLocalData
+  /* Thread::current()返回的是主线程*/
   _barrier_set->on_thread_create(Thread::current());
 }
 

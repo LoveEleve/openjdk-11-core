@@ -1635,17 +1635,37 @@ jint G1CollectedHeap::initialize() {
   G1CardTable* ct = new G1CardTable(reserved_region()); // 这里传入了 reserved_region() - 就是上面说的 _reserved对象(内部包含了堆的起始地址和大小(堆的范围))
   // 调用卡表的初始化方法 (G1 Card Table 覆盖了 Card Table的实现,但是默认是空实现,而是使用另外一个initialize(mapper)来实现自己的初始化逻辑),这里可以忽略
   ct->initialize();
-  // forcus 
-  G1BarrierSet* bs = new G1BarrierSet(ct);
-  bs->initialize();
+  // forcus 创建G1 BarrierSet(屏障集)
+  /*
+   * note 知识科普:
+   *  什么是屏障集?
+   *   - 屏障：是GC在对象引用被读取或者修改时插入的一段代码,G1 GC使用两种屏障
+   *     1.写前屏障(pre-write-barrier):引用被覆盖之前,记录旧值到SATB队列,支持并发标记
+   *     2.写后屏障(post-write-barrier):引用被修改之后,标记卡表为脏,记录跨Region引用
+   */
+  G1BarrierSet* bs = new G1BarrierSet(ct); // note 参数为G1 Card Table
+  bs->initialize(); // forcus G1BarrierSet 没有重写 initialize()，调用的是父类 CardTableBarrierSet::initialize()：
   assert(bs->is_a(BarrierSet::G1BarrierSet), "sanity");
+  // forcus 设置到全局变量中 -> _barrier_set
+  // 将新创建的 G1BarrierSet 设置为全局唯一的屏障集。JVM 中任何地方都可以通过 BarrierSet::barrier_set() 获取。
+  // forcus G1BarrierSet::on_thread_create
+  // 为主线程创建 G1ThreadLocalData
   BarrierSet::set_barrier_set(bs);
-  _card_table = ct;
+  _card_table = ct; // forcus 将卡表指针保存到 G1CollectedHeap 的成员变量 _card_table 中
 
   // Create the hot card cache.
+  /*
+   * note 问题背景
+   *  在 G1 GC 中，当应用线程修改对象引用时，会触发写后屏障，将对应的卡标记为"脏"。然后并发细化线程（Concurrent Refinement Thread） 会处理这些脏卡，更新 RSet。
+   * note 问题
+   *  有些卡被频繁修改（比如热点代码中的对象），如果每次修改都立即处理，会造成大量重复工作。
+   * note 解决方案 热卡缓存
+   *  对于频繁修改的"热卡"，先放入缓存，等到 GC 暂停时再统一处理，避免重复劳动。
+   */
   _hot_card_cache = new G1HotCardCache(this);
 
   // Carve out the G1 part of the heap.
+  // forcus
   ReservedSpace g1_rs = heap_rs.first_part(max_byte_size);
   size_t page_size = UseLargePages ? os::large_page_size() : os::vm_page_size();
   G1RegionToSpaceMapper* heap_storage =

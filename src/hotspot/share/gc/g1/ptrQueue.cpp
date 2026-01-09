@@ -33,7 +33,7 @@
 #include <new>
 
 PtrQueue::PtrQueue(PtrQueueSet* qset, bool permanent, bool active) :
-  _qset(qset),
+  _qset(qset), // ← 这里！保存了全局队列集的指针
   _active(active),
   _permanent(permanent),
   _index(0),

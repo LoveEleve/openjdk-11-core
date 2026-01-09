@@ -53,12 +53,13 @@ CardTableBarrierSet::CardTableBarrierSet(BarrierSetAssembler* barrier_set_assemb
                                          BarrierSetC2* barrier_set_c2,
                                          CardTable* card_table,
                                          const BarrierSet::FakeRtti& fake_rtti) :
+  // forcus 继续向上调用
   ModRefBarrierSet(barrier_set_assembler,
                    barrier_set_c1,
                    barrier_set_c2,
                    fake_rtti.add_tag(BarrierSet::CardTableBarrierSet)),
-  _defer_initial_card_mark(false),
-  _card_table(card_table)
+  _defer_initial_card_mark(false), // 是否延迟初始卡标记（用于 ReduceInitialCardMarks 优化，后面会详细介绍）
+  _card_table(card_table) // 保存卡表指针，供屏障代码使用
 {}
 
 CardTableBarrierSet::CardTableBarrierSet(CardTable* card_table) :
@@ -167,6 +168,19 @@ void CardTableBarrierSet::initialize_deferred_card_mark_barriers() {
   // Used for ReduceInitialCardMarks (when COMPILER2 or JVMCI is used);
   // otherwise remains unused.
 #if COMPILER2_OR_JVMCI
+  // forcus 延迟卡标记优化
+  /*
+   * is_server_compilation_mode_vm() : 是否使用 Server 编译模式
+   * ReduceInitialCardMarks : JVM 参数，默认 true
+   * DeferInitialCardMark : 是否延迟卡标记
+   * card_mark_must_follow_store() : 卡标记是否必须紧跟存储操作
+   * note 这个优化是什么意思呢?
+   *  对于新分配的对象，它的所有字段初始都是 null 或默认值，不会有跨代引用
+   *  所以：
+        TLAB 快速分配：可以跳过初始卡标记，提升性能
+        慢路径分配：补上卡标记
+        GC 安全点：检查并补上遗漏的卡标记
+   */
   _defer_initial_card_mark = is_server_compilation_mode_vm() && ReduceInitialCardMarks
                              && (DeferInitialCardMark || card_mark_must_follow_store());
 #else

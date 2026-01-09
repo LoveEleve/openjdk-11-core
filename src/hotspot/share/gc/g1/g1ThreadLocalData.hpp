@@ -33,12 +33,13 @@
 
 class G1ThreadLocalData {
 private:
-  SATBMarkQueue  _satb_mark_queue;
-  DirtyCardQueue _dirty_card_queue;
+  SATBMarkQueue  _satb_mark_queue; // 线程本地SATB队列 - 关联到全局 _satb_mark_queue_set
+  DirtyCardQueue _dirty_card_queue; // 线程本地脏卡队列 - 关联到全局 _dirty_card_queue_set
 
   G1ThreadLocalData() :
-      _satb_mark_queue(&G1BarrierSet::satb_mark_queue_set()),
-      _dirty_card_queue(&G1BarrierSet::dirty_card_queue_set()) {}
+      _satb_mark_queue(&G1BarrierSet::satb_mark_queue_set()), // SATBMarkQueue 构造函数
+      _dirty_card_queue(&G1BarrierSet::dirty_card_queue_set()) // DirtyCardQueue 构造函数
+      {}
 
   static G1ThreadLocalData* data(Thread* thread) {
     assert(UseG1GC, "Sanity");
