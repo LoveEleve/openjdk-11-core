@@ -1416,76 +1416,93 @@ void G1CollectedHeap::shrink(size_t shrink_bytes) {
 // Public methods.
 
 G1CollectedHeap::G1CollectedHeap(G1CollectorPolicy* collector_policy) :
-  CollectedHeap(),
-  _young_gen_sampling_thread(NULL),
-  _collector_policy(collector_policy),
-  _soft_ref_policy(),
-  _card_table(NULL),
-  _memory_manager("G1 Young Generation", "end of minor GC"),
-  _full_gc_memory_manager("G1 Old Generation", "end of major GC"),
-  _eden_pool(NULL),
-  _survivor_pool(NULL),
-  _old_pool(NULL),
-  _gc_timer_stw(new (ResourceObj::C_HEAP, mtGC) STWGCTimer()),
-  _gc_tracer_stw(new (ResourceObj::C_HEAP, mtGC) G1NewTracer()),
-  _g1_policy(new G1Policy(_gc_timer_stw)),
-  _collection_set(this, _g1_policy),
-  _dirty_card_queue_set(false),
-  _ref_processor_stw(NULL),
-  _is_alive_closure_stw(this),
-  _is_subject_to_discovery_stw(this),
-  _ref_processor_cm(NULL),
-  _is_alive_closure_cm(this),
-  _is_subject_to_discovery_cm(this),
-  _bot(NULL),
-  _hot_card_cache(NULL),
-  _g1_rem_set(NULL),
-  _cr(NULL),
-  _g1mm(NULL),
-  _preserved_marks_set(true /* in_c_heap */),
-  _old_set("Old Set", false /* humongous */, new OldRegionSetMtSafeChecker()),
-  _humongous_set("Master Humongous Set", true /* humongous */, new HumongousRegionSetMtSafeChecker()),
-  _humongous_reclaim_candidates(),
-  _has_humongous_reclaim_candidates(false),
-  _archive_allocator(NULL),
-  _summary_bytes_used(0),
-  _survivor_evac_stats("Young", YoungPLABSize, PLABWeight),
-  _old_evac_stats("Old", OldPLABSize, PLABWeight),
-  _expand_heap_after_alloc_failure(true),
-  _old_marking_cycles_started(0),
-  _old_marking_cycles_completed(0),
-  _in_cset_fast_test() {
-
+  CollectedHeap(), // forcus 调用父类的构造方法
+  // note 线程与策略相关
+  _young_gen_sampling_thread(NULL), // 年轻代采样线程（后续创建） - 作用：周期性采样年轻代大小，用于自适应调整
+  _collector_policy(collector_policy), // 收集器策略（传入参数）
+  _soft_ref_policy(),  // 软引用策略（默认构造） 作用：控制软引用的清理策略
+  // note 卡表与内存管理器
+  _card_table(NULL), // G1卡表，用于记录跨Region引用
+  _memory_manager("G1 Young Generation", "end of minor GC"), // JMX暴露的年轻代内存管理器
+  _full_gc_memory_manager("G1 Old Generation", "end of major GC"), // JMX暴露的老年代内存管理器
+  // note 内存池（JMX监控用）这些用于通过 JMX 监控各代内存使用情况
+  _eden_pool(NULL), // Eden区内存池
+  _survivor_pool(NULL), // Survivor区内存池
+  _old_pool(NULL),  // 老年代内存池
+  // note GC计时与追踪
+  _gc_timer_stw(new (ResourceObj::C_HEAP, mtGC) STWGCTimer()), // 记录Stop-The-World暂停时间
+  _gc_tracer_stw(new (ResourceObj::C_HEAP, mtGC) G1NewTracer()), // 追踪GC事件，用于JFR等诊断工具
+  // note G1策略与收集集
+  _g1_policy(new G1Policy(_gc_timer_stw)), // G1策略（核心决策组件） note 决定何时GC、回收哪些Region、暂停时间预测
+  _collection_set(this, _g1_policy), // 收集集（待回收Region集合） note 本次GC要回收的Region集合（CSet）
+  // note 脏卡队列
+  _dirty_card_queue_set(false), // 脏卡队列集（false表示不是SATB队列） note 用于并发标记期间记录被修改的卡表项。
+  // note 引用处理器（STW阶段）-- 用于在STW暂停期间处理软引用、弱引用、虚引用、终结器引用。
+  _ref_processor_stw(NULL),  // STW引用处理器
+  _is_alive_closure_stw(this), // 判断对象存活的闭包
+  _is_subject_to_discovery_stw(this), // 判断是否需要发现引用
+  // note 引用处理器（并发标记阶段）-- 用于并发标记期间的引用处理
+  _ref_processor_cm(NULL), // 并发标记引用处理器
+  _is_alive_closure_cm(this),  // 并发标记的存活判断闭包
+  _is_subject_to_discovery_cm(this), // 并发标记的引用发现判断
+  // note 辅助数据结构
+  _bot(NULL), // Block Offset Table（块偏移表） note 快速定位堆块中对象起始位置
+  _hot_card_cache(NULL), // 热卡缓存 note 缓存频繁修改的卡，避免重复处理
+  _g1_rem_set(NULL), // G1 Remembered Set note 记忆集，记录跨Region引用
+  _cr(NULL),// Concurrent Refinement（并发细化） note 并发细化线程，后台处理脏卡
+  _g1mm(NULL), // G1 Monitoring Support note G1监控指标支持
+  // note 对象保留与Region集合
+  _preserved_marks_set(true /* in_c_heap */), // 保留标记集（evacuation失败时用） note evacuation失败时保存对象的mark word
+  _old_set("Old Set", false /* humongous */, new OldRegionSetMtSafeChecker()), // note 老年代Region集合
+  _humongous_set("Master Humongous Set", true /* humongous */, new HumongousRegionSetMtSafeChecker()), // note 巨型对象Region集合
+  // note 巨型对象回收
+  _humongous_reclaim_candidates(), // 巨型对象回收候选列表
+  _has_humongous_reclaim_candidates(false), // 是否有回收候选
+  _archive_allocator(NULL),  // 归档分配器（CDS用）
+  // note 统计与PLAB(PLAB (Promotion Local Allocation Buffer)：每个GC线程的本地分配缓冲区，减少竞争。)
+  _summary_bytes_used(0),  // 已使用字节数统计
+  _survivor_evac_stats("Young", YoungPLABSize, PLABWeight), // Survivor PLAB统计
+  _old_evac_stats("Old", OldPLABSize, PLABWeight), // Old PLAB统计
+  // note  其他标志
+  _expand_heap_after_alloc_failure(true), // 分配失败后是否扩展堆
+  _old_marking_cycles_started(0),  // 已启动的老年代标记周期数
+  _old_marking_cycles_completed(0), // 已完成的老年代标记周期数
+  _in_cset_fast_test() { // 快速判断Region是否在CSet中
+  // 下面的就是构造函数体
+  // forcus 1. 创建GC工作线程池
   _workers = new WorkGang("GC Thread", ParallelGCThreads,
                           /* are_GC_task_threads */true,
                           /* are_ConcurrentGC_threads */false);
+  // forcus 2. 创建堆验证器
   _workers->initialize_workers();
   _verifier = new G1HeapVerifier(this);
-
+  // forcus 3. 创建分配器
   _allocator = new G1Allocator(this);
-
+  // forcus 4. 创建堆大小调整策略
   _heap_sizing_policy = G1HeapSizingPolicy::create(this, _g1_policy->analytics());
-
+  // forcus 5. 计算巨型对象阈值（Region大小的一半）
   _humongous_object_threshold_in_words = humongous_threshold_for(HeapRegion::GrainWords);
 
   // Override the default _filler_array_max_size so that no humongous filler
   // objects are created.
+  // forcus 6. 设置填充数组最大大小，避免创建巨型填充对象
   _filler_array_max_size = _humongous_object_threshold_in_words;
-
+  // forcus 7. 创建任务队列（每个GC线程一个）
   uint n_queues = ParallelGCThreads;
   _task_queues = new RefToScanQueueSet(n_queues);
 
   _evacuation_failed_info_array = NEW_C_HEAP_ARRAY(EvacuationFailedInfo, n_queues, mtGC);
-
+  // forcus 8. 初始化每个队列
   for (uint i = 0; i < n_queues; i++) {
     RefToScanQueue* q = new RefToScanQueue();
     q->initialize();
     _task_queues->register_queue(i, q);
     ::new (&_evacuation_failed_info_array[i]) EvacuationFailedInfo();
   }
-
+  // forcus 9. 初始化GC追踪器
   // Initialize the G1EvacuationFailureALot counters and flags.
   NOT_PRODUCT(reset_evacuation_should_fail();)
+
   _gc_tracer_stw->initialize();
 
   guarantee(_task_queues != NULL, "task_queues allocation failure.");
@@ -1594,12 +1611,31 @@ jint G1CollectedHeap::initialize() {
    */
   ReservedSpace heap_rs = Universe::reserve_heap(max_byte_size, // G1堆大小(-Xms/-Xmx)
                                                  heap_alignment); // 堆对齐大小
-
+  /*
+   * note 这里返回的heap_rs(ReservedSpace对象)中的base()是在 reserve_heap()中通过mmap()预留的堆内存的起始地址
+   * 这个方法的作用是将预留的堆空间信息保存到 CollectedHeap 的 _reserved 成员变量中
+   * note _reserved是一个 MemRegion对象,表示一段连续的内存区域
+        class MemRegion {
+            private:
+              HeapWord* _start;      // 起始地址
+              size_t    _word_size;  // 大小（以 HeapWord 为单位）
+        }
+   */
   initialize_reserved_region((HeapWord*)heap_rs.base(), (HeapWord*)(heap_rs.base() + heap_rs.size()));
 
   // Create the barrier set for the entire reserved region.
-  G1CardTable* ct = new G1CardTable(reserved_region());
+  /*
+   * note 创建并且初始化 G1 Card Table(卡表)，用于跟踪堆内存中的跨代/跨区域引用
+   * note Cart Table: 是一种写屏障数据结构,用于记录哪些内存区域被修改过(每512字节堆内存对应于1字节卡表项)
+   * note GC时只需要扫描脏卡
+   * note 卡表大小 = 堆内存 / 512B（比如8GB堆 - 8GB / 512B = 16MB）
+   * 核心常量: SomePublicConstants(cardtable.hpp)
+   *
+   */
+  G1CardTable* ct = new G1CardTable(reserved_region()); // 这里传入了 reserved_region() - 就是上面说的 _reserved对象(内部包含了堆的起始地址和大小(堆的范围))
+  // 调用卡表的初始化方法 (G1 Card Table 覆盖了 Card Table的实现,但是默认是空实现,而是使用另外一个initialize(mapper)来实现自己的初始化逻辑),这里可以忽略
   ct->initialize();
+  // forcus 
   G1BarrierSet* bs = new G1BarrierSet(ct);
   bs->initialize();
   assert(bs->is_a(BarrierSet::G1BarrierSet), "sanity");

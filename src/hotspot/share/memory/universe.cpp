@@ -911,22 +911,38 @@ ReservedSpace Universe::reserve_heap(size_t heap_size, size_t alignment) {
             heap_allocation_directory: 指定堆文件位置(很少见) {通过 -XX:AllocateHeapAt=/path 可以把堆分配到特定文件（如 NVMe、持久内存）}
    */
   ReservedHeapSpace total_rs(total_reserved, alignment, use_large_pages, AllocateHeapAt);
-
+  // forcus 判断上面是否预留内存成功(也就是jvm通过mmap()向os预留内存,是否成功,一般都是成功的)
   if (total_rs.is_reserved()) {
     assert((total_reserved == total_rs.size()) && ((uintptr_t)total_rs.base() % alignment == 0),
            "must be exactly of required size and alignment");
     // We are good.
-
+    // forcus 设置压缩指针base
     if (UseCompressedOops) {
       // Universe::initialize_heap() will reset this to NULL if unscaled
       // or zero-based narrow oops are actually used.
       // Else heap start and base MUST differ, so that NULL can be encoded nonambigous.
+      /*
+       * note 这行代码设置了压缩对象指针(Compressed Oops)的base值,用于解编码64位对象地址到32位,一共涉及到2个方法
+       *  - total_rs.compressed_oop_base(): _base - _noaccess_prefix(即真正的堆起始地址)
+       *  - _narrow_oop._base = base：将base存入到全局数据 _narrow_oop中
+       *
+       *    NarrowPtrStruct
+       *    {
+       *        address _base; // 基地址
+       *        int     _shift; // 移位量(0/3)
+       *        bool    _use_implicit_null_checks; // 是否使用隐式空指针检查
+       *    }
+       *    后续会在 Universe::initialize_heap() 中重置base值（注意与_base值的区分）
+       *     Unscaled模式: base = 0，shift = 0
+       *     ZeroBased模式: base = 0，shift = 3
+       */
       Universe::set_narrow_oop_base((address)total_rs.compressed_oop_base());
     }
 
     if (AllocateHeapAt != NULL) {
       log_info(gc,heap)("Successfully allocated Java heap at location %s", AllocateHeapAt);
     }
+    // forcus 返回成功预留的 ReservedHeapSpace 对象
     return total_rs;
   }
 

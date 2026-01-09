@@ -35,7 +35,7 @@ class G1RegionToSpaceMapper;
 
 class G1CardTableChangedListener : public G1MappingChangedListener {
  private:
-  G1CardTable* _card_table;
+  G1CardTable* _card_table; // forcus G1 Card Table
  public:
   G1CardTableChangedListener() : _card_table(NULL) { }
 
@@ -43,19 +43,30 @@ class G1CardTableChangedListener : public G1MappingChangedListener {
 
   virtual void on_commit(uint start_idx, size_t num_regions, bool zero_filled);
 };
-
+// forcus G1的卡表实现, 继承自CardTable(通用卡表)
 class G1CardTable: public CardTable {
   friend class VMStructs;
   friend class G1CardTableChangedListener;
 
-  G1CardTableChangedListener _listener;
+  G1CardTableChangedListener _listener; // 监听器
 
   enum G1CardValues {
-    g1_young_gen = CT_MR_BS_last_reserved << 1
+    g1_young_gen = CT_MR_BS_last_reserved << 1 // forcus G1特有的年轻代卡值
   };
 
 public:
+  // forcus G1 卡表构造函数, 第一个参数是整个堆的大小，第二个参数是支持并发扫描卡表(G1默认支持)
+  // note 这里会调用父类的构造函数(CardTable)
   G1CardTable(MemRegion whole_heap): CardTable(whole_heap, /* scanned concurrently */ true), _listener() {
+    // forcus 将当前卡表对象设置到监听器中
+    /*
+     * 这个listener的作用:当G1堆中的某个Region被提交(commit)时，自动清理对应的卡表区域 - 初始化为 clean_care = -1
+     * note 在这里,commit代表的是什么意思呢？
+     *  这里涉及到了虚拟内存的两阶段分配：
+     *   1.预留:Reserve - 向OS申请一段虚拟内存空间,这里需要说明一下,是在进程的虚拟地址空间标记这段地址已经被使用,但没有实际分配物理内存(不能直接访问) - note os::reserve_memory(size)
+     *   2.提交:commit - 将预留的虚拟地址映射到实际的物理内存 - note os::commit_memory(addr,size)
+     *   而G1 GC在jvm启动的时候就预留(Reserve)了整个堆空间,但不会立即提交所有Region
+     */
     _listener.set_card_table(this);
   }
   bool is_card_dirty(size_t card_index) {

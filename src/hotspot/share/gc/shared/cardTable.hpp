@@ -226,10 +226,10 @@ public:
   MemRegion dirty_card_range_after_reset(MemRegion mr, bool reset,
                                          int reset_val);
 
-  // Constants
+  // Constants forcus
   enum SomePublicConstants {
-    card_shift                  = 9,
-    card_size                   = 1 << card_shift,
+    card_shift                  = 9, // 地址右移9位得到卡索引
+    card_size                   = 1 << card_shift, // 每张卡覆盖的堆内存大小
     card_size_in_words          = card_size / sizeof(HeapWord)
   };
 

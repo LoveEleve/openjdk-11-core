@@ -194,12 +194,13 @@ bool CollectedHeap::is_oop(oop object) const {
 
 
 CollectedHeap::CollectedHeap() :
-  _is_gc_active(false),
-  _total_collections(0),
-  _total_full_collections(0),
-  _gc_cause(GCCause::_no_gc),
-  _gc_lastcause(GCCause::_no_gc)
+  _is_gc_active(false),  // GC是否正在进行
+  _total_collections(0), // 总GC次数
+  _total_full_collections(0), // 总Full GC次数
+  _gc_cause(GCCause::_no_gc), // 当前GC原因
+  _gc_lastcause(GCCause::_no_gc) // 上一次GC原因
 {
+  // 计算填充数组的最大大小（用于对齐）
   const size_t max_len = size_t(arrayOopDesc::max_array_length(T_INT));
   const size_t elements_per_word = HeapWordSize / sizeof(jint);
   _filler_array_max_size = align_object_size(filler_array_hdr_size() +
@@ -207,7 +208,7 @@ CollectedHeap::CollectedHeap() :
 
   NOT_PRODUCT(_promotion_failure_alot_count = 0;)
   NOT_PRODUCT(_promotion_failure_alot_gc_number = 0;)
-
+  // 创建性能计数器（如果启用）
   if (UsePerfData) {
     EXCEPTION_MARK;
 
@@ -221,6 +222,7 @@ CollectedHeap::CollectedHeap() :
   }
 
   // Create the ring log
+  // 创建GC事件日志环形缓冲区
   if (LogEvents) {
     _gc_heap_log = new GCHeapLog();
   } else {
@@ -538,9 +540,12 @@ void CollectedHeap::post_full_gc_dump(GCTimer* timer) {
 void CollectedHeap::initialize_reserved_region(HeapWord *start, HeapWord *end) {
   // It is important to do this in a way such that concurrent readers can't
   // temporarily think something is in the heap.  (Seen this happen in asserts.)
-  _reserved.set_word_size(0);
-  _reserved.set_start(start);
-  _reserved.set_end(end);
+  /*
+   * 必须清0,不能少了这一步，否则可能存在start为新值,但是end还是旧值的情况
+   */
+  _reserved.set_word_size(0); // 先把大小设置为0
+  _reserved.set_start(start); // 再设置起始地址
+  _reserved.set_end(end); // 最后设置结束地址
 }
 
 void CollectedHeap::post_initialize() {

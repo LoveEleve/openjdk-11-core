@@ -40,26 +40,36 @@ size_t CardTable::compute_byte_map_size() {
   const size_t granularity = os::vm_allocation_granularity();
   return align_up(_guard_index + 1, MAX2(_page_size, granularity));
 }
-
+// forcus 通用卡表的构造函数
+// 传入的两个参数： whole_heap: MemRegion类型的,代表一段连续的内存(其实是_reverse全局对象), conc_scan: 是否并发扫描
 CardTable::CardTable(MemRegion whole_heap, bool conc_scan) :
-  _scanned_concurrently(conc_scan),
-  _whole_heap(whole_heap),
-  _guard_index(0),
-  _guard_region(),
-  _last_valid_index(0),
-  _page_size(os::vm_page_size()),
-  _byte_map_size(0),
-  _covered(NULL),
-  _committed(NULL),
-  _cur_covered_regions(0),
-  _byte_map(NULL),
-  _byte_map_base(NULL)
+  _scanned_concurrently(conc_scan), // 是否并发扫描：G1默认为true
+  _whole_heap(whole_heap), // 保存整个堆的内存区域
+  _guard_index(0), // 哨兵卡索引
+  _guard_region(), // 哨兵卡区域
+  _last_valid_index(0), // 最后有效卡索引
+  _page_size(os::vm_page_size()), // 系统页大小-linux上通常为4KB
+  _byte_map_size(0), // 卡表大小
+  _covered(NULL), // 覆盖区域数组(在下面的构造函数中分配)
+  _committed(NULL), // 已提交区域数组
+  _cur_covered_regions(0), // 当前覆盖区域数量
+  _byte_map(NULL), // 卡表数组
+  _byte_map_base(NULL) // 卡表基地址
 {
   assert((uintptr_t(_whole_heap.start())  & (card_size - 1))  == 0, "heap must start at card boundary");
   assert((uintptr_t(_whole_heap.end()) & (card_size - 1))  == 0, "heap must end at card boundary");
 
   assert(card_size <= 512, "card_size must be less than 512"); // why?
-
+  // forcus 分配覆盖区域数组
+  /*
+   * note _max_covered_regions = 2
+   * 对于传统的分代GC,每个代(generation)最多一个覆盖区域
+   *  - 年轻代
+   *  - 老年代
+   * _covered[]的作用：记录卡表覆盖的堆内存区域
+   * _committed[]的作用：记录卡表已提交的内存区域(与_covered[]一一对应)
+   * 而G1 GC则只使用了一个覆盖区域
+   */
   _covered   = new MemRegion[_max_covered_regions];
   if (_covered == NULL) {
     vm_exit_during_initialization("Could not allocate card table covered region set.");
@@ -76,7 +86,7 @@ CardTable::~CardTable() {
     _committed = NULL;
   }
 }
-
+// forcus 卡表初始化(不是G1 卡表初始化哦)
 void CardTable::initialize() {
   _guard_index = cards_required(_whole_heap.word_size()) - 1;
   _last_valid_index = _guard_index - 1;

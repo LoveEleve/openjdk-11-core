@@ -3998,7 +3998,7 @@ jint Threads::create_vm(JavaVMInitArgs *args, bool *canTryAgain) {
     _number_of_non_daemon_threads = 0;
 
     // Initialize global data structures and create system classes in heap
-    // forcus 初始化 "全局数据结构"
+    // forcus 初始化 "vm全局数据结构"
     vm_init_globals();
 
 #if INCLUDE_JVMCI
@@ -4055,6 +4055,8 @@ jint Threads::create_vm(JavaVMInitArgs *args, bool *canTryAgain) {
     ObjectMonitor::Initialize();
 
     // Initialize global modules
+    // forcus forcus 核心方法,初始化jvm的核心模块
+    /* --- 这个是超级核心的方法 --- */
     jint status = init_globals();
     if (status != JNI_OK) {
         main_thread->smr_delete();

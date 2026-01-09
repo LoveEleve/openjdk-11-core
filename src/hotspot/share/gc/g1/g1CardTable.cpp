@@ -70,7 +70,6 @@ void G1CardTableChangedListener::on_commit(uint start_idx, size_t num_regions, b
   MemRegion mr(G1CollectedHeap::heap()->bottom_addr_for_region(start_idx), num_regions * HeapRegion::GrainWords);
   _card_table->clear(mr);
 }
-
 void G1CardTable::initialize(G1RegionToSpaceMapper* mapper) {
   mapper->set_mapping_changed_listener(&_listener);
 
