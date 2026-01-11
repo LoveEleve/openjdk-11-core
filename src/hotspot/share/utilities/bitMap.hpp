@@ -49,8 +49,8 @@ class BitMap {
   friend class BitMap2D;
 
  public:
-  typedef size_t idx_t;         // Type used for bit and word indices.
-  typedef uintptr_t bm_word_t;  // Element type of array that represents
+  typedef size_t idx_t;         // Type used for bit and word indices.  // forcus 位索引类型
+  typedef uintptr_t bm_word_t;  // Element type of array that represents // forcus 存储单元类型 (64位系统上是 8 字节)
                                 // the bitmap.
 
   // Hints for range sizes.
@@ -59,8 +59,8 @@ class BitMap {
   } RangeSizeHint;
 
  private:
-  bm_word_t* _map;     // First word in bitmap
-  idx_t      _size;    // Size of bitmap (in bits)
+  bm_word_t* _map;     // First word in bitmap // forcus 位图数组
+  idx_t      _size;    // Size of bitmap (in bits)  // forcus 位图大小（位数）
 
   // Threshold for performing small range operation, even when large range
   // operation was requested. Measured in words.
@@ -359,7 +359,7 @@ class CHeapBitMap : public BitMap {
   NONCOPYABLE(CHeapBitMap);
 
   // NMT memory type
-  MEMFLAGS _flags;
+  MEMFLAGS _flags; // forcus NMT 内存类型标记
 
  public:
   CHeapBitMap(MEMFLAGS flags = mtInternal) : BitMap(NULL, 0), _flags(flags) {}

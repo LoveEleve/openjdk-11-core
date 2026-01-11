@@ -44,35 +44,37 @@ class WorkGang;
 // be committed using OS small pages.
 // The implementation gives an error when trying to commit or uncommit pages that
 // have already been committed or uncommitted.
+
+// forcus
 class G1PageBasedVirtualSpace {
   friend class VMStructs;
  private:
   // Reserved area addresses.
-  char* _low_boundary;
-  char* _high_boundary;
+  char* _low_boundary; // forcus 虚拟空间起始地址
+  char* _high_boundary; // forcus 虚拟空间结束地址
 
   // The size of the tail in bytes of the handled space that needs to be committed
   // using small pages.
-  size_t _tail_size;
+  size_t _tail_size; // 尾部不足一页的大小
 
   // The preferred page size used for commit/uncommit in bytes.
-  size_t _page_size;
+  size_t _page_size;  // 首选页大小
 
   // Bitmap used for verification of commit/uncommit operations.
-  CHeapBitMap _committed;
+  CHeapBitMap _committed; // 每页的 commit 状态位图
 
   // Bitmap used to keep track of which pages are dirty or not for _special
   // spaces. This is needed because for those spaces the underlying memory
   // will only be zero filled the first time it is committed. Calls to commit
   // will use this bitmap and return whether or not the memory is zero filled.
-  CHeapBitMap _dirty;
+  CHeapBitMap _dirty; // 每页的脏标记（用于 special 空间 - 暂时不关心）
 
   // Indicates that the entire space has been committed and pinned in memory,
   // os::commit_memory() or os::uncommit_memory() have no function.
-  bool _special;
+  bool _special; // 是否是特殊内存（已预先 commit 并锁定）
 
   // Indicates whether the committed space should be executable.
-  bool _executable;
+  bool _executable; // 是否可执行
 
   // Helper function for committing memory. Commit the given memory range by using
   // _page_size pages as much as possible and the remainder with small sized pages.

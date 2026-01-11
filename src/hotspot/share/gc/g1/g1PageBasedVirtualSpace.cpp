@@ -34,8 +34,9 @@
 #include "utilities/bitMap.inline.hpp"
 
 G1PageBasedVirtualSpace::G1PageBasedVirtualSpace(ReservedSpace rs, size_t used_size, size_t page_size) :
-  _low_boundary(NULL), _high_boundary(NULL), _committed(mtGC), _page_size(0), _special(false),
+  _low_boundary(NULL), _high_boundary(NULL), _committed(mtGC), _page_size(0), _special(false), // 默认的成员构造
   _dirty(mtGC), _executable(false) {
+    // note used_size = 堆大小
   initialize_with_page_size(rs, used_size, page_size);
 }
 
@@ -54,22 +55,24 @@ void G1PageBasedVirtualSpace::initialize_with_page_size(ReservedSpace rs, size_t
   guarantee(is_aligned(rs.size(), page_size),
             "Expected that the virtual space is size aligned, but " SIZE_FORMAT " is not aligned to page size " SIZE_FORMAT, rs.size(), page_size);
 
-  _low_boundary  = rs.base();
-  _high_boundary = _low_boundary + used_size;
+  _low_boundary  = rs.base(); // forcus 起始地址
+  _high_boundary = _low_boundary + used_size; // forcus 结束地址
 
-  _special = rs.special();
-  _executable = rs.executable();
+  _special = rs.special(); // 是否是特殊内存
+  _executable = rs.executable(); // 是否是特殊内存
 
-  _page_size = page_size;
+  _page_size = page_size; // 页面大小
 
   vmassert(_committed.size() == 0, "virtual space initialized more than once");
+  // forcus 计算页数并初始化位图
   BitMap::idx_t size_in_pages = rs.size() / page_size;
-  _committed.initialize(size_in_pages);
+  _committed.initialize(size_in_pages);  // forcus 初始化 commit 位图
+  // special 空间需要脏页追踪
   if (_special) {
     _dirty.initialize(size_in_pages);
   }
 
-  _tail_size = used_size % _page_size;
+  _tail_size = used_size % _page_size; // 计算尾部不足一页的大小
 }
 
 G1PageBasedVirtualSpace::~G1PageBasedVirtualSpace() {

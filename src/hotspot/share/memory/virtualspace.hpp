@@ -95,6 +95,10 @@ class ReservedSpace {
 ReservedSpace
 ReservedSpace::first_part(size_t partition_size, bool split, bool realloc)
 {
+    /*
+     * splist:是否真正分割(默认为false)
+     * realloc:是否重新分配内存(默认为true)
+     */
   return first_part(partition_size, alignment(), split, realloc);
 }
 

@@ -31,7 +31,10 @@
 void G1CMBitMap::print_on_error(outputStream* st, const char* prefix) const {
   _bm.print_on_error(st, prefix);
 }
-
+/*
+ * 1.计算标记距离( mark_distance() ) = 8B * 8 = 64字节 { 64B -> 1个标记位}
+ * 2.计算原始位图大小: heap_size / mark_distance() = 8GB / 64B = 128M
+ */
 size_t G1CMBitMap::compute_size(size_t heap_size) {
   return ReservedSpace::allocation_align_size_up(heap_size / mark_distance());
 }

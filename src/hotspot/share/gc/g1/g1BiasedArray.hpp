@@ -56,11 +56,11 @@ protected:
     assert(base != NULL, "just checking");
     assert(length > 0, "just checking");
     assert(shift_by < sizeof(uintptr_t) * 8, "Shifting by %u, larger than word size?", shift_by);
-    _base = base;
-    _length = length;
-    _biased_base = base - (bias * elem_size);
-    _bias = bias;
-    _shift_by = shift_by;
+    _base = base; // 实际数组起始地址
+    _length = length; // 2048 (区域总数)
+    _biased_base = base - (bias * elem_size); // _base - (0x1C00 * 8) (偏移后的基地址)
+    _bias = bias; // 0x1C00 ((堆起始地址对应的索引偏移))
+    _shift_by = shift_by; // 22 (log2(4MB) = 22位右移) 因为所有的Region都是4MB对齐的,所以这里是移动22位
   }
 
   // Allocate and initialize this array to cover the heap addresses in the range
@@ -75,9 +75,13 @@ protected:
     assert((uintptr_t)end % mapping_granularity_in_bytes == 0,
            "end mapping area address must be a multiple of mapping granularity " SIZE_FORMAT ", is " PTR_FORMAT,
            mapping_granularity_in_bytes, p2i(end));
+    // forcus-1 区域数量计算: (end - bottom) / mapping_granularity_in_bytes = 2048个
     size_t num_target_elems = pointer_delta(end, bottom, mapping_granularity_in_bytes);
+    // forcus-2 偏移量计算 0x600000000 / 0x400000 = 0x1800 = 6144 (偏移索引)
     idx_t bias = (uintptr_t)bottom / mapping_granularity_in_bytes;
+    // forcus-3 数组分配
     address base = create_new_base_array(num_target_elems, target_elem_size_in_bytes);
+    // forcus-4 初始化
     initialize_base(base, num_target_elems, bias, target_elem_size_in_bytes, log2_intptr(mapping_granularity_in_bytes));
   }
 

@@ -1509,17 +1509,19 @@ G1CollectedHeap::G1CollectedHeap(G1CollectorPolicy* collector_policy) :
 }
 
 G1RegionToSpaceMapper* G1CollectedHeap::create_aux_memory_mapper(const char* description,
-                                                                 size_t size,
-                                                                 size_t translation_factor) {
+                                                                 size_t size, // 16MB / 128MB
+                                                                 size_t translation_factor) { // 512B
   size_t preferred_page_size = os::page_size_for_region_unaligned(size, 1);
   // Allocate a new reserved space, preferring to use large pages.
+  // forcus 创建ReservedSpace对象
   ReservedSpace rs(size, preferred_page_size);
+  // 和之前一样
   G1RegionToSpaceMapper* result  =
     G1RegionToSpaceMapper::create_mapper(rs,
                                          size,
                                          rs.alignment(),
-                                         HeapRegion::GrainBytes,
-                                         translation_factor,
+                                         HeapRegion::GrainBytes, // 4MB
+                                         translation_factor, // 412B
                                          mtGC);
 
   os::trace_page_sizes_for_requested_size(description,
@@ -1665,46 +1667,109 @@ jint G1CollectedHeap::initialize() {
   _hot_card_cache = new G1HotCardCache(this);
 
   // Carve out the G1 part of the heap.
-  // forcus
-  ReservedSpace g1_rs = heap_rs.first_part(max_byte_size);
+  // forcus 在下面初始化了6个G1RegionToSpaceMapper对象(映射器)
+  /*
+   * note 基础知识,mmap内存分配的两阶段
+   *  - mmap(addr, size, PROT_NONE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0)
+   *    - 在进程的虚拟地址空间中"占位"
+   *    {
+   *        不分配物理内存
+   *        不消耗 RSS (Resident Set Size)
+   *        只修改进程的页表，标记这段地址"已被使用"
+   *        PROT_NONE 表示不可读、不可写、不可执行
+   *    }
+   *  - mmap(addr, size, PROT_READ|PROT_WRITE, MAP_FIXED|..., -1, 0)
+   *   - 让这段虚拟地址可以真正使用
+   *  {
+   *       修改页表权限为可读写
+   *       触发 Page Fault 时才真正分配物理页
+   *       MAP_FIXED 表示必须在指定地址分配
+   *  }
+   */
+  // forcus 从已预留的堆空间中切分出指定大小的前半部分
+  // note 通常情况下,这里的 g1_rs 和之前创建的 heap_rs 是一样的
+  // 从heap_rs.size()中划分出max_byte_size(-Xmx)区域(但是通常这两者是相等的,可能由于noaccess_prefix/对齐操作导致两者不相等)
+  ReservedSpace g1_rs = heap_rs.first_part(max_byte_size); // max_byte_size = heap_size(通过-Xmx来指定)
+  // 获取页面大小,通常不会开启大页,默认为4KB
   size_t page_size = UseLargePages ? os::large_page_size() : os::vm_page_size();
+  /*
+   * 涉及到的一些jvm参数：
+   *  -XX:+UseLargePages：false	启用大页
+   *  -XX:+AlwaysPreTouch	false	启动时预触摸所有内存
+   *  -XX:G1HeapRegionSize	自动	Region 大小
+   *  -Xms / -Xmx	-	堆大小 note
+   *  -Xlog:gc+heap=debug	-	日志	可以看到 pretouch 信息
+   *  -XX:+UseTransparentHugePages	false	透明大页
+   */
+  // note 图解-4
   G1RegionToSpaceMapper* heap_storage =
-    G1RegionToSpaceMapper::create_mapper(g1_rs,
-                                         g1_rs.size(),
-                                         page_size,
-                                         HeapRegion::GrainBytes,
-                                         1,
-                                         mtJavaHeap);
+    G1RegionToSpaceMapper::create_mapper(g1_rs, // 预留的虚拟地址空间(ReservedSpace对象)
+                                         g1_rs.size(), // 实际使用大小
+                                         page_size, // 页面大小
+                                         // Region 大小 = MAX(堆大小/2048, 1MB)，向上取整到 2 的幂次，最大 32MB - 当堆内存大小=8GB时,region = 4MB
+                                         HeapRegion::GrainBytes, // Region 大小(1MB~32MB) {Region大小的确定依赖于堆内存大小}
+                                         1, // commit_factor (提交因子（用于计算实际提交粒度）)
+                                         mtJavaHeap); // 内存类型标记 (NMT 内存追踪类型)
   os::trace_page_sizes("Heap",
                        collector_policy()->min_heap_byte_size(),
                        max_byte_size,
                        page_size,
                        heap_rs.base(),
                        heap_rs.size());
-  heap_storage->set_mapping_changed_listener(&_listener);
+  heap_storage->set_mapping_changed_listener(&_listener); // forcus 设置监听器
 
+  /*
+   * forcus 下面三个辅助数据结构的创建都是使用 - create_aux_memory_mapper()来创建的,并且参数都是相同的
+   */
   // Create storage for the BOT, card table, card counts table (hot card cache) and the bitmaps.
+  // forcus BOT(Block Offset Table) - 用于快速定位对象起始地址
+  // note 每512字节堆内存对应1字节BOT
   G1RegionToSpaceMapper* bot_storage =
     create_aux_memory_mapper("Block Offset Table",
-                             G1BlockOffsetTable::compute_size(g1_rs.size() / HeapWordSize),
+                             G1BlockOffsetTable::compute_size(g1_rs.size() / HeapWordSize), // 16MB
                              G1BlockOffsetTable::heap_map_factor());
-
+  // forcus 跟踪跨代引用和并发标记
+  // note 每512字节堆内存对应1字节Card
   G1RegionToSpaceMapper* cardtable_storage =
     create_aux_memory_mapper("Card Table",
-                             G1CardTable::compute_size(g1_rs.size() / HeapWordSize),
+                             G1CardTable::compute_size(g1_rs.size() / HeapWordSize), // 16MB
                              G1CardTable::heap_map_factor());
-
+  // forcus 热卡缓存优化
+  // note 记录卡片被修改的次数
   G1RegionToSpaceMapper* card_counts_storage =
     create_aux_memory_mapper("Card Counts Table",
-                             G1CardCounts::compute_size(g1_rs.size() / HeapWordSize),
+                             G1CardCounts::compute_size(g1_rs.size() / HeapWordSize), // 16MB
                              G1CardCounts::heap_map_factor());
-
-  size_t bitmap_size = G1CMBitMap::compute_size(g1_rs.size());
+  /*
+   * G1并发标记位图(G1 Concurrent Mark BitMap): G1垃圾回收时用于并发标记的核心数据结构
+   *  - 对象存活标记
+   *  - 并发标记支持
+   *  - 增量收集优化
+   */
+  size_t bitmap_size = G1CMBitMap::compute_size(g1_rs.size()); // forcus 计算位图大小 - 参数为堆大小(堆大小为8GB的情况下为128M)
+  /*
+   * forcus 创建2个辅助内存映射器 图-5
+   */
+  /*
+   * note prev_bitmap_storage
+   *  - 存储上一轮并发标记的结果：保存已完成的标记周期中所有存活对象的标记信息
+   *  - 增量收集的基础：在Mixed GC中，作为判断老年代对象存活性的依据
+   *  - 稳定的引用基准：提供一个"快照"，避免并发标记过程中的不一致性
+   */
   G1RegionToSpaceMapper* prev_bitmap_storage =
     create_aux_memory_mapper("Prev Bitmap", bitmap_size, G1CMBitMap::heap_map_factor());
+  /*
+   * note next_bitmap_storage
+   *  - 存储当前并发标记的结果：正在进行的标记周期中新发现的存活对象
+   *  - 并发标记的工作区：标记线程在此位图上设置新的标记位
+   *  - 双缓冲机制：完成后与prev_bitmap交换，实现无锁切换
+   */
   G1RegionToSpaceMapper* next_bitmap_storage =
     create_aux_memory_mapper("Next Bitmap", bitmap_size, G1CMBitMap::heap_map_factor());
-
+  // forcus HeapRegionManager _hrm;
+  /*
+   * note HeapRegionManager 是G1垃圾收集器的核心管理组件，负责统一管理所有G1区域及其辅助数据结构
+   */
   _hrm.initialize(heap_storage, prev_bitmap_storage, next_bitmap_storage, bot_storage, cardtable_storage, card_counts_storage);
   _card_table->initialize(cardtable_storage);
   // Do later initialization work for concurrent refinement.

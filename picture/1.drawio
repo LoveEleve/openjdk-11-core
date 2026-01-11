@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="MaloUzJlONj0Se2GEySu" name="第 1 页">
-        <mxGraphModel dx="474" dy="715" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="none" math="0" shadow="0">
+        <mxGraphModel dx="366" dy="763" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" background="none" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -579,6 +579,996 @@
                 </mxCell>
                 <mxCell id="OSj8RTBEWgCXbP2xkJ4S-117" value="&lt;font face=&quot;Times New Roman&quot;&gt;&lt;b&gt;Klass Space&lt;/b&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;shadow=1;" vertex="1" parent="1">
                     <mxGeometry x="1720" y="1180" width="70" height="30" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="ytL7OlRsQ5LMcKjHfugG" name="第 4 页">
+        <mxGraphModel dx="1462" dy="1884" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+                    <mxGeometry x="140" y="230" width="600" height="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-2" value="&lt;div&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;G1RegionToSpaceMapper* heap_storage =&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;&amp;nbsp; &amp;nbsp; G1RegionToSpaceMapper::create_mapper(g1_rs, // 预留的虚拟地址空间(ReservedSpace对象)&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;g1_rs.size(), // 实际使用大小&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;page_size, // 页面大小&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;// Region 大小 = MAX(堆大小/2048, 1MB)，向上取整到 2 的幂次，最大 32MB - 当堆内存大小=8GB时,region = 4MB&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;HeapRegion::GrainBytes, // Region 大小(1MB~32MB) {Region大小的确定依赖于堆内存大小}&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;1, // commit_factor (提交因子（用于计算实际提交粒度）)&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;&amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp; &amp;nbsp;mtJavaHeap); // 内存类型标记 (NMT 内存追踪类型)&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;&lt;br&gt;&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;# 案例条件为：堆内存大小 = 8GB, page_size = 4KB(linux系统), region大小 = 4MB&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;可能会涉及到的一些计算&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;&amp;nbsp;- Region数量 = 堆内存大小 / region大小 = 8GB / 4MB = 2048个&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;&amp;nbsp;- 每Region页数 = region大小 / page_size = 4MB / 4KB.= 1024个&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;strokeColor=default;dashed=1;dashPattern=12 12;" vertex="1" parent="1">
+                    <mxGeometry x="-60" y="-90" width="1000" height="210" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-3" value="&lt;b style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: &amp;quot;Courier New&amp;quot;; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;G1RegionToSpaceMapper对象&lt;/b&gt;" style="text;whiteSpace=wrap;html=1;strokeColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="350" y="160" width="180" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fillColor=#e51400;strokeColor=#B20000;" edge="1" parent="1" source="B9awbz-ofGHFxkKF3Ntz-5">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="680" y="130" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-5" value="&lt;b style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: &amp;quot;Courier New&amp;quot;; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;G1RegionsLargerThanCommitSizeMapper对象&lt;/b&gt;" style="text;whiteSpace=wrap;html=1;strokeColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="300" y="190" width="290" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-6" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+                    <mxGeometry x="215" y="250" width="450" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-7" value="&lt;b style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: &amp;quot;Courier New&amp;quot;; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;G1RegionToSpaceMapper类的属性&lt;/b&gt;" style="text;whiteSpace=wrap;html=1;strokeColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="337.5" y="240" width="215" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-8" value="&lt;b style=&quot;&quot;&gt;&lt;font face=&quot;Courier New&quot;&gt;返回的是这个对象&lt;/font&gt;&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="687" y="160" width="103" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-9" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;_storage : G1PageBasedVirtualSpace&lt;/font&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="275" y="280" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-10" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;_commit_map : CHeapBitMap # region粒度&lt;/font&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="275" y="310" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-11" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;_region_granularity : size_t &lt;/font&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="275" y="340" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="B9awbz-ofGHFxkKF3Ntz-13" target="B9awbz-ofGHFxkKF3Ntz-83">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="750" y="383"/>
+                            <mxPoint x="750" y="620"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-13" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;_listener : G1MappingChangedListener*&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="275" y="370" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-14" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+                    <mxGeometry x="215" y="425" width="450" height="75" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-15" value="&lt;b style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: &amp;quot;Courier New&amp;quot;; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;G1RegionsLargerThanCommitSizeMapper类的属性&lt;/b&gt;" style="text;whiteSpace=wrap;html=1;strokeColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="280" y="410" width="310" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-16" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;_pages_per_region : size_t = 1024&lt;/font&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="275" y="450" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-17" value="&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;每Region的页面数&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="620" y="452.5" width="126" height="22.5" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-18" value="&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;Region粒度 = 4MB&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="630" y="340" width="126" height="22.5" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-19" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+                    <mxGeometry x="842.5" y="100" width="450" height="270" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-20" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;_storage&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1020" y="370" width="75" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-21" value="&lt;span class=&quot;hljs-type&quot; style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;char&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;* _low_boundary = &lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start;&quot;&gt;0x600000000(24GB)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="897.5" y="120" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-22" value="&lt;span&gt;&lt;font&gt;&lt;span class=&quot;hljs-type&quot; style=&quot;color: rgb(0, 0, 0); box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;char&lt;/span&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;* _high_boundary = &lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; background-color: rgba(255, 255, 255, 0.1);&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;0x800000000(32GB)&lt;/font&gt;&lt;/span&gt;&lt;/font&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="897.5" y="150" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-23" value="&lt;span style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot; class=&quot;hljs-type&quot;&gt;size_t&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt; _page_size = 4KB&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=none;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="897.5" y="180" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-24" value="&lt;span style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot; class=&quot;hljs-type&quot;&gt;size_t&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt; _tail_size = 0(通常为0)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=none;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="897.5" y="210" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="B9awbz-ofGHFxkKF3Ntz-26">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="1320" y="252.5" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-26" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;CHeapBitMap _committed # 每页的commit位图&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=none;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="897.5" y="240" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-27" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;CHeapBitMap _dirty # 每页的脏标记位图&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=none;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="897.5" y="270" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-28" value="&lt;span class=&quot;hljs-type&quot; style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;bool&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt; _special # 是否为特殊内存(通常为false)&lt;/span&gt;&lt;div&gt;&lt;span class=&quot;hljs-type&quot; style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;bool&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt; _executable # 是否可执行(通常为false)&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=none;fontColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="897.5" y="305" width="340" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-29" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt; _committed&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1320" y="235" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-30" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+                    <mxGeometry x="1320" y="150" width="280" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-31" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;CHeapBitMap&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1350" y="115" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-32" value="&lt;span class=&quot;hljs-type&quot; style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;bm_word_t&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;* _map # 位图数组&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1330" y="160" width="250" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-33" value="&lt;span class=&quot;hljs-type&quot; style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;bm_word_t&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;* _map # 位图大小(位数) &lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1330" y="192.5" width="250" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-34" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1630" y="155" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-35" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1680" y="155" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-36" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1730" y="155" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-37" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1780" y="155" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-38" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1830" y="155" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-39" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1880" y="155" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-40" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1930" y="155" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-41" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1980" y="155" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-42" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2030" y="155" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-43" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2080" y="155" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-44" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2130" y="155" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-45" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2180" y="155" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-46" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2230" y="155" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-47" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2280" y="155" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-48" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2330" y="155" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-49" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2380" y="155" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-50" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2430" y="155" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-51" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;0&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1640" y="195" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-52" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;...&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2040" y="195" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-53" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;2097152&lt;/span&gt;&lt;div&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;heap_size / region_size / page_size&lt;/span&gt;&lt;/div&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2440" y="200" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-54" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.001;entryY=0.713;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="B9awbz-ofGHFxkKF3Ntz-9" target="B9awbz-ofGHFxkKF3Ntz-19">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-55" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+                    <mxGeometry x="842.5" y="435" width="280" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-56" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;CHeapBitMap&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="932.5" y="410" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-57" value="&lt;span class=&quot;hljs-type&quot; style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;bm_word_t&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;* _map # 位图数组&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="852.5" y="445" width="250" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-58" value="&lt;span class=&quot;hljs-type&quot; style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;bm_word_t&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;* _map # 位图大小(位数) &lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="852.5" y="477.5" width="250" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-59" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;_commit_map&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="932.5" y="515" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-60" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.002;entryY=0.131;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="B9awbz-ofGHFxkKF3Ntz-10" target="B9awbz-ofGHFxkKF3Ntz-55">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="770" y="323"/>
+                            <mxPoint x="770" y="446"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-61" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1170" y="437.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-62" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1220" y="437.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-63" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1270" y="437.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-64" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1320" y="437.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-65" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1370" y="437.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-66" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1420" y="437.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-67" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1470" y="437.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-68" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1520" y="437.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-69" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1570" y="437.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-70" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1620" y="437.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-71" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1670" y="437.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-72" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1720" y="437.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-73" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1770" y="437.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-74" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1820" y="437.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-75" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1870" y="437.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-76" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1920" y="437.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-77" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1970" y="437.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-78" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;0&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1190" y="480" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-79" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;2048&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1980" y="485" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-80" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;...&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1580" y="480" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-81" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;追踪每个Region是否commit&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="897.5" y="545" width="187.5" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-82" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;追踪每个页面是否commit&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1330" y="265" width="187.5" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-83" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fad7ac;strokeColor=#b46504;" vertex="1" parent="1">
+                    <mxGeometry x="842.5" y="600" width="280" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-84" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;_listener&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="932.5" y="690" width="100" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-85" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;G1MappingChangedListener&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="882.5" y="585" width="220" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-86" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;on_commit()&lt;/font&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="917.5" y="620" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-87" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;默认为都0&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1170" y="400" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="B9awbz-ofGHFxkKF3Ntz-88" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;默认为都0&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1630" y="115" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <UserObject label="&lt;span style=&quot;color: rgb(0, 0, 0); font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(251, 251, 251); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;&lt;font style=&quot;&quot; face=&quot;Courier New&quot;&gt;&lt;b&gt;g1CollectedHeap.cpp #&amp;nbsp;G1CollectedHeap::initialize()&lt;/b&gt;&lt;/font&gt;&lt;/span&gt;" link="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Helvetica; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(251, 251, 251); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;g1CollectedHeap.cpp #&amp;nbsp;G1CollectedHeap::initialize()&lt;/span&gt;" id="B9awbz-ofGHFxkKF3Ntz-90">
+                    <mxCell style="text;whiteSpace=wrap;html=1;strokeColor=default;" vertex="1" parent="1">
+                        <mxGeometry x="80" y="-130" width="405" height="30" as="geometry"/>
+                    </mxCell>
+                </UserObject>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="k2_gt3EN6G7B26dN6eza" name="第 5 页">
+        <mxGraphModel dx="1083" dy="763" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-1" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+                    <mxGeometry x="960" y="450" width="600" height="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-2" value="&lt;b style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: &amp;quot;Courier New&amp;quot;; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;G1RegionToSpaceMapper对象&lt;/b&gt;" style="text;whiteSpace=wrap;html=1;strokeColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="1170" y="380" width="180" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-3" value="&lt;b style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: &amp;quot;Courier New&amp;quot;; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;G1RegionsLargerThanCommitSizeMapper对象&lt;/b&gt;" style="text;whiteSpace=wrap;html=1;strokeColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="1120" y="410" width="290" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-4" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+                    <mxGeometry x="1035" y="470" width="450" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-5" value="&lt;b style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: &amp;quot;Courier New&amp;quot;; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;G1RegionToSpaceMapper类的属性&lt;/b&gt;" style="text;whiteSpace=wrap;html=1;strokeColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="1157.5" y="460" width="215" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-6" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;_storage : G1PageBasedVirtualSpace&lt;/font&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="1095" y="500" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-7" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;_commit_map : CHeapBitMap &lt;/font&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="1095" y="530" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-8" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;_region_granularity : size_t &lt;/font&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="1095" y="560" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="tAuXTIPndK2Jp9PVpYzk-10" target="tAuXTIPndK2Jp9PVpYzk-79">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1570" y="603"/>
+                            <mxPoint x="1570" y="840"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-10" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;_listener : G1MappingChangedListener*&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="1095" y="590" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-11" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+                    <mxGeometry x="1035" y="645" width="450" height="75" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-12" value="&lt;b style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: &amp;quot;Courier New&amp;quot;; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;G1RegionsLargerThanCommitSizeMapper类的属性&lt;/b&gt;" style="text;whiteSpace=wrap;html=1;strokeColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="1100" y="630" width="310" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-13" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;_pages_per_region : size_t = 16&lt;/font&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="1095" y="670" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-14" value="&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;Region粒度 = 4MB&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="1450" y="560" width="126" height="22.5" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-15" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+                    <mxGeometry x="1662.5" y="320" width="450" height="270" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-16" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;_storage&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1840" y="590" width="75" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="tAuXTIPndK2Jp9PVpYzk-18" target="tAuXTIPndK2Jp9PVpYzk-89">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-18" value="&lt;span style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot; class=&quot;hljs-type&quot;&gt;char&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;* _low_boundary = &lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;0x7fffe6000000&lt;/font&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1717.5" y="340" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-19" value="&lt;span&gt;&lt;font&gt;&lt;span style=&quot;color: rgb(0, 0, 0); box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot; class=&quot;hljs-type&quot;&gt;char&lt;/span&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;* _high_boundary = &lt;/span&gt;&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;0x7fffe7000000&lt;/font&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1717.5" y="370" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-20" value="&lt;span style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot; class=&quot;hljs-type&quot;&gt;size_t&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt; _page_size = 4KB&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=none;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1717.5" y="400" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-21" value="&lt;span style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot; class=&quot;hljs-type&quot;&gt;size_t&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt; _tail_size = 0(通常为0)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=none;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1717.5" y="430" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-22" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="tAuXTIPndK2Jp9PVpYzk-23">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="2140" y="472.5" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-23" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;CHeapBitMap   # 每页的commit位图&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=none;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1717.5" y="460" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-24" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;CHeapBitMap _dirty # 每页的脏标记位图&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=none;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1717.5" y="490" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-25" value="&lt;span class=&quot;hljs-type&quot; style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;bool&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt; _special # 是否为特殊内存(通常为false)&lt;/span&gt;&lt;div&gt;&lt;span class=&quot;hljs-type&quot; style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;bool&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt; _executable # 是否可执行(通常为false)&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=none;fontColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="1717.5" y="525" width="340" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-26" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt; _committed&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2140" y="455" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-27" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+                    <mxGeometry x="2140" y="370" width="280" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-28" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;CHeapBitMap&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2170" y="335" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-29" value="&lt;span class=&quot;hljs-type&quot; style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;bm_word_t&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;* _map # 位图数组&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2150" y="380" width="250" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-30" value="&lt;span class=&quot;hljs-type&quot; style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;bm_word_t&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;* _map # 位图大小(位数) &lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2150" y="412.5" width="250" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-31" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2450" y="375" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-32" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2500" y="375" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-33" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2550" y="375" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-34" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2600" y="375" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-35" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2650" y="375" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-36" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2700" y="375" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-37" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2750" y="375" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-38" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2800" y="375" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-39" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2850" y="375" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-40" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2900" y="375" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-41" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2950" y="375" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-42" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="3000" y="375" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-43" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="3050" y="375" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-44" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="3100" y="375" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-45" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="3150" y="375" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-46" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="3200" y="375" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-47" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="3250" y="375" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-48" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;0&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2460" y="415" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-49" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;...&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2860" y="415" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-50" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.001;entryY=0.713;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="tAuXTIPndK2Jp9PVpYzk-6" target="tAuXTIPndK2Jp9PVpYzk-15">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-51" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+                    <mxGeometry x="1662.5" y="655" width="280" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-52" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;CHeapBitMap&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1752.5" y="630" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-53" value="&lt;span class=&quot;hljs-type&quot; style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;bm_word_t&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;* _map # 位图数组&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1672.5" y="665" width="250" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-54" value="&lt;span class=&quot;hljs-type&quot; style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;bm_word_t&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;* _map # 位图大小(位数) &lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1672.5" y="697.5" width="250" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-55" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;_commit_map&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1752.5" y="735" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-56" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.002;entryY=0.131;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="tAuXTIPndK2Jp9PVpYzk-7" target="tAuXTIPndK2Jp9PVpYzk-51">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1590" y="543"/>
+                            <mxPoint x="1590" y="666"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-57" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1990" y="657.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-58" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2040" y="657.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-59" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2090" y="657.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-60" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2140" y="657.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-61" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2190" y="657.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-62" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2240" y="657.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-63" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2290" y="657.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-64" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2340" y="657.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-65" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2390" y="657.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-66" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2440" y="657.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-67" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2490" y="657.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-68" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2540" y="657.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-69" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2590" y="657.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-70" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2640" y="657.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-71" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2690" y="657.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-72" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2740" y="657.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-73" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2790" y="657.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-74" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;0&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2010" y="700" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-75" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;2048&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2800" y="705" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-76" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;...&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2400" y="700" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-77" value="&lt;font style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: rgb(0, 0, 0);&quot; face=&quot;Courier New&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;跟踪哪些&lt;/span&gt;&lt;span style=&quot;box-sizing: border-box; font-size: 13px;&quot;&gt;堆区域&lt;/span&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;对应的辅助数据已经被提交 - 在这里是2048个堆区域(Region)&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1675" y="765" width="505" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-78" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;font-family: Inter, -apple-system, &amp;quot;system-ui&amp;quot;, &amp;quot;Segoe UI (Custom)&amp;quot;, Roboto, &amp;quot;Helvetica Neue&amp;quot;, &amp;quot;Open Sans (Custom)&amp;quot;, system-ui, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;; font-size: 13px;&quot;&gt;跟踪哪些&lt;/span&gt;&lt;span style=&quot;box-sizing: border-box; font-family: Inter, -apple-system, &amp;quot;system-ui&amp;quot;, &amp;quot;Segoe UI (Custom)&amp;quot;, Roboto, &amp;quot;Helvetica Neue&amp;quot;, &amp;quot;Open Sans (Custom)&amp;quot;, system-ui, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;; font-size: 13px;&quot;&gt;物理页面&lt;/span&gt;&lt;span style=&quot;font-family: Inter, -apple-system, &amp;quot;system-ui&amp;quot;, &amp;quot;Segoe UI (Custom)&amp;quot;, Roboto, &amp;quot;Helvetica Neue&amp;quot;, &amp;quot;Open Sans (Custom)&amp;quot;, system-ui, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;; font-size: 13px;&quot;&gt;已经被提交到内存&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2150" y="485" width="310" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-79" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fad7ac;strokeColor=#b46504;" vertex="1" parent="1">
+                    <mxGeometry x="1662.5" y="820" width="280" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-80" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;G1MappingChangedListener&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1702.5" y="805" width="220" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-81" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;on_commit()&lt;/font&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1737.5" y="840" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-82" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;默认为都0&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1990" y="620" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-83" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;默认为都0&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2450" y="335" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-84" value="&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;每个区域对应16个页面&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="1450" y="671.25" width="126" height="22.5" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-85" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="tAuXTIPndK2Jp9PVpYzk-86" target="tAuXTIPndK2Jp9PVpYzk-87">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-86" value="&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;4MB / (4KB * 64) = 16&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="1170" y="697.5" width="178" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-87" value="&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;在这里代表的是：在Region中,每64B对应一个标记位，那么存储一个Region的标记位则需要4MB / 64B = 64KB(也即16个4KB大小的page)&amp;nbsp;&amp;nbsp;&lt;br&gt;&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="999" y="775" width="521" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-88" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;G1RegionToSpaceMapper*&amp;nbsp;&lt;/b&gt;&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;prev_bitmap_storage&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=12 12;strokeColor=#FF3333;" vertex="1" parent="1">
+                    <mxGeometry x="680" y="542.5" width="250" height="87.5" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-89" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;OS自己选择的地址&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2010" y="270" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-90" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;32768&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="3260" y="420" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-91" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;fontColor=#333333;strokeColor=#666666;" vertex="1" parent="1">
+                    <mxGeometry x="960" y="1170" width="600" height="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-92" value="&lt;b style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: &amp;quot;Courier New&amp;quot;; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;G1RegionToSpaceMapper对象&lt;/b&gt;" style="text;whiteSpace=wrap;html=1;strokeColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="1170" y="1100" width="180" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-93" value="&lt;b style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: &amp;quot;Courier New&amp;quot;; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;G1RegionsLargerThanCommitSizeMapper对象&lt;/b&gt;" style="text;whiteSpace=wrap;html=1;strokeColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="1120" y="1130" width="290" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-94" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+                    <mxGeometry x="1035" y="1190" width="450" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-95" value="&lt;b style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: &amp;quot;Courier New&amp;quot;; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;G1RegionToSpaceMapper类的属性&lt;/b&gt;" style="text;whiteSpace=wrap;html=1;strokeColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="1157.5" y="1180" width="215" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-96" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; float: none; display: inline !important;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;_storage : G1PageBasedVirtualSpace&lt;/font&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="1095" y="1220" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-97" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;_commit_map : CHeapBitMap &lt;/font&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="1095" y="1250" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-98" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;_region_granularity : size_t &lt;/font&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="1095" y="1280" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-99" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" source="tAuXTIPndK2Jp9PVpYzk-100" target="tAuXTIPndK2Jp9PVpYzk-169">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1570" y="1323"/>
+                            <mxPoint x="1570" y="1560"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-100" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;_listener : G1MappingChangedListener*&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=#000000;" vertex="1" parent="1">
+                    <mxGeometry x="1095" y="1310" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-101" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+                    <mxGeometry x="1035" y="1365" width="450" height="75" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-102" value="&lt;b style=&quot;forced-color-adjust: none; color: rgb(0, 0, 0); font-family: &amp;quot;Courier New&amp;quot;; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;&quot;&gt;G1RegionsLargerThanCommitSizeMapper类的属性&lt;/b&gt;" style="text;whiteSpace=wrap;html=1;strokeColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="1100" y="1350" width="310" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-103" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;_pages_per_region : size_t = 16&lt;/font&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="1095" y="1390" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-104" value="&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;Region粒度 = 4MB&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="1450" y="1280" width="126" height="22.5" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-105" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+                    <mxGeometry x="1662.5" y="1040" width="450" height="270" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-106" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;_storage&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1840" y="1310" width="75" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-107" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="tAuXTIPndK2Jp9PVpYzk-108" target="tAuXTIPndK2Jp9PVpYzk-179">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-108" value="&lt;span style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot; class=&quot;hljs-type&quot;&gt;char&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;* _low_boundary = &lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;0x7fffe6000000&lt;/font&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1717.5" y="1060" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-109" value="&lt;span&gt;&lt;font&gt;&lt;span style=&quot;color: rgb(0, 0, 0); box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot; class=&quot;hljs-type&quot;&gt;char&lt;/span&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;* _high_boundary = &lt;/span&gt;&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;0x7fffe7000000&lt;/font&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1717.5" y="1090" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-110" value="&lt;span style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot; class=&quot;hljs-type&quot;&gt;size_t&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt; _page_size = 4KB&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=none;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1717.5" y="1120" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-111" value="&lt;span style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot; class=&quot;hljs-type&quot;&gt;size_t&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt; _tail_size = 0(通常为0)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=none;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1717.5" y="1150" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-112" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="tAuXTIPndK2Jp9PVpYzk-113">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="2140" y="1192.5" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-113" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;CHeapBitMap   # 每页的commit位图&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=none;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1717.5" y="1180" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-114" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;CHeapBitMap _dirty # 每页的脏标记位图&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=none;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1717.5" y="1210" width="340" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-115" value="&lt;span class=&quot;hljs-type&quot; style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;bool&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt; _special # 是否为特殊内存(通常为false)&lt;/span&gt;&lt;div&gt;&lt;span class=&quot;hljs-type&quot; style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;bool&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt; _executable # 是否可执行(通常为false)&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;&lt;/span&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=none;fontColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="1717.5" y="1245" width="340" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-116" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt; _committed&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2140" y="1175" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-117" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+                    <mxGeometry x="2140" y="1090" width="280" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-118" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;CHeapBitMap&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2170" y="1055" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-119" value="&lt;span class=&quot;hljs-type&quot; style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;bm_word_t&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;* _map # 位图数组&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2150" y="1100" width="250" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-120" value="&lt;span class=&quot;hljs-type&quot; style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;bm_word_t&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;* _map # 位图大小(位数) &lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2150" y="1132.5" width="250" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-121" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2450" y="1095" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-122" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2500" y="1095" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-123" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2550" y="1095" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-124" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2600" y="1095" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-125" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2650" y="1095" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-126" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2700" y="1095" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-127" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2750" y="1095" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-128" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2800" y="1095" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-129" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2850" y="1095" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-130" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2900" y="1095" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-131" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2950" y="1095" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-132" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="3000" y="1095" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-133" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="3050" y="1095" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-134" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="3100" y="1095" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-135" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="3150" y="1095" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-136" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="3200" y="1095" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-137" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="3250" y="1095" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-138" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;0&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2460" y="1135" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-139" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;...&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2860" y="1135" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-140" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.001;entryY=0.713;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="tAuXTIPndK2Jp9PVpYzk-96" target="tAuXTIPndK2Jp9PVpYzk-105">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-141" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+                    <mxGeometry x="1662.5" y="1375" width="280" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-142" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;CHeapBitMap&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1752.5" y="1350" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-143" value="&lt;span class=&quot;hljs-type&quot; style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;bm_word_t&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;* _map # 位图数组&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1672.5" y="1385" width="250" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-144" value="&lt;span class=&quot;hljs-type&quot; style=&quot;box-sizing: border-box; font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;bm_word_t&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;* _map # 位图大小(位数) &lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1672.5" y="1417.5" width="250" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-145" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;_commit_map&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1752.5" y="1455" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-146" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.002;entryY=0.131;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="tAuXTIPndK2Jp9PVpYzk-97" target="tAuXTIPndK2Jp9PVpYzk-141">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="1590" y="1263"/>
+                            <mxPoint x="1590" y="1386"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-147" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="1990" y="1377.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-148" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2040" y="1377.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-149" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2090" y="1377.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-150" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2140" y="1377.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-151" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2190" y="1377.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-152" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2240" y="1377.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-153" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2290" y="1377.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-154" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2340" y="1377.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-155" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2390" y="1377.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-156" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2440" y="1377.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-157" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2490" y="1377.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-158" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2540" y="1377.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-159" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2590" y="1377.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-160" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2640" y="1377.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-161" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2690" y="1377.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-162" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2740" y="1377.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-163" value="" style="rounded=1;whiteSpace=wrap;html=1;strokeColor=default;fillColor=default;labelBackgroundColor=default;fontColor=default;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="2790" y="1377.5" width="50" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-164" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;0&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2010" y="1420" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-165" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;2048&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2800" y="1425" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-166" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;...&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2400" y="1420" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-167" value="&lt;font style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: rgb(0, 0, 0);&quot; face=&quot;Courier New&quot;&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;跟踪哪些&lt;/span&gt;&lt;span style=&quot;box-sizing: border-box; font-size: 13px;&quot;&gt;堆区域&lt;/span&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;对应的辅助数据已经被提交 - 在这里是2048个堆区域(Region)&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1675" y="1485" width="505" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-168" value="&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;font-family: Inter, -apple-system, &amp;quot;system-ui&amp;quot;, &amp;quot;Segoe UI (Custom)&amp;quot;, Roboto, &amp;quot;Helvetica Neue&amp;quot;, &amp;quot;Open Sans (Custom)&amp;quot;, system-ui, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;; font-size: 13px;&quot;&gt;跟踪哪些&lt;/span&gt;&lt;span style=&quot;box-sizing: border-box; font-family: Inter, -apple-system, &amp;quot;system-ui&amp;quot;, &amp;quot;Segoe UI (Custom)&amp;quot;, Roboto, &amp;quot;Helvetica Neue&amp;quot;, &amp;quot;Open Sans (Custom)&amp;quot;, system-ui, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;; font-size: 13px;&quot;&gt;物理页面&lt;/span&gt;&lt;span style=&quot;font-family: Inter, -apple-system, &amp;quot;system-ui&amp;quot;, &amp;quot;Segoe UI (Custom)&amp;quot;, Roboto, &amp;quot;Helvetica Neue&amp;quot;, &amp;quot;Open Sans (Custom)&amp;quot;, system-ui, sans-serif, &amp;quot;Apple Color Emoji&amp;quot;, &amp;quot;Segoe UI Emoji&amp;quot;; font-size: 13px;&quot;&gt;已经被提交到内存&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2150" y="1205" width="310" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-169" value="&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fad7ac;strokeColor=#b46504;" vertex="1" parent="1">
+                    <mxGeometry x="1662.5" y="1540" width="280" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-170" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;G1MappingChangedListener&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1702.5" y="1525" width="220" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-171" value="&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; text-align: start; white-space: pre;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;on_commit()&lt;/font&gt;&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1737.5" y="1560" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-172" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;默认为都0&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1990" y="1340" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-173" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;默认为都0&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2450" y="1055" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-174" value="&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;每个区域对应16个页面&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="1450" y="1391.25" width="126" height="22.5" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-175" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="tAuXTIPndK2Jp9PVpYzk-176" target="tAuXTIPndK2Jp9PVpYzk-177">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-176" value="&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;4MB / (4KB * 64) = 16&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="1170" y="1417.5" width="178" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-177" value="&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;在这里代表的是：在Region中,每64B对应一个标记位，那么存储一个Region的标记位则需要4MB / 64B = 64KB(也即16个4KB大小的page)&amp;nbsp;&amp;nbsp;&lt;br&gt;&lt;/b&gt;&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="999" y="1495" width="521" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-178" value="&lt;div style=&quot;text-align: left;&quot;&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;G1RegionToSpaceMapper*&amp;nbsp;&lt;/b&gt;&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;div style=&quot;text-align: left;&quot;&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;next_bitmap_storage&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=12 12;strokeColor=#FF3333;" vertex="1" parent="1">
+                    <mxGeometry x="680" y="1262.5" width="250" height="87.5" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-179" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;OS自己选择的地址&lt;/span&gt;&lt;/font&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="2010" y="990" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-180" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: pre; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;32768&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="3260" y="1140" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-181" value="- 存储上一轮并发标记的结果：保存已完成的标记周期中所有存活对象的标记信息&#xa;- 增量收集的基础：在Mixed GC中，作为判断老年代对象存活性的依据&#xa;- 稳定的引用基准：提供一个&quot;快照&quot;，避免并发标记过程中的不一致性" style="text;whiteSpace=wrap;fontFamily=Menlo, Monaco, Courier New, monospace;align=left;" vertex="1" parent="1">
+                    <mxGeometry x="190" y="550" width="470" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="tAuXTIPndK2Jp9PVpYzk-182" value="- 存储当前并发标记的结果：正在进行的标记周期中新发现的存活对象&#xa;- 并发标记的工作区：标记线程在此位图上设置新的标记位&#xa;- 双缓冲机制：完成后与prev_bitmap交换，实现无锁切换" style="text;whiteSpace=wrap;" vertex="1" parent="1">
+                    <mxGeometry x="208" y="1265" width="410" height="70" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="uBeGv_Qt3HagK1bWWVp6" name="第 6 页">
+        <mxGraphModel dx="1547" dy="1090" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="sQKOJ216YgIhKN891cqr-1" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontColor=#333333;" vertex="1" parent="1">
+                    <mxGeometry x="50" y="270" width="230" height="260" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-2" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;HeapRegionManager&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="102.5" y="240" width="125" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="sQKOJ216YgIhKN891cqr-4" target="sQKOJ216YgIhKN891cqr-5">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-4" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;G1HeapRegionTable _regions;&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+                    <mxGeometry x="60" y="300" width="210" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-5" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;这个_region的作用是建立堆地址到Region的映射(也即给定任意堆地址都能找到对应的HeapRegion)&lt;/font&gt;&lt;div&gt;&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;假设堆的内存地址范围为[&lt;/font&gt;&lt;span style=&quot;font-family: &amp;quot;Courier New&amp;quot;; font-weight: 700;&quot;&gt;0x600000000&lt;/span&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot; face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;,&amp;nbsp;&lt;/font&gt;&lt;/span&gt;&lt;span style=&quot;font-family: &amp;quot;Courier New&amp;quot;; font-weight: 700;&quot;&gt;0x800000000)&lt;/span&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;(8GB)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;那么：&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-family: &amp;quot;Courier New&amp;quot;; font-weight: 700; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;- 0x600000000 &amp;gt;&amp;gt; 22 = 0x1800(为第一个Region)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-family: &amp;quot;Courier New&amp;quot;; font-weight: 700; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&amp;nbsp;-&amp;nbsp;&lt;/span&gt;&lt;span style=&quot;font-family: &amp;quot;Courier New&amp;quot;; font-weight: 700; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;0x800000000 &amp;gt;&amp;gt; 22 = 0x2000(为最后一个Region)&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;索引范围为(0x1800 ~ 0x2000) = [6144,8192]&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;因为数组的内存空间是连续的,所以在这里必须创建大小为8192的数组，但是只会使用2048个&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;所以为了节省内存,在这里又加了一层映射：也就是将右移22位后的值再减去一个偏移0x1800&lt;/b&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font face=&quot;Courier New&quot;&gt;&lt;b&gt;比如&amp;nbsp;&lt;/b&gt;&lt;/font&gt;&lt;span style=&quot;font-family: &amp;quot;Courier New&amp;quot;; font-weight: 700; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;0x600000000 &amp;gt;&amp;gt; 22 = 0x1800 - 0x1800 = 0 -&amp;gt; 第一个Region&amp;nbsp;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;font-family: &amp;quot;Courier New&amp;quot;; font-weight: 700; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;br&gt;&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="330" y="100" width="570" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-6" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+                    <mxGeometry x="330" y="250" width="330" height="210" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.003;entryY=0.333;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="sQKOJ216YgIhKN891cqr-4" target="sQKOJ216YgIhKN891cqr-6">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-8" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;_regions&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="440" y="460" width="90" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="sQKOJ216YgIhKN891cqr-10">
+                    <mxGeometry relative="1" as="geometry">
+                        <mxPoint x="670" y="280" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-10" value="&lt;div style=&quot;text-align: start;&quot;&gt;&lt;span style=&quot;font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 13px; white-space: pre;&quot;&gt;_base # 指向真正的数组&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;labelBackgroundColor=none;fontColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="375" y="260" width="210" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-11" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="670" y="255" width="70" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-12" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="740" y="255" width="70" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-13" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="810" y="255" width="70" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-14" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="880" y="255" width="70" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-15" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="950" y="255" width="70" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-16" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1020" y="255" width="70" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-17" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1090" y="255" width="70" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-18" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1160" y="255" width="70" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-19" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;0&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="700" y="305" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-20" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;2047&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="1180" y="310" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-21" value="&lt;div style=&quot;text-align: start;&quot;&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot; face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;_length = &lt;/span&gt;&lt;span style=&quot;box-sizing: border-box; font-size: 13px; white-space: pre;&quot; class=&quot;hljs-number&quot;&gt;2048&lt;/span&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;;&lt;/span&gt;&lt;span style=&quot;box-sizing: border-box; font-style: italic; font-size: 13px; white-space: pre;&quot; class=&quot;hljs-comment&quot;&gt; &lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;box-sizing: border-box; font-style: italic; font-size: 13px; white-space: pre;&quot; class=&quot;hljs-comment&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot; face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt; - 数组实际长度&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;box-sizing: border-box; font-style: italic; font-size: 13px; white-space: pre;&quot; class=&quot;hljs-comment&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot; face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-style: normal;&quot;&gt;_shift_by = &lt;/span&gt;&lt;span style=&quot;box-sizing: border-box; font-style: normal;&quot; class=&quot;hljs-number&quot;&gt;22&lt;/span&gt;&lt;span style=&quot;font-style: normal;&quot;&gt;;&lt;/span&gt;&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;box-sizing: border-box; font-size: 13px; white-space: pre;&quot; class=&quot;hljs-comment&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot; face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;box-sizing: border-box;&quot; class=&quot;hljs-comment&quot;&gt; - &lt;/span&gt;&lt;span style=&quot;font-style: italic; box-sizing: border-box;&quot; class=&quot;hljs-comment&quot;&gt;log2(4MB) = 22&lt;/span&gt;&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot; face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;box-sizing: border-box; font-size: 13px; white-space: pre;&quot; class=&quot;hljs-comment&quot;&gt;&lt;span style=&quot;font-style: italic; box-sizing: border-box;&quot; class=&quot;hljs-comment&quot;&gt; - &lt;/span&gt;&lt;/span&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;将堆地址转换为区域索引&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;box-sizing: border-box; font-style: italic; font-size: 13px; white-space: pre;&quot; class=&quot;hljs-comment&quot;&gt;&lt;span style=&quot;box-sizing: border-box;&quot; class=&quot;hljs-comment&quot;&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot; face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-style: normal;&quot;&gt;_bias = &lt;/span&gt;&lt;span style=&quot;box-sizing: border-box; font-style: normal;&quot; class=&quot;hljs-number&quot;&gt;0x1800&lt;/span&gt;&lt;span style=&quot;font-style: normal;&quot;&gt;;  &lt;/span&gt;&lt;span style=&quot;box-sizing: border-box;&quot; class=&quot;hljs-comment&quot;&gt;// 堆起始地址对应的索引偏移&lt;/span&gt;&lt;/font&gt;&lt;/span&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot; face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;&lt;i&gt;&amp;nbsp;- &lt;/i&gt;&lt;/span&gt;&lt;span style=&quot;font-size: 13px;&quot;&gt;用于将biased_index转换为真实数组索引&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;h3 style=&quot;box-sizing: border-box; font-size: 13px; margin-block: 0px;&quot;&gt;&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot; style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;code style=&quot;box-sizing: border-box; padding: 1px 3px; border-radius: 3px; padding-inline: 4px; pointer-events: none;&quot; class=&quot;&quot;&gt;_biased_base&lt;/code&gt;&amp;nbsp;- 偏移后的基地址&lt;/font&gt;&lt;/h3&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(0, 0, 0);&quot; face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;&amp;nbsp;-&amp;nbsp;&lt;span style=&quot;font-size: 13px;&quot;&gt;实现直接用biased_index访问数组&lt;/span&gt;&lt;/font&gt;&lt;/div&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;labelBackgroundColor=none;" vertex="1" parent="1">
+                    <mxGeometry x="680" y="335" width="380" height="165" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-22" value="&lt;div style=&quot;text-align: start;&quot;&gt;&lt;span style=&quot;font-size: 13px; white-space: pre;&quot;&gt;&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;其他属性&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;labelBackgroundColor=none;fontColor=default;" vertex="1" parent="1">
+                    <mxGeometry x="375" y="350" width="210" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.008;entryY=0.212;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="sQKOJ216YgIhKN891cqr-22" target="sQKOJ216YgIhKN891cqr-21">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="sQKOJ216YgIhKN891cqr-25" target="sQKOJ216YgIhKN891cqr-26">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-25" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;CHeapBitMap _available_map&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+                    <mxGeometry x="60" y="360" width="210" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-26" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="330" y="530" width="70" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-27" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="400" y="530" width="70" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-28" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="470" y="530" width="70" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-29" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="540" y="530" width="70" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-30" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="610" y="530" width="70" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-31" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="680" y="530" width="70" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-32" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="750" y="530" width="70" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-33" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="820" y="530" width="70" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-34" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;0&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="360" y="580" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-35" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-family: Menlo, Monaco, &amp;quot;Courier New&amp;quot;, monospace; font-size: 12px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: center; text-indent: 0px; text-transform: none; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; white-space: normal; background-color: rgb(236, 236, 236); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial; display: inline !important; float: none;&quot;&gt;2047&lt;/span&gt;" style="text;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="840" y="585" width="30" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-36" value="&lt;div&gt;&lt;span style=&quot;font-weight: 700; background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;用于快速判断某个Region是否可以分配新对象&lt;/font&gt;&lt;/span&gt;&lt;/div&gt;" style="text;html=1;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+                    <mxGeometry x="330" y="600" width="440" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="sQKOJ216YgIhKN891cqr-37" value="&lt;font face=&quot;Menlo, Monaco, Courier New, monospace&quot;&gt;6大映射器&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+                    <mxGeometry x="60" y="420" width="210" height="90" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

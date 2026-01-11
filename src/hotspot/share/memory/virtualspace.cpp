@@ -55,6 +55,8 @@ ReservedSpace::ReservedSpace(size_t size, size_t preferred_page_size) : _fd_for_
         // since that will waste memory.
         alignment = os::vm_allocation_granularity();
     }
+    // forcus 初始化(这里看的是三个G1 GC的三个辅助函数的初始化)
+    // note 这里的第三个参数 requested_address 为 NULL - 这代表的是让linux自己选择一个合适的地址
     initialize(size, alignment, large_pages, NULL, false);
 }
 
@@ -180,7 +182,7 @@ void ReservedSpace::initialize(size_t size, size_t alignment, bool large,
             }
         }
     }
-
+    // forcus 真正分配内存的地方
     if (base == NULL) {
         // Optimistically assume that the OSes returns an aligned base pointer.
         // When reserving a large address range, most OSes seem to align to at
@@ -196,8 +198,16 @@ void ReservedSpace::initialize(size_t size, size_t alignment, bool large,
                 // OS ignored requested address. Try different address.
                 base = NULL;
             }
-        } else {
-            base = MACOS_ONLY(os::reserve_memory(size, NULL, alignment, _fd_for_heap, _executable))
+        }
+        else {
+            /*
+             * ReservedSpace
+             * {
+             *      _base = 0x00007f8b20000000 (OS选择的地址)
+             *      _size = 16MB
+             * }
+             */
+            base = MACOS_ONLY(os::reserve_memory(size, NULL, alignment, _fd_for_heap, _executable)) // forcus mmap()
                     NOT_MACOS(os::reserve_memory(size, NULL, alignment, _fd_for_heap));
         }
 
@@ -235,9 +245,11 @@ void ReservedSpace::initialize(size_t size, size_t alignment, bool large,
 ReservedSpace ReservedSpace::first_part(size_t partition_size, size_t alignment,
                                         bool split, bool realloc) {
     assert(partition_size <= size(), "partition failed");
+    // 不分割
     if (split) {
         os::split_reserved_memory(base(), size(), partition_size, realloc);
     }
+    // 创建一个新的 ReservedSpace对象
     ReservedSpace result(base(), partition_size, alignment, special(),
                          executable());
     return result;
@@ -336,7 +348,7 @@ void ReservedHeapSpace::establish_noaccess_prefix() {
 void ReservedHeapSpace::try_reserve_heap(size_t size,
                                          size_t alignment,
                                          bool large, // 是否使用大页,默认为false
-                                         char *requested_address) { // 期望OS分配内存的地方
+                                         char *requested_address) { // 期望linux分配内存的地方
     // 这里通常是因为OS分配的地址不符合预期,所以需要释放掉,第一次_base都是为null的
     if (_base != NULL) {
         // We tried before, but we didn't like the address delivered.

@@ -37,6 +37,12 @@ class G1MappingChangedListener {
   // for can be accessed.
   // Zero_filled indicates that the memory can be considered as filled with zero bytes
   // when called.
+  /*
+   *  内存 commit 后触发
+   *  start_idx: 起始 Region 索引
+   *  num_regions: Region 数量
+   *  zero_filled: 内存是否已零填充
+   */
   virtual void on_commit(uint start_idx, size_t num_regions, bool zero_filled) = 0;
 };
 
@@ -44,14 +50,14 @@ class G1MappingChangedListener {
 // space.
 class G1RegionToSpaceMapper : public CHeapObj<mtGC> {
  private:
-  G1MappingChangedListener* _listener;
+  G1MappingChangedListener* _listener; // forcus 监听器，Region 状态变化时回调 (解耦内存管理和 Region 初始化)
  protected:
   // Backing storage.
-  G1PageBasedVirtualSpace _storage;
+  G1PageBasedVirtualSpace _storage; // forcus 底层存储：页级别的虚拟空间管理(封装 commit/uncommit 操作)
 
-  size_t _region_granularity;
+  size_t _region_granularity; // Region 粒度（字节）(将 Region 索引转换为页索引)
   // Mapping management
-  CHeapBitMap _commit_map;
+  CHeapBitMap _commit_map; // forcus 位图：记录每个 Region 的 commit 状态 (O(1) 查询某 Region 是否已提交)
 
   G1RegionToSpaceMapper(ReservedSpace rs, size_t used_size, size_t page_size, size_t region_granularity, size_t commit_factor, MemoryType type);
 
@@ -61,7 +67,7 @@ class G1RegionToSpaceMapper : public CHeapObj<mtGC> {
 
   size_t reserved_size() { return _storage.reserved_size(); }
   size_t committed_size() { return _storage.committed_size(); }
-
+  // 设置监听器
   void set_mapping_changed_listener(G1MappingChangedListener* listener) { _listener = listener; }
 
   virtual ~G1RegionToSpaceMapper() {}
@@ -69,7 +75,7 @@ class G1RegionToSpaceMapper : public CHeapObj<mtGC> {
   bool is_committed(uintptr_t idx) const {
     return _commit_map.at(idx);
   }
-
+  // forcus 虚函数,子类必须实现
   virtual void commit_regions(uint start_idx, size_t num_regions = 1, WorkGang* pretouch_workers = NULL) = 0;
   virtual void uncommit_regions(uint start_idx, size_t num_regions = 1) = 0;
 

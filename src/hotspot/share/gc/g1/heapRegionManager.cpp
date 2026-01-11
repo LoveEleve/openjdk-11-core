@@ -37,8 +37,9 @@ void HeapRegionManager::initialize(G1RegionToSpaceMapper* heap_storage,
                                G1RegionToSpaceMapper* bot,
                                G1RegionToSpaceMapper* cardtable,
                                G1RegionToSpaceMapper* card_counts) {
+   // 重置已分配的HeapRegion实例数量计数器
   _allocated_heapregions_length = 0;
-
+  // 保存各种映射器引用(6个)
   _heap_mapper = heap_storage;
 
   _prev_bitmap_mapper = prev_bitmap;
@@ -46,12 +47,18 @@ void HeapRegionManager::initialize(G1RegionToSpaceMapper* heap_storage,
 
   _bot_mapper = bot;
   _cardtable_mapper = cardtable;
-
   _card_counts_mapper = card_counts;
 
+  // forcus  初始化区域表
+  // 获取堆存储的预留内存区域(8GB)
   MemRegion reserved = heap_storage->reserved();
+  // note 图解-6
+  // _regions : G1HeapRegionTable 继承自G1BiasedMappedArray<HeapRegion*>
+  // initialize:初始化区域表，建立地址到区域索引的映射(区域数量: 8GB ÷ 4MB = 2048个区域)
   _regions.initialize(reserved.start(), reserved.end(), HeapRegion::GrainBytes);
-
+  // 初始化可用性位图
+  // _available_map CHeapBitMap (2048位 = 256字节)
+  // 作用: 跟踪每个区域是否可用于分配
   _available_map.initialize(_regions.length());
 }
 

@@ -49,10 +49,10 @@ class ContiguousSpace;
 
 class BOTConstants : public AllStatic {
 public:
-  static const uint LogN = 9;
+  static const uint LogN = 9; // 512字节
   static const uint LogN_words = LogN - LogHeapWordSize;
-  static const uint N_bytes = 1 << LogN;
-  static const uint N_words = 1 << LogN_words;
+  static const uint N_bytes = 1 << LogN; // 每个BOT条目覆盖512字节堆内存
+  static const uint N_words = 1 << LogN_words; // 每个BOT条目覆盖64个HeapWord（8字节/word）
   // entries "e" of at least N_words mean "go back by Base^(e-N_words)."
   // All entries are less than "N_words + N_powers".
   static const uint LogBase = 4;

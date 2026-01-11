@@ -30,21 +30,26 @@
 #include "services/memTracker.hpp"
 #include "utilities/align.hpp"
 #include "utilities/bitMap.inline.hpp"
-
+// forcus 基类构造函数
 G1RegionToSpaceMapper::G1RegionToSpaceMapper(ReservedSpace rs,
                                              size_t used_size,
                                              size_t page_size,
                                              size_t region_granularity,
                                              size_t commit_factor,
                                              MemoryType type) :
-  _storage(rs, used_size, page_size),
-  _region_granularity(region_granularity),
-  _listener(NULL),
-  _commit_map(rs.size() * commit_factor / region_granularity, mtGC) {
+  // 成员初始化列表 (C++ 语法)
+  _storage(rs, used_size, page_size), // 1. 初始化底层存储 forcus G1PageBasedVirtualSpace
+  _region_granularity(region_granularity), // 2. 保存 Region 粒度
+  _listener(NULL), // 3. 监听器初始为空
+  /*
+   * note _commit_map 大小计算
+   *  = 堆大小 × 提交因子 / Region大小
+   */
+  _commit_map(rs.size() * commit_factor / region_granularity, mtGC) {  // 4. 初始化 commit 位图
   guarantee(is_power_of_2(page_size), "must be");
   guarantee(is_power_of_2(region_granularity), "must be");
 
-  MemTracker::record_virtual_memory_type((address)rs.base(), type);
+  MemTracker::record_virtual_memory_type((address)rs.base(), type); // NMT 记录
 }
 
 // G1RegionToSpaceMapper implementation where the region granularity is larger than
@@ -52,8 +57,8 @@ G1RegionToSpaceMapper::G1RegionToSpaceMapper(ReservedSpace rs,
 // Basically, the space corresponding to one region region spans several OS pages.
 class G1RegionsLargerThanCommitSizeMapper : public G1RegionToSpaceMapper {
  private:
-  size_t _pages_per_region;
-
+  size_t _pages_per_region; // forcus 每个 Region 对应的 Page 数
+ // note 先看下基类的构造函数
  public:
   G1RegionsLargerThanCommitSizeMapper(ReservedSpace rs,
                                       size_t actual_size,
@@ -61,19 +66,23 @@ class G1RegionsLargerThanCommitSizeMapper : public G1RegionToSpaceMapper {
                                       size_t alloc_granularity,
                                       size_t commit_factor,
                                       MemoryType type) :
-    G1RegionToSpaceMapper(rs, actual_size, page_size, alloc_granularity, commit_factor, type),
-    _pages_per_region(alloc_granularity / (page_size * commit_factor)) {
-
+    G1RegionToSpaceMapper(rs, actual_size, page_size, alloc_granularity, commit_factor, type), // forcus 父类的构造函数
+    _pages_per_region(alloc_granularity / (page_size * commit_factor)) // forcus 每个 Region 对应的 Page 数 ( Region_Size / Page_Size)
+  {
     guarantee(alloc_granularity >= page_size, "allocation granularity smaller than commit granularity");
   }
-
+  // forcus 提交 Region
   virtual void commit_regions(uint start_idx, size_t num_regions, WorkGang* pretouch_gang) {
+      // 1. 计算起始页号
     size_t const start_page = (size_t)start_idx * _pages_per_region;
+      // 2. 调用底层 commit
     bool zero_filled = _storage.commit(start_page, num_regions * _pages_per_region);
     if (AlwaysPreTouch) {
       _storage.pretouch(start_page, num_regions * _pages_per_region, pretouch_gang);
     }
+      // 4. 更新 commit 位图
     _commit_map.set_range(start_idx, start_idx + num_regions);
+      // 5. 触发监听器回调
     fire_on_commit(start_idx, num_regions, zero_filled);
   }
 
@@ -170,16 +179,19 @@ void G1RegionToSpaceMapper::fire_on_commit(uint start_idx, size_t num_regions, b
   }
 }
 
-G1RegionToSpaceMapper* G1RegionToSpaceMapper::create_mapper(ReservedSpace rs,
-                                                            size_t actual_size,
-                                                            size_t page_size,
-                                                            size_t region_granularity,
-                                                            size_t commit_factor,
-                                                            MemoryType type) {
+G1RegionToSpaceMapper* G1RegionToSpaceMapper::create_mapper(ReservedSpace rs, // 预留堆空间对象
+                                                            size_t actual_size, // 堆大小
+                                                            size_t page_size, // Page 大小
+                                                            size_t region_granularity, // Region 大小
+                                                            size_t commit_factor, // 提交因子
+                                                            MemoryType type) { // NMT 类型
 
   if (region_granularity >= (page_size * commit_factor)) {
+    // forcus Region >= Page: 一个 Region 包含多个 Page (这是通常的情况)
+    // note 不要忘了看基类的构造函数/成员变量
     return new G1RegionsLargerThanCommitSizeMapper(rs, actual_size, page_size, region_granularity, commit_factor, type);
   } else {
+    // 大页情况,暂时可以忽略
     return new G1RegionsSmallerThanCommitSizeMapper(rs, actual_size, page_size, region_granularity, commit_factor, type);
   }
 }
