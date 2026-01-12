@@ -1824,6 +1824,10 @@ jint G1CollectedHeap::initialize() {
     size_t granularity = HeapRegion::GrainBytes;
     // forcus 初始化收集集合快速测试数组，用于O(1)时间判断区域是否在CSet中
     // note 这是G1GC性能优化的关键数据结构，避免遍历查找
+    /*
+     * 为什么需要这个?
+     *  - 问题背景: 在垃圾收集过程中，需要频繁判断某个对象/区域是否在当前的收集集合(Collection Set)中
+     */
     _in_cset_fast_test.initialize(start, end, granularity);
     // forcus 初始化巨型对象回收候选数组，用于标记可回收的巨型区域
     // note 巨型对象跨越多个区域，需要特殊的回收策略和跟踪机制

@@ -66,6 +66,7 @@ protected:
     
     // forcus 计算偏置基地址 - 这是性能优化的关键
     // note 通过预先减去偏移量，后续访问时可以直接用地址索引，无需减法运算
+    // 后续直接访问 _biased_base[heap_size >> 22] 即可
     _biased_base = base - (bias * elem_size); // _base - (0x1800 * 元素大小)
     
     // forcus 保存地址偏移量
@@ -95,13 +96,16 @@ protected:
     // forcus 计算需要映射的区域总数 = (堆大小) / (区域大小)
     // note 例如: 8GB堆 / 4MB区域 = 2048个区域
     size_t num_target_elems = pointer_delta(end, bottom, mapping_granularity_in_bytes);
-    
+
+    /*
+     * 这里和之前讲解的逻辑是一样的,为了避免分配大数组,这里提前计算出bias偏移量
+     */
     // forcus 计算地址偏移量，用于实现O(1)地址到索引的转换
     // note 例如: 堆起始地址0x600000000 / 4MB = 0x1800 (6144)，这个偏移量让我们可以直接通过地址计算数组索引
     idx_t bias = (uintptr_t)bottom / mapping_granularity_in_bytes;
     
     // forcus 分配实际的数组内存
-    // note 为所有区域分配对应的数组元素，InCSetState数组占用2048字节，bool数组占用2048字节
+    // note 为所有区域分配对应的数组元素，InCSetState数组占用2048字节(数组长度为2048)
     address base = create_new_base_array(num_target_elems, target_elem_size_in_bytes);
     
     // forcus 初始化偏置数组的核心字段
