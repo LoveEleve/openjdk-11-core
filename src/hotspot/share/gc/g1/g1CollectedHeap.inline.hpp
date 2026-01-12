@@ -139,7 +139,11 @@ bool G1CollectedHeap::is_in_cset_or_humongous(const oop obj) {
   return _in_cset_fast_test.is_in_cset_or_humongous((HeapWord*)obj);
 }
 
+// forcus 获取对象所在区域的CSet状态 - GC热路径上的关键方法
+// note 这个方法在对象复制、引用更新等操作中被频繁调用，必须极其高效
 InCSetState G1CollectedHeap::in_cset_state(const oop obj) {
+  // forcus 通过_in_cset_fast_test实现O(1)查找
+  // note 直接通过对象地址获取其所在区域的状态，无需遍历CSet
   return _in_cset_fast_test.at((HeapWord*)obj);
 }
 

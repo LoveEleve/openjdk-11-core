@@ -37,20 +37,31 @@
  */
 G1HotCardCache::G1HotCardCache(G1CollectedHeap *g1h):
   _g1h(g1h), _hot_cache(NULL), _use_cache(false), _card_counts(g1h) {}
-
+// forcus G1HotCardCache 初始化
 void G1HotCardCache::initialize(G1RegionToSpaceMapper* card_counts_storage) {
-  if (default_use_cache()) {
+    // forcus 通常都是true
+  if (default_use_cache()) { // G1ConcRSLogCacheSize = 10(默认为10)
     _use_cache = true;
-
+    // 计算缓存大小 _hot_cache_size = 1 << 10 = 1024
+    // note 热卡缓存默认可以存储 1024个热卡指针
     _hot_cache_size = (size_t)1 << G1ConcRSLogCacheSize;
+    // forcus 分配缓存数组,存储 jbyte* 指针(数组大小为1024) - 每个元素是指向卡表中某张卡的指针
     _hot_cache = ArrayAllocator<jbyte*>::allocate(_hot_cache_size, mtGC);
-
+    // 清0操作
     reset_hot_cache_internal();
 
-    // For refining the cards in the hot cache in parallel
-    _hot_cache_par_chunk_size = ClaimChunkSize;
-    _hot_cache_par_claimed_idx = 0;
 
+    // forcus 设置并行处理参数 - 用于多线程并行处理热卡缓存中的卡
+    // For refining the cards in the hot cache in parallel
+    _hot_cache_par_chunk_size = ClaimChunkSize; // 并行处理时每个线程处理的块大小
+    _hot_cache_par_claimed_idx = 0; // 并行处理时的索引计数器
+    // forcus 初始化G1CardCounts  使用 card_counts_storage 提供的内存空间
+    /*
+     * 热卡缓存的工作原理：
+            热卡：被频繁修改的卡（跨代引用频繁的区域）
+            通过 G1CardCounts 统计每张卡的修改次数
+            超过阈值 G1ConcRSHotCardLimit（默认4次）的卡被认为是热卡
+     */
     _card_counts.initialize(card_counts_storage);
   }
 }

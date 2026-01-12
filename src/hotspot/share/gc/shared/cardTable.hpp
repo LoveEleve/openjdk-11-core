@@ -131,7 +131,10 @@ public:
   // in, um, words.
   inline size_t cards_required(size_t covered_words) {
     // Add one for a guard card, used to detect errors.
+    // covered_words = 1G card_size_in_words = 512B / 8B = 64
+    // word = align_up(1G,64)=1G
     const size_t words = align_up(covered_words, card_size_in_words);
+    // return 1G / 64 + 1 = 16M + 1
     return words / card_size_in_words + 1;
   }
 

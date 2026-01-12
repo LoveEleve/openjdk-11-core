@@ -263,7 +263,12 @@ private:
     }
   };
 
+  // forcus 巨型对象回收候选数组 - 高效管理跨区域大对象的回收
+  // note 巨型对象跨越多个区域，需要特殊的回收策略和跟踪机制，每个区域仅需1位标记
   HumongousReclaimCandidates _humongous_reclaim_candidates;
+  
+  // forcus 优化标志：是否存在巨型对象回收候选
+  // note 如果没有候选对象，可以跳过一些处理步骤，提高性能
   // Stores whether during humongous object registration we found candidate regions.
   // If not, we can skip a few steps.
   bool _has_humongous_reclaim_candidates;
@@ -1085,6 +1090,8 @@ public:
   inline bool is_in_cset_or_humongous(const oop obj);
 
  private:
+  // forcus G1GC性能优化的核心数据结构 - 收集集合快速测试数组
+  // note 将O(n)的CSet遍历查找优化为O(1)的数组访问，在GC热路径上提供关键性能提升
   // This array is used for a quick test on whether a reference points into
   // the collection set or not. Each of the array's elements denotes whether the
   // corresponding region is in the collection set or not.

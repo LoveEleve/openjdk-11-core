@@ -65,18 +65,27 @@ G1CardCounts::G1CardCounts(G1CollectedHeap *g1h):
 void G1CardCounts::initialize(G1RegionToSpaceMapper* mapper) {
   assert(_g1h->max_capacity() > 0, "initialization order");
   assert(_g1h->capacity() == 0, "initialization order");
-
+  // forcus 默认值为 4
+  // note 表示卡被修改4次或以上就被认为是"热卡"
   if (G1ConcRSHotCardLimit > 0) {
     // The max value we can store in the counts table is
     // max_jubyte. Guarantee the value of the hot
     // threshold limit is no more than this.
     guarantee(G1ConcRSHotCardLimit <= max_jubyte, "sanity");
-
-    _ct = _g1h->card_table();
+   // forcus 获取卡表引用 - 后续需要通过卡表进行地址到卡的映射
+    _ct = _g1h->card_table(); // note 注意这里的_ct是cardTable对象的地址。不是真实卡表数组的地址,卡表数组的地址为其内部的 _byte_map 地址
+    // forcus 计算卡表起始位置
+    /*
+     * _g1h->reserved_region().start()：获取堆的起始地址
+     * _ct->byte_for_const(...)：将堆地址转换为对应的卡表指针
+     * _ct_bot：存储堆起始地址对应的卡表位置
+     *  ==> _ct_bot = &_byte_map_base[heap_start >> 9];
+     *  note ==> 这里等于 cartTable对象中_byte_map的地址
+     */
     _ct_bot = _ct->byte_for_const(_g1h->reserved_region().start());
-
-    _card_counts = (jubyte*) mapper->reserved().start();
-    _reserved_max_card_num = mapper->reserved().byte_size();
+    // forcus 获取计数数组存储空间
+    _card_counts = (jubyte*) mapper->reserved().start(); // _card_counts：指向用于 card_counts_storaged 中的 _low_boundary
+    _reserved_max_card_num = mapper->reserved().byte_size(); // 计数数组的总大小(16MB)
     mapper->set_mapping_changed_listener(&_listener);
   }
 }

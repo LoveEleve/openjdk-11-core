@@ -104,14 +104,28 @@ private:
   static const G1RemsetIterState Unclaimed = 0; // The remembered set has not been scanned yet.
   static const G1RemsetIterState Claimed = 1;   // The remembered set is currently being scanned.
   static const G1RemsetIterState Complete = 2;  // The remembered set has been completely scanned.
-
+  /*
+   * note 每个区域的迭代状态
+   *  - 大小：max_regions * sizeof(jint)
+   *  - 状态：Unclaimed(0) → Claimed(1) → Complete(2)
+   */
   G1RemsetIterState volatile* _iter_states;
+  /*
+   * note 每个区域当前扫描位置
+   *  - 大小：max_regions * sizeof(size_t)
+   *  - 用于并发扫描时的进度跟踪
+   */
   // The current location where the next thread should continue scanning in a region's
   // remembered set.
   size_t volatile* _iter_claims;
 
   // Temporary buffer holding the regions we used to store remembered set scan duplicate
   // information. These are also called "dirty". Valid entries are from [0.._cur_dirty_region)
+  /*
+   * note 脏区域缓冲区
+   *  - 大小：max_regions * sizeof(uint)
+   *  - 存储需要清理卡表的区域ID
+   */
   uint* _dirty_region_buffer;
 
   typedef jbyte IsDirtyRegionState;
@@ -119,6 +133,11 @@ private:
   static const IsDirtyRegionState Dirty = 1;
   // Holds a flag for every region whether it is in the _dirty_region_buffer already
   // to avoid duplicates. Uses jbyte since there are no atomic instructions for bools.
+  /*
+   * note  脏区域标记数组
+   *  - 大小：max_regions * sizeof(jbyte)
+   *  - 标记区域是否已在脏缓冲区中
+   */
   IsDirtyRegionState* _in_dirty_region_buffer;
   size_t _cur_dirty_region;
 
@@ -146,16 +165,21 @@ private:
   // humongous regions outside the collection set.
   // This is valid because we are not interested in scanning stray remembered set
   // entries from free or archive regions.
+  /*
+   * note 每个区域的扫描顶部指针
+   *  - 大小：max_regions * sizeof(HeapWord*)
+   *  - 记录每个区域在GC开始时的top位置
+   */
   HeapWord** _scan_top;
 public:
   G1RemSetScanState() :
     _max_regions(0),
-    _iter_states(NULL),
-    _iter_claims(NULL),
-    _dirty_region_buffer(NULL),
-    _in_dirty_region_buffer(NULL),
+    _iter_states(NULL), // note 每个区域的迭代状态
+    _iter_claims(NULL), // note 每个区域当前扫描位置
+    _dirty_region_buffer(NULL), // note 脏区域缓冲区
+    _in_dirty_region_buffer(NULL), // note 脏区域标记数组
     _cur_dirty_region(0),
-    _scan_top(NULL) {
+    _scan_top(NULL) { // note 每个区域的扫描顶部指针
   }
 
   ~G1RemSetScanState() {
@@ -179,12 +203,12 @@ public:
   void initialize(uint max_regions) {
     assert(_iter_states == NULL, "Must not be initialized twice");
     assert(_iter_claims == NULL, "Must not be initialized twice");
-    _max_regions = max_regions;
-    _iter_states = NEW_C_HEAP_ARRAY(G1RemsetIterState, max_regions, mtGC);
-    _iter_claims = NEW_C_HEAP_ARRAY(size_t, max_regions, mtGC);
-    _dirty_region_buffer = NEW_C_HEAP_ARRAY(uint, max_regions, mtGC);
-    _in_dirty_region_buffer = NEW_C_HEAP_ARRAY(IsDirtyRegionState, max_regions, mtGC);
-    _scan_top = NEW_C_HEAP_ARRAY(HeapWord*, max_regions, mtGC);
+    _max_regions = max_regions; // 保存最大region数
+    _iter_states = NEW_C_HEAP_ARRAY(G1RemsetIterState, max_regions, mtGC); // note 跟踪区域扫描状态 (Unclaimed/Claimed/Complete) 大小 = max_regions * sizeof(jint)
+    _iter_claims = NEW_C_HEAP_ARRAY(size_t, max_regions, mtGC); // note 每个区域的扫描进度 记录当前扫描到的卡片位置 大小 = max_regions * sizeof(size_t)
+    _dirty_region_buffer = NEW_C_HEAP_ARRAY(uint, max_regions, mtGC); // note 脏区域缓冲区  存储需要清理卡表的区域ID 大小 = max_regions * sizeof(uint)
+    _in_dirty_region_buffer = NEW_C_HEAP_ARRAY(IsDirtyRegionState, max_regions, mtGC); // note 脏区域标记 标记区域是否已在脏缓冲区中 大小 = max_regions * sizeof(jbyte)
+    _scan_top = NEW_C_HEAP_ARRAY(HeapWord*, max_regions, mtGC); // note 扫描顶部指针 记录GC开始时每个区域的top位置 大小 = max_regions * sizeof(HeapWord*)
   }
 
   void reset() {
@@ -282,13 +306,13 @@ public:
 G1RemSet::G1RemSet(G1CollectedHeap* g1h,
                    G1CardTable* ct,
                    G1HotCardCache* hot_card_cache) :
-  _g1h(g1h),
-  _scan_state(new G1RemSetScanState()),
-  _num_conc_refined_cards(0),
-  _ct(ct),
-  _g1p(_g1h->g1_policy()),
-  _hot_card_cache(hot_card_cache),
-  _prev_period_summary() {
+  _g1h(g1h), // 保存堆引用
+  _scan_state(new G1RemSetScanState()), // note 扫描状态管理器 这个是G1记忆集的核心数据结构，负责管理记忆集扫描状态
+  _num_conc_refined_cards(0), // note 并发精炼卡数量
+  _ct(ct), // 卡表引用
+  _g1p(_g1h->g1_policy()), // GC策略引用
+  _hot_card_cache(hot_card_cache), // 热卡缓存引用
+  _prev_period_summary() { // 统计信息
 }
 
 G1RemSet::~G1RemSet() {
@@ -296,13 +320,30 @@ G1RemSet::~G1RemSet() {
     delete _scan_state;
   }
 }
-
+/*
+ * note 计算并发线程数量
+ *  - DirtyCardQueueSet::num_par_ids() -- 返回系统初始活跃处理器数量,代表可以并行处理脏卡队列的变异器线程数
+ *  - G1ConcurrentRefine::max_num_threads() -- 返回并发精炼线程的最大数量(note 由 JVM 参数 -XX:G1ConcRefinementThreads 控制)
+ *  - MAX2(ConcGCThreads, ParallelGCThreads)
+ *      - ConcGCThreads: 并发GC线程数
+ *      - ParallelGCThreads: 并行GC线程数
+ *  - result: 总线程数 = 活跃处理器数 + 并发精炼线程数 + max(并发GC线程数, 并行GC线程数)
+ */
 uint G1RemSet::num_par_rem_sets() {
   return DirtyCardQueueSet::num_par_ids() + G1ConcurrentRefine::max_num_threads() + MAX2(ConcGCThreads, ParallelGCThreads);
 }
-
+// forcus 初始化G1记忆集
 void G1RemSet::initialize(size_t capacity, uint max_regions) {
+    /*
+     *  num_par_rem_sets()：计算并发线程数量(活跃处理器数 + 并发精炼线程数 + max(并发GC线程数, 并行GC线程数))
+     *  note 初始化 G1FromCardCache
+     *    作用:
+     *      - 记住每个区域在每个线程上最近处理的卡片
+     *      - 避免重复处理相同的卡片
+     *      - 提高记忆集扫描效率
+     */
   G1FromCardCache::initialize(num_par_rem_sets(), max_regions);
+  // forcus 初始化扫描状态
   _scan_state->initialize(max_regions);
 }
 

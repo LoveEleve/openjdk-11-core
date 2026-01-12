@@ -52,20 +52,36 @@ protected:
 
   // Initialize the members of this class. The biased start address of this array
   // is the bias (in elements) multiplied by the element size.
+  // forcus 初始化偏置数组的核心字段 - 建立快速地址映射机制
   void initialize_base(address base, size_t length, size_t bias, size_t elem_size, uint shift_by) {
     assert(base != NULL, "just checking");
     assert(length > 0, "just checking");
     assert(shift_by < sizeof(uintptr_t) * 8, "Shifting by %u, larger than word size?", shift_by);
-    _base = base; // 实际数组起始地址
-    _length = length; // 2048 (区域总数)
-    _biased_base = base - (bias * elem_size); // _base - (0x1C00 * 8) (偏移后的基地址)
-    _bias = bias; // 0x1C00 ((堆起始地址对应的索引偏移))
-    _shift_by = shift_by; // 22 (log2(4MB) = 22位右移) 因为所有的Region都是4MB对齐的,所以这里是移动22位
+    
+    // forcus 保存实际数组的起始地址
+    _base = base; // 指向malloc分配的内存起始位置
+    
+    // forcus 保存数组长度(区域总数)
+    _length = length; // 例如: 2048个区域
+    
+    // forcus 计算偏置基地址 - 这是性能优化的关键
+    // note 通过预先减去偏移量，后续访问时可以直接用地址索引，无需减法运算
+    _biased_base = base - (bias * elem_size); // _base - (0x1800 * 元素大小)
+    
+    // forcus 保存地址偏移量
+    _bias = bias; // 0x1800 (堆起始地址 / 4MB = 堆起始地址对应的区域索引)
+    
+    // forcus 保存右移位数，用于快速地址转换
+    // note log2(4MB) = 22位，地址右移22位等效于除以4MB，但比除法快得多
+    _shift_by = shift_by; // 22 (因为所有Region都是4MB对齐的)
   }
 
   // Allocate and initialize this array to cover the heap addresses in the range
   // of [bottom, end).
+  // forcus 偏置数组初始化方法 - G1GC性能优化的核心数据结构
+  // note 参数说明: bottom=堆起始地址, end=堆结束地址, target_elem_size_in_bytes=元素大小, mapping_granularity_in_bytes=映射粒度(4MB)
   void initialize(HeapWord* bottom, HeapWord* end, size_t target_elem_size_in_bytes, size_t mapping_granularity_in_bytes) {
+
     assert(mapping_granularity_in_bytes > 0, "just checking");
     assert(is_power_of_2(mapping_granularity_in_bytes),
            "mapping granularity must be power of 2, is " SIZE_FORMAT, mapping_granularity_in_bytes);
@@ -75,13 +91,21 @@ protected:
     assert((uintptr_t)end % mapping_granularity_in_bytes == 0,
            "end mapping area address must be a multiple of mapping granularity " SIZE_FORMAT ", is " PTR_FORMAT,
            mapping_granularity_in_bytes, p2i(end));
-    // forcus-1 区域数量计算: (end - bottom) / mapping_granularity_in_bytes = 2048个
+    
+    // forcus 计算需要映射的区域总数 = (堆大小) / (区域大小)
+    // note 例如: 8GB堆 / 4MB区域 = 2048个区域
     size_t num_target_elems = pointer_delta(end, bottom, mapping_granularity_in_bytes);
-    // forcus-2 偏移量计算 0x600000000 / 0x400000 = 0x1800 = 6144 (偏移索引)
+    
+    // forcus 计算地址偏移量，用于实现O(1)地址到索引的转换
+    // note 例如: 堆起始地址0x600000000 / 4MB = 0x1800 (6144)，这个偏移量让我们可以直接通过地址计算数组索引
     idx_t bias = (uintptr_t)bottom / mapping_granularity_in_bytes;
-    // forcus-3 数组分配
+    
+    // forcus 分配实际的数组内存
+    // note 为所有区域分配对应的数组元素，InCSetState数组占用2048字节，bool数组占用2048字节
     address base = create_new_base_array(num_target_elems, target_elem_size_in_bytes);
-    // forcus-4 初始化
+    
+    // forcus 初始化偏置数组的核心字段
+    // note 设置_base、_length、_biased_base、_bias、_shift_by等，建立快速访问机制
     initialize_base(base, num_target_elems, bias, target_elem_size_in_bytes, log2_intptr(mapping_granularity_in_bytes));
   }
 
@@ -124,11 +148,16 @@ public:
   // The raw biased base pointer.
   T* biased_base() const { return (T*)G1BiasedMappedArrayBase::_biased_base; }
 
-  // Return the element of the given array that covers the given word in the
-  // heap. Assumes the index is valid.
+  // forcus 通过堆地址获取对应的数组元素 - G1GC性能优化的核心方法
+  // note 这是热路径上的关键操作，在GC过程中会被频繁调用
   T get_by_address(HeapWord* value) const {
+    // forcus 核心优化: 通过地址右移直接计算数组索引
+    // note 右移22位等效于除以4MB，但比除法运算快得多，利用了G1区域4MB对齐的特性
     idx_t biased_index = ((uintptr_t)value) >> this->shift_by();
     this->verify_biased_index(biased_index);
+    
+    // forcus 直接通过偏置基地址访问，实现真正的O(1)访问
+    // note biased_base已经预先减去了偏移量，无需额外的减法运算
     return biased_base()[biased_index];
   }
 
@@ -140,10 +169,13 @@ public:
     return biased_index - _bias;
   }
 
-  // Set the value of the array entry that corresponds to the given array.
+  // forcus 通过堆地址设置对应的数组元素值
+  // note 用于更新区域状态，如标记区域进入CSet或设置为巨型区域
   void set_by_address(HeapWord * address, T value) {
+    // forcus 同样使用右移快速计算索引
     idx_t biased_index = ((uintptr_t)address) >> this->shift_by();
     this->verify_biased_index(biased_index);
+    // forcus 直接通过偏置基地址设置值
     biased_base()[biased_index] = value;
   }
 
@@ -192,8 +224,14 @@ public:
 
   // Allocate and initialize this array to cover the heap addresses in the range
   // of [bottom, end).
-  void initialize(HeapWord* bottom, HeapWord* end, size_t mapping_granularity) {
+  // forcus G1BiasedMappedArray的初始化入口方法
+  // note 这是_in_cset_fast_test和_humongous_reclaim_candidates调用的方法
+  void initialize(HeapWord* bottom, HeapWord* end, size_t mapping_granularity) { // 参数为:堆起始地址、堆结束地址、4MB
+    // forcus 调用基类初始化方法，建立偏置数组的核心数据结构
     G1BiasedMappedArrayBase::initialize(bottom, end, sizeof(T), mapping_granularity);
+    
+    // forcus 清空数组，将所有元素设置为默认值
+    // note InCSetState数组设为NotInCSet，bool数组设为false
     this->clear();
   }
 };

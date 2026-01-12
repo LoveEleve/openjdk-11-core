@@ -139,7 +139,7 @@ class G1PageBasedVirtualSpace {
   size_t uncommitted_size() const;
 
   bool contains(const void* p) const;
-
+// forcus 创建一个新的 以_low_boundary 为起始地址，reserved_size() 为大小的 MemRegion
   MemRegion reserved() {
     MemRegion x((HeapWord*)_low_boundary, reserved_size() / HeapWordSize);
     return x;

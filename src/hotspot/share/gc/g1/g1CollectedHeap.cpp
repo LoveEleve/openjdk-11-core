@@ -1771,37 +1771,62 @@ jint G1CollectedHeap::initialize() {
    * note HeapRegionManager 是G1垃圾收集器的核心管理组件，负责统一管理所有G1区域及其辅助数据结构
    */
   _hrm.initialize(heap_storage, prev_bitmap_storage, next_bitmap_storage, bot_storage, cardtable_storage, card_counts_storage);
+  // forcus 初始化卡表,传入了 cardtable_storage
   _card_table->initialize(cardtable_storage);
   // Do later initialization work for concurrent refinement.
   _hot_card_cache->initialize(card_counts_storage);
 
   // 6843694 - ensure that the maximum region index can fit
   // in the remembered set structures.
+  // Region索引范围验证 - 确保堆中的Region数量不超过 RegionIdx_t 类型能表示的最大值(这是Bug 6843694的修复)
   const uint max_region_idx = (1U << (sizeof(RegionIdx_t)*BitsPerByte-1)) - 1;
   guarantee((max_regions() - 1) <= max_region_idx, "too many regions");
 
   // The G1FromCardCache reserves card with value 0 as "invalid", so the heap must not
   // start within the first card.
   guarantee(g1_rs.base() >= (char*)G1CardTable::card_size, "Java heap must not start within the first card.");
+  // forcus 创建和初始化记忆集
+  /*
+        创建G1记忆集对象
+        传入卡表和热卡缓存的引用
+        初始化记忆集，设置最大容量和最大Region数
+   */
   // Also create a G1 rem set.
-  _g1_rem_set = new G1RemSet(this, _card_table, _hot_card_cache);
+  _g1_rem_set = new G1RemSet(this, _card_table, _hot_card_cache); // note 传入了this(堆对象) + 卡表对象 + 热卡对象
   _g1_rem_set->initialize(max_capacity(), max_regions());
-
+  // 每个Region的卡数量验证
+  /*
+   * 实际的每Region卡数
+   *  HeapRegion::CardsPerRegion = (Region大小 = 4MB = 4 * 1024 * 1024 = 4,194,304 字节 / 卡大小 = 512 字节 = 8,192 张卡)
+   */
   size_t max_cards_per_region = ((size_t)1 << (sizeof(CardIdx_t)*BitsPerByte-1)) - 1;
   guarantee(HeapRegion::CardsPerRegion > 0, "make sure it's initialized");
   guarantee(HeapRegion::CardsPerRegion < max_cards_per_region,
             "too many cards per region");
-
+    // forcus 设置空闲区域列表的"不现实长度"阈值，用于调试和验证
+    // note 这是一个全局静态变量，只能设置一次，用于检测异常长的空闲区域链表
   FreeRegionList::set_unrealistically_long_length(max_regions() + 1);
 
-  _bot = new G1BlockOffsetTable(reserved_region(), bot_storage);
+    // forcus 创建G1块偏移表，用于快速定位堆中任意地址对应的对象起始位置
+    // note 传入堆的预留区域和BOT存储映射器，BOT是G1GC的核心数据结构之一
+    // reserved_region()
+  _bot = new G1BlockOffsetTable(reserved_region(), bot_storage); // 这里的bot_storage就是在上面创建的
 
   {
+    //  获取堆管理器预留的内存区域起始地址
+    //  _hrm是HeapRegionManager对象，管理所有G1堆区域
     HeapWord* start = _hrm.reserved().start();
+    //  获取堆管理器预留的内存区域结束地址
+    //  这定义了整个G1堆的地址范围边界
     HeapWord* end = _hrm.reserved().end();
+    //  设置映射粒度为单个区域大小(4MB)
+    //  GrainBytes是G1区域的标准大小，所有区域都按此大小对齐
     size_t granularity = HeapRegion::GrainBytes;
-
+    // forcus 初始化收集集合快速测试数组，用于O(1)时间判断区域是否在CSet中
+    // note 这是G1GC性能优化的关键数据结构，避免遍历查找
     _in_cset_fast_test.initialize(start, end, granularity);
+    // forcus 初始化巨型对象回收候选数组，用于标记可回收的巨型区域
+    // note 巨型对象跨越多个区域，需要特殊的回收策略和跟踪机制
     _humongous_reclaim_candidates.initialize(start, end, granularity);
   }
 

@@ -90,6 +90,7 @@ HeapRegionSetBase::HeapRegionSetBase(const char* name, bool humongous, bool free
 
 void FreeRegionList::set_unrealistically_long_length(uint len) {
   guarantee(_unrealistically_long_length == 0, "should only be set once");
+  // forcus 设置到全局变量中(对于8GB的堆内存来说,这里应该是2049)
   _unrealistically_long_length = len;
 }
 

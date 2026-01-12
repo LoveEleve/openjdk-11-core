@@ -71,7 +71,7 @@ class HeapRegionManager: public CHeapObj<mtGC> {
   friend class VMStructs;
   friend class HeapRegionClaimer;
 
-  G1HeapRegionTable _regions;
+  G1HeapRegionTable _regions; // forcus 建立堆地址到Region的映射(也即给定任意堆地址都能找到对应的HeapRegion)
 
   G1RegionToSpaceMapper* _heap_mapper;
   G1RegionToSpaceMapper* _prev_bitmap_mapper;

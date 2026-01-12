@@ -38,11 +38,19 @@ uint   G1FromCardCache::_max_workers = 0;
 void G1FromCardCache::initialize(uint num_par_rem_sets, uint max_num_regions) {
   guarantee(max_num_regions > 0, "Heap size must be valid");
   guarantee(_cache == NULL, "Should not call this multiple times");
-
+  // forcus 保存最大region数
   _max_regions = max_num_regions;
 #ifdef ASSERT
+  // forcus  保存并发线程数量
   _max_workers = num_par_rem_sets;
 #endif
+  // forcus 创建二维数组
+  /*
+   * 行数: max_regions (堆区域数量)
+   * 列数: num_par_rem_sets (并发线程数量)
+   * 元素类型: uintptr_t (卡片索引)
+   * 内存布局: 使用内存对齐优化缓存性能
+   */
   _cache = Padded2DArray<uintptr_t, mtGC>::create_unfreeable(_max_regions,
                                                              num_par_rem_sets,
                                                              &_static_mem_size);

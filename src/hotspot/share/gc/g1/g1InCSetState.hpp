@@ -28,7 +28,7 @@
 #include "gc/g1/g1BiasedArray.hpp"
 #include "gc/g1/heapRegion.hpp"
 
-// Per-region state during garbage collection.
+// forcus G1GC中区域状态的核心枚举 - 性能优化的精妙设计
 struct InCSetState {
  public:
   // We use different types to represent the state value. Particularly SPARC puts
@@ -48,6 +48,8 @@ struct InCSetState {
   in_cset_state_t _value;
  public:
   enum {
+    // forcus 巧妙的编码设计，优化最常见的性能检查
+    // note 最频繁的操作是检查区域是否在CSet中，使用 > 0 检查即可实现
     // Selection of the values were driven to micro-optimize the encoding and
     // frequency of the checks.
     // The most common check is whether the region is in the collection set or not,
@@ -57,9 +59,17 @@ struct InCSetState {
     // used to index into arrays.
     // The negative values are used for objects requiring various special cases,
     // for example eager reclamation of humongous objects.
+    
+    // forcus 巨型区域标记，负值用于特殊处理逻辑
     Humongous    = -1,    // The region is humongous
+    
+    // forcus 默认状态，不在收集集合中，值为0便于快速判断
     NotInCSet    =  0,    // The region is not in the collection set.
+    
+    // forcus 年轻代区域，正值1，便于 > 0 的CSet检查
     Young        =  1,    // The region is in the collection set and a young region.
+    
+    // forcus 老年代区域，正值2，按代际递增便于代际转换
     Old          =  2,    // The region is in the collection set and an old region.
     Num
   };
@@ -72,9 +82,14 @@ struct InCSetState {
 
   void set_old()                       { _value = Old; }
 
+  // forcus 关键的状态检查方法 - 在GC热路径上被频繁调用
   bool is_in_cset_or_humongous() const { return is_in_cset() || is_humongous(); }
+  
+  // forcus 核心优化: 通过 > 0 检查判断是否在CSet中
+  // note 这比逐个比较Young和Old快得多，体现了编码设计的巧妙
   bool is_in_cset() const              { return _value > NotInCSet; }
 
+  // forcus 各种状态的快速判断方法
   bool is_humongous() const            { return _value == Humongous; }
   bool is_young() const                { return _value == Young; }
   bool is_old() const                  { return _value == Old; }
@@ -86,6 +101,9 @@ struct InCSetState {
 #endif
 };
 
+// forcus G1收集集合快速测试数组 - 实现O(1)的CSet查找
+// note 这个类是G1GC性能优化的核心，将O(n)的CSet遍历优化为O(1)的数组访问
+//
 // Instances of this class are used for quick tests on whether a reference points
 // into the collection set and into which generation or is a humongous object
 //
@@ -99,8 +117,11 @@ struct InCSetState {
 // referenced, i.e. live.
 class G1InCSetStateFastTestBiasedMappedArray : public G1BiasedMappedArray<InCSetState> {
  protected:
+  // forcus 默认值为NotInCSet，确保初始状态下所有区域都不在CSet中
   InCSetState default_value() const { return InCSetState::NotInCSet; }
  public:
+  // forcus 设置指定区域为巨型区域
+  // note 巨型区域在引用处理时会被特殊对待，通过这种方式"加入"到CSet中
   void set_humongous(uintptr_t index) {
     assert(get_by_index(index).is_default(),
            "State at index " INTPTR_FORMAT " should be default but is " CSETSTATE_FORMAT, index, get_by_index(index).value());
@@ -123,10 +144,16 @@ class G1InCSetStateFastTestBiasedMappedArray : public G1BiasedMappedArray<InCSet
     set_by_index(index, InCSetState::Old);
   }
 
+  // forcus 核心的快速查询方法 - 在GC热路径上被大量调用
+  // note 通过地址直接获取区域的CSet状态，实现O(1)查找
   bool is_in_cset_or_humongous(HeapWord* addr) const { return at(addr).is_in_cset_or_humongous(); }
   bool is_in_cset(HeapWord* addr) const { return at(addr).is_in_cset(); }
   bool is_in_cset(const HeapRegion* hr) const { return get_by_index(hr->hrm_index()).is_in_cset(); }
+  
+  // forcus 通过地址获取InCSetState，底层调用get_by_address实现O(1)访问
   InCSetState at(HeapWord* addr) const { return get_by_address(addr); }
+  
+  // forcus 清理方法
   void clear() { G1BiasedMappedArray<InCSetState>::clear(); }
   void clear(const HeapRegion* hr) { return set_by_index(hr->hrm_index(), InCSetState::NotInCSet); }
 };

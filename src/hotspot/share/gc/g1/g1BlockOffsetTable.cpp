@@ -40,9 +40,9 @@
 
 G1BlockOffsetTable::G1BlockOffsetTable(MemRegion heap, G1RegionToSpaceMapper* storage) :
   _reserved(heap), _offset_array(NULL) {
-
+  // forcus 创建一个新的MemRegion 对象( 起始地址为: bot_storage._low_boundary)
   MemRegion bot_reserved = storage->reserved();
-
+  // forcus  _offset_array = bot_storage._low_boundary（和之前是一样的套路）
   _offset_array = (u_char*)bot_reserved.start();
 
   log_trace(gc, bot)("G1BlockOffsetTable::G1BlockOffsetTable: ");

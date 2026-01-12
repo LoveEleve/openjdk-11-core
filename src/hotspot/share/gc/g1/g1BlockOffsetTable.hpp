@@ -48,7 +48,7 @@ class G1BlockOffsetTable: public CHeapObj<mtGC> {
 
 private:
   // The reserved region covered by the table.
-  MemRegion _reserved;
+  MemRegion _reserved; // 保存heap引用
 
   // Array for keeping offsets for retrieving object start fast given an
   // address.
