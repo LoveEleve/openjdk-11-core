@@ -150,11 +150,17 @@ void G1RegionMappingChangedListener::reset_from_card_cache(uint start_idx, size_
 void G1RegionMappingChangedListener::on_commit(uint start_idx, size_t num_regions, bool zero_filled) {
   // The from card cache is not the memory that is actually committed. So we cannot
   // take advantage of the zero_filled parameter.
+    // 卡缓存不是实际提交的内存，所以不能利用zero_filled参数
   reset_from_card_cache(start_idx, num_regions);
 }
 
 HeapRegion* G1CollectedHeap::new_heap_region(uint hrs_index,
                                              MemRegion mr) {
+    /*
+     * hrs_index : region的索引号
+     * mr        : 代表一块连续的内存区域(用来表示这块Region)
+     * bot() : 返回G1BlockOffsetTable指针，用于块偏移表管理 - 所有HeapRegion共享同一个BOT实例，提高内存效率
+     */
   return new HeapRegion(hrs_index, bot(), mr);
 }
 
@@ -1333,24 +1339,32 @@ HeapWord* G1CollectedHeap::expand_and_allocate(size_t word_size) {
   }
   return NULL;
 }
-
+// expand_bytes:-Xms(8GB)
 bool G1CollectedHeap::expand(size_t expand_bytes, WorkGang* pretouch_workers, double* expand_time_ms) {
+  // expand_bytes 要与os_page对齐:通常是4KB - 一般都是满足的(返回8GB)
   size_t aligned_expand_bytes = ReservedSpace::page_align_size_up(expand_bytes);
+  // expand_bytes 要与 region对齐(4MB)  - 一般都是满足的(返回8GB)
   aligned_expand_bytes = align_up(aligned_expand_bytes,
                                        HeapRegion::GrainBytes);
 
   log_debug(gc, ergo, heap)("Expand the heap. requested expansion amount: " SIZE_FORMAT "B expansion amount: " SIZE_FORMAT "B",
                             expand_bytes, aligned_expand_bytes);
-
-  if (is_maximal_no_gc()) {
+  /*
+   * 初始化场景:
+        - `max_length() = 2048` (最大Region数)
+        - `length() = 0` (当前已提交Region数)
+        - `available() = 2048 - 0 = 2048` (可用Region数)
+        - `is_maximal_no_gc() = false` (允许扩展)
+   */
+  if (is_maximal_no_gc()) { // 初始化时一般为false
     log_debug(gc, ergo, heap)("Did not expand the heap (heap already fully expanded)");
     return false;
   }
 
   double expand_heap_start_time_sec = os::elapsedTime();
-  uint regions_to_expand = (uint)(aligned_expand_bytes / HeapRegion::GrainBytes);
+  uint regions_to_expand = (uint)(aligned_expand_bytes / HeapRegion::GrainBytes); // 2048个Region需要expand
   assert(regions_to_expand > 0, "Must expand by at least one region");
-
+  // forcus 调用HeapRegionManager进行实际的内存分配
   uint expanded_by = _hrm.expand_by(regions_to_expand, pretouch_workers);
   if (expand_time_ms != NULL) {
     *expand_time_ms = (os::elapsedTime() - expand_heap_start_time_sec) * MILLIUNITS;
@@ -1836,7 +1850,48 @@ jint G1CollectedHeap::initialize() {
 
   // Create the G1ConcurrentMark data structure and thread.
   // (Must do this late, so that "max_regions" is defined.)
-  _cm = new G1ConcurrentMark(this, prev_bitmap_storage, next_bitmap_storage);
+  // forcus 初始化并发标记器，负责整个并发标记周期的协调和执行
+  // forcus 这个类管理用于在G1并发周期中执行存活性分析的数据结构和方法。(来自注释)
+  /*
+   * 核心职责:
+   *  1.存活性标记(core):首要任务就是标记堆中的存活对象
+   *    1.1 位图标记: 使用双缓冲的标记位图记录对象存活状态
+   *    1.2 并发执行：在应用线程运行时进行标记，减少STW时间
+   *    1.3 多线程并行：使用ConcGCThreads个线程并行标记，提高效率
+   *  2.协调并发标记周期:协调整个标记周期的各个阶段
+   *    2.1 Initial Mark (初始标记) - STW
+   *    2.2 Root Region Scan (根区域扫描) - 并发
+   *    2.3 Concurrent Mark (并发标记) - 并发  ← G1ConcurrentMark核心工作
+   *         - 多线程并行标记所有可达对象
+   *         - 使用任务队列 + 全局标记栈
+   *         - SATB队列记录并发更新
+   *    2.4 Remark (最终标记) - STW
+   *         - 处理SATB队列
+   *         - 完成剩余标记
+   *    2.5 Cleanup (清理) - STW/并发
+   *         - 统计区域存活率
+   *         - 回收空区域
+   *         - 准备Mixed GC
+   *
+   *   ====
+   *
+   *   G1ConcurrentMark 管理所有标记相关的数据结构
+   *    - 双缓冲位图 : 记录对象存活状态 : 256MB
+   *    - 任务队列集合 : 	每个线程的灰色对象队列
+   *    - 全局标记栈 : 处理队列溢出
+   *    - 区域统计数组 : 每个区域的存活率
+   *    - 根区域跟踪器 : 管理survivor扫描
+   *
+   *    ====
+   *
+   *    标记完成后，G1ConcurrentMark 提供的数据用于Mixed GC的决策：
+   *     - _prev_mark_bitmap（已完成的标记位图）
+   *      - Mixed GC使用：判断对象是否存活
+   *     - _region_mark_stats（区域存活率统计）
+   *      - （优先回收存活率低的区域）
+   *      - 预测回收时间和空间收益
+   */
+  _cm = new G1ConcurrentMark(this, prev_bitmap_storage, next_bitmap_storage); // forcus 这里传入了之前创建的两个mapper对象
   if (_cm == NULL || !_cm->completed_initialization()) {
     vm_shutdown_during_initialization("Could not create/initialize G1ConcurrentMark");
     return JNI_ENOMEM;
@@ -1844,12 +1899,21 @@ jint G1CollectedHeap::initialize() {
   _cm_thread = _cm->cm_thread();
 
   // Now expand into the initial heap size.
+  // init_byte_size = -Xms(在生产环境下和-Xmx相同)
+  /*
+   * forcus 该方法为核心方法
+   *  作用:
+   *   1. 将预留的虚拟地址空间转换为已提交的物理内存
+   *   2. 创建HeapRegion对象并初始化
+   *   3. 提交所有辅助数据结构的内存
+   */
   if (!expand(init_byte_size, _workers)) {
     vm_shutdown_during_initialization("Failed to allocate initial heap.");
     return JNI_ENOMEM;
   }
 
   // Perform any initialization actions delegated to the policy.
+  // forcus g1策略初始化
   g1_policy()->init(this, &_collection_set);
 
   G1BarrierSet::satb_mark_queue_set().initialize(SATB_Q_CBL_mon,

@@ -340,47 +340,71 @@ bool G1CMRootRegions::wait_until_scan_finished() {
 static uint scale_concurrent_worker_threads(uint num_gc_workers) {
   return MAX2((num_gc_workers + 2) / 4, 1U);
 }
-
+// forcus 在/data/workspace/openjdk11-core/md/g1_concurrent_mark_constructor_analysis.md 文档中有介绍
 G1ConcurrentMark::G1ConcurrentMark(G1CollectedHeap* g1h,
                                    G1RegionToSpaceMapper* prev_bitmap_storage,
                                    G1RegionToSpaceMapper* next_bitmap_storage) :
   // _cm_thread set inside the constructor
+  // forcus 保存G1堆对象指针，提供全局堆信息访问能力
+  // note 并发标记需要频繁访问堆的区域数量(_g1h->max_regions())、堆边界、区域管理器等
   _g1h(g1h),
+  // forcus 初始化完成标志，默认为false，初始化成功后设为true
+  // note 用于在构造函数返回前验证所有初始化步骤是否成功，失败则终止VM启动
   _completed_initialization(false),
-
-  _mark_bitmap_1(),
-  _mark_bitmap_2(),
-  _prev_mark_bitmap(&_mark_bitmap_1),
-  _next_mark_bitmap(&_mark_bitmap_2),
-
-  _heap(_g1h->reserved_region()),
-
-  _root_regions(),
-
-  _global_mark_stack(),
+  // forcus 创建两个标记位图对象（双缓冲机制）
+  // note 每个位图对应堆中所有对象的一位标记，位图大小 = 堆大小 / 对象对齐大小
+  _mark_bitmap_1(), // 默认构造，实际初始化在构造函数体400行
+  _mark_bitmap_2(), // 默认构造，实际初始化在构造函数体401行
+  // forcus 初始化位图指针，实现双缓冲切换
+  // note prev保存已完成的标记结果，next是当前工作区，通过swap_mark_bitmaps()交换指针实现O(1)切换
+  _prev_mark_bitmap(&_mark_bitmap_1), // 指向bitmap1作为"上一轮完成的标记"
+  _next_mark_bitmap(&_mark_bitmap_2), // 指向bitmap2作为"当前正在标记"
+  // forcus 保存G1堆的内存区域范围（起始地址和结束地址）
+  // note 用于边界检查：判断指针是否指向堆内对象，计算对象所属区域等
+  _heap(_g1h->reserved_region()), // 返回MemRegion(start, end)
+  // forcus 根区域跟踪器，管理初始标记时需要扫描的survivor区域
+  // note 根区域是Young GC后残留的对象，必须在并发标记开始前扫描完成
+  _root_regions(), // 默认构造，实际初始化在构造函数体414行
+  // forcus 全局标记栈（溢出栈），用于处理任务队列溢出的灰色对象
+  // note 当任务本地队列满时，将多余的对象批量推入全局栈，支持动态扩展
+  _global_mark_stack(), // 默认构造，实际初始化在构造函数体473行
 
   // _finger set in set_non_marking_state
-
+  // forcus 工作线程ID偏移量，避免与其他GC线程ID冲突
+  // note 并发标记线程ID = _worker_id_offset + 本地索引，确保全局唯一性
   _worker_id_offset(DirtyCardQueueSet::num_par_ids() + G1ConcRefinementThreads),
+  // forcus 最大任务数量 = 并行GC线程数
+  // note 每个ParallelGC线程对应一个标记任务，任务数在VM生命周期内固定
   _max_num_tasks(ParallelGCThreads),
   // _num_active_tasks set in set_non_marking_state()
   // _tasks set inside the constructor
-
+  // forcus 创建任务队列集合，管理所有标记任务的本地队列
+  // note 每个标记线程有独立的任务队列，减少线程间竞争，支持工作窃取负载均衡
   _task_queues(new G1CMTaskQueueSet((int) _max_num_tasks)),
+  // forcus 并行任务终止器，协调多个标记线程的终止时机
+  // note 当所有线程的任务队列和全局栈都为空时，才能确认标记完成
   _terminator(ParallelTaskTerminator((int) _max_num_tasks, _task_queues)),
-
-  _first_overflow_barrier_sync(),
-  _second_overflow_barrier_sync(),
-
+  // forcus 两个溢出同步屏障，处理全局标记栈溢出时的线程同步
+  // note 确保所有线程在重新初始化全局数据结构时处于一致状态
+  _first_overflow_barrier_sync(), // 第一屏障：停止操作全局数据
+  _second_overflow_barrier_sync(), // 第二屏障：确认新数据结构初始化完成
+  // forcus 标记栈溢出标志，volatile确保多线程可见性
+  // note 任何线程检测到溢出时设置，所有线程读取后进入溢出处理流程
   _has_overflown(false),
+  // forcus 并发标记阶段标志，区分并发标记和最终标记(remark)
+  // note true=与应用线程并发，false=STW的remark阶段
   _concurrent(false),
+  // forcus 标记中止标志，Full GC等原因导致标记周期中止
+  // note 设置后所有标记线程立即停止工作，清理资源
   _has_aborted(false),
+  // forcus 溢出重启标志，remark阶段溢出时设置
+  // note 指示需要重新开始一个完整的并发标记周期
   _restart_for_overflow(false),
   _gc_timer_cm(new (ResourceObj::C_HEAP, mtGC) ConcurrentGCTimer()),
   _gc_tracer_cm(new (ResourceObj::C_HEAP, mtGC) G1OldTracer()),
 
   // _verbose_level set below
-
+  // forcus 各阶段时间统计序列，NumberSeq支持统计平均值、标准差等
   _init_times(),
   _remark_times(),
   _remark_mark_times(),

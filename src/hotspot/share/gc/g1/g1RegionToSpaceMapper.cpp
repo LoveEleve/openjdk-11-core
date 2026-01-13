@@ -73,16 +73,25 @@ class G1RegionsLargerThanCommitSizeMapper : public G1RegionToSpaceMapper {
   }
   // forcus 提交 Region
   virtual void commit_regions(uint start_idx, size_t num_regions, WorkGang* pretouch_gang) {
-      // 1. 计算起始页号
+      // 1. 计算起始页号(第一次进来为0)
     size_t const start_page = (size_t)start_idx * _pages_per_region;
-      // 2. 调用底层 commit
-    bool zero_filled = _storage.commit(start_page, num_regions * _pages_per_region);
+      // forcus 调用底层 commit
+    bool zero_filled = _storage.commit(start_page, num_regions * _pages_per_region); // total_page = num_regions * _pages_per_region
+    // 并行预触摸(默认为false)
     if (AlwaysPreTouch) {
       _storage.pretouch(start_page, num_regions * _pages_per_region, pretouch_gang);
     }
-      // 4. 更新 commit 位图
+      // forcus 更新 _commit_map 位图 (0 ~ 2048)
+      /*
+            result:
+             _commit_map内存结构（每个字64位）：
+                字0: [1111111111111111111111111111111111111111111111111111111111111111] (Region 0-63)
+                字1: [1111111111111111111111111111111111111111111111111111111111111111] (Region 64-127)
+                ...
+                字31:[1111111111111111111111111111111111111111111111111111111111111111] (Region 1984-2047)
+       */
     _commit_map.set_range(start_idx, start_idx + num_regions);
-      // 5. 触发监听器回调
+      // forcus 触发监听器回调
     fire_on_commit(start_idx, num_regions, zero_filled);
   }
 

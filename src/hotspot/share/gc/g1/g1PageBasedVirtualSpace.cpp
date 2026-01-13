@@ -127,16 +127,25 @@ bool G1PageBasedVirtualSpace::is_after_last_page(size_t index) const {
   return index == _committed.size();
 }
 
+// forcus start = 0 ,num_pages = 2,097,152(个page)
 void G1PageBasedVirtualSpace::commit_preferred_pages(size_t start, size_t num_pages) {
   vmassert(num_pages > 0, "No full pages to commit");
   vmassert(start + num_pages <= _committed.size(),
            "Tried to commit area from page " SIZE_FORMAT " to page " SIZE_FORMAT " "
            "that is outside of managed space of " SIZE_FORMAT " pages",
            start, start + num_pages, _committed.size());
-
+  // 计算堆内存起始地址(因为start=0,所以这里等于_low_boundary - 24GB位置)
   char* start_addr = page_start(start);
+  // 堆内存大小 所以堆内存范围就是 [start_addr , start_addr + size]
   size_t size = num_pages * _page_size;
-
+  // forcus syscall
+  /*
+   *  int prot = exec ? PROT_READ | PROT_WRITE | PROT_EXEC : PROT_READ | PROT_WRITE; (exec通常为false,所以这里 prot = PROT_READ | PROT_WRITE) note 可读写
+   *   uintptr_t res = (uintptr_t) ::mmap(addr, size, prot, MAP_PRIVATE | MAP_FIXED | MAP_ANONYMOUS, -1, 0); // 私有映射,写时复制 & 使用指定地址，不允许内核选择其他地址(因为之前已经reversed过了) & 匿名映射，不关联文件
+   *    - addr = start_addr(24GB位置)
+   *    - size = size (8GB)
+   *    - ...
+   */
   os::commit_memory_or_exit(start_addr, size, _page_size, _executable,
                             err_msg("Failed to commit area from " PTR_FORMAT " to " PTR_FORMAT " of length " SIZE_FORMAT ".",
                             p2i(start_addr), p2i(start_addr + size), size));
@@ -150,14 +159,15 @@ void G1PageBasedVirtualSpace::commit_tail() {
                             err_msg("Failed to commit tail area from " PTR_FORMAT " to " PTR_FORMAT " of length " SIZE_FORMAT ".",
                             p2i(aligned_end_address), p2i(_high_boundary), _tail_size));
 }
-
+// forcus 真正提交内存
 void G1PageBasedVirtualSpace::commit_internal(size_t start_page, size_t end_page) {
   guarantee(start_page < end_page,
             "Given start page " SIZE_FORMAT " is larger or equal to end page " SIZE_FORMAT, start_page, end_page);
   guarantee(end_page <= _committed.size(),
             "Given end page " SIZE_FORMAT " is beyond end of managed page amount of " SIZE_FORMAT, end_page, _committed.size());
-
+  // 页数
   size_t pages = end_page - start_page;
+  // 一般都是对齐的,这里暂时不需要考虑
   bool need_to_commit_tail = is_after_last_page(end_page) && is_last_page_partial();
 
   // If we have to commit some (partial) tail area, decrease the amount of pages to avoid
@@ -165,7 +175,7 @@ void G1PageBasedVirtualSpace::commit_internal(size_t start_page, size_t end_page
   if (need_to_commit_tail) {
     pages--;
   }
-
+  // forcus 提交内存
   if (pages > 0) {
     commit_preferred_pages(start_page, pages);
   }
@@ -185,14 +195,15 @@ void G1PageBasedVirtualSpace::pretouch_internal(size_t start_page, size_t end_pa
 
   os::pretouch_memory(page_start(start_page), bounded_end_addr(end_page), _page_size);
 }
-
+// forcus 提交内存
 bool G1PageBasedVirtualSpace::commit(size_t start_page, size_t size_in_pages) {
   // We need to make sure to commit all pages covered by the given area.
   guarantee(is_area_uncommitted(start_page, size_in_pages), "Specified area is not uncommitted");
 
   bool zero_filled = true;
+  // 结束页号(起始页号 + 页数)
   size_t end_page = start_page + size_in_pages;
-
+  // 非大页,可以忽略
   if (_special) {
     // Check for dirty pages and update zero_filled if any found.
     if (_dirty.get_next_one_offset(start_page, end_page) < end_page) {
@@ -200,8 +211,9 @@ bool G1PageBasedVirtualSpace::commit(size_t start_page, size_t size_in_pages) {
       _dirty.clear_range(start_page, end_page);
     }
   } else {
-    commit_internal(start_page, end_page);
+    commit_internal(start_page, end_page); // forcus  普通内存：调用commit_internal进行实际提交
   }
+  // forcus 更新已提交位图
   _committed.set_range(start_page, end_page);
 
   return zero_filled;

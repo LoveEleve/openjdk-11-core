@@ -37,14 +37,14 @@ class G1SurvivorRegions;
 class HeapRegion;
 
 class G1CollectionSet {
-  G1CollectedHeap* _g1h;
-  G1Policy* _policy;
+  G1CollectedHeap* _g1h; // G1堆引用
+  G1Policy* _policy; // G1策略引用
 
-  CollectionSetChooser* _cset_chooser;
+  CollectionSetChooser* _cset_chooser; // 收集集合选择器
 
-  uint _eden_region_length;
-  uint _survivor_region_length;
-  uint _old_region_length;
+  uint _eden_region_length; // Eden Region数量
+  uint _survivor_region_length;  // Survivor Region数量
+  uint _old_region_length; // Old Region数量
 
   // The actual collection set as a set of region indices.
   // All entries in _collection_set_regions below _collection_set_cur_length are
@@ -67,13 +67,13 @@ class G1CollectionSet {
   // The associated information that is maintained while the incremental
   // collection set is being built with young regions. Used to populate
   // the recorded info for the evacuation pause.
-
+  // 增量构建状态
   enum CSetBuildType {
-    Active,             // We are actively building the collection set
-    Inactive            // We are not actively building the collection set
+    Active,             // We are actively building the collection set 非活跃状态
+    Inactive            // We are not actively building the collection set 活跃构建状态
   };
 
-  CSetBuildType _inc_build_state;
+  CSetBuildType _inc_build_state; // 增量构建状态
 
   // The number of bytes in the incrementally built collection set.
   // Used to set _collection_set_bytes_used_before at the start of

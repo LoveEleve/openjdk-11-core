@@ -8191,3 +8191,1522 @@
 39^done
 (gdb) 
 40^exit
+=cmd-param-changed,param="logging enabled",value="on"
+=cmd-param-changed,param="breakpoint pending",value="on"
+=cmd-param-changed,param="print pretty",value="on"
+(gdb) 
+1^done
+(gdb) 
+2^done
+(gdb) 
+3^done
+(gdb) 
+4^done
+(gdb) 
+5^done
+(gdb) 
+6^done
+(gdb) 
+7^done
+(gdb) 
+8^done
+(gdb) 
+9^done
+(gdb) 
+10^done,value="off"
+(gdb) 
+&"handle SIGSTOP stop nopass\n"
+~"Signal        Stop\tPrint\tPass to program\tDescription\n"
+~"SIGSTOP       Yes\tYes\tNo\t\tStopped (signal)\n"
+11^done
+(gdb) 
+&"python import gdb; print(gdb.VERSION);\n"
+~"14.1\n"
+12^done
+(gdb) 
+&"info pretty-printer\n"
+~"global pretty-printers:\n"
+~"  builtin\n"
+~"    mpx_bound128\n"
+13^done
+(gdb) 
+&"python import sys; sys.dont_write_bytecode = True; sys.path.insert(0, \"/codev/ide/CL/clion-2024.1.1/bin/gdb/renderers\"); from default.printers import register_default_printers; register_default_printers(None); from libstdcxx.v6.printers import register_libstdcxx_printers; register_libstdcxx_printers(None); from default.libstdcxx_printers import patch_libstdcxx_printers_module; patch_libstdcxx_printers_module(); \n"
+14^done
+(gdb) 
+15^done
+(gdb) 
+&"python from default.commands import register_commands; register_commands();\n"
+16^done
+(gdb) 
+17^done
+(gdb) 
+&"No source file named /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp.\n"
+18^done,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",addr="<PENDING>",pending="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp:1339",times="0",original-location="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp:1339"}
+(gdb) 
+19^done
+(gdb) 
+20^done
+(gdb) 
+21^done
+(gdb) 
+22^done
+(gdb) 
+&"maintenance info sections\n"
+~"Exec file: `/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/java', file type elf64-x86-64.\n"
+~" [0]      0x00000318->0x00000334 at 0x00000318: .interp ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [1]      0x00000338->0x00000378 at 0x00000338: .note.gnu.property ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [2]      0x00000378->0x0000039c at 0x00000378: .note.gnu.build-id ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [3]      0x0000039c->0x000003bc at 0x0000039c: .note.ABI-tag ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [4]      0x000003c0->0x0000045c at 0x000003c0: .hash ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [5]      0x00000460->0x00000484 at 0x00000460: .gnu.hash ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [6]      0x00000488->0x00000668 at 0x00000488: .dynsym ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [7]      0x00000668->0x000007eb at 0x00000668: .dynstr ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [8]      0x000007ec->0x00000814 at 0x000007ec: .gnu.version ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [9]      0x00000818->0x00000858 at 0x00000818: .gnu.version_r ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [10]     0x00000858->0x00000a20 at 0x00000858: .rela.dyn ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [11]     0x00000a20->0x00000b70 at 0x00000a20: .rela.plt ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [12]     0x00001000->0x0000101b at 0x00001000: .init ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [13]     0x00001020->0x00001110 at 0x00001020: .plt ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [14]     0x00001110->0x000015b8 at 0x00001110: .text ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [15]     0x000015b8->0x000015c5 at 0x000015b8: .fini ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [16]     0x00002000->0x0000210d at 0x00002000: .rodata ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [17]     0x00002110->0x00002134 at 0x00002110: .eh_frame_hdr ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [18]     0x00002138->0x000021b4 at 0x00002138: .eh_frame ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [19]     0x00003d10->0x00003d18 at 0x00002d10: .init_array ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [20]     0x00003d18->0x00003d20 at 0x00002d18: .fini_array ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [21]     0x00003d20->0x00003f50 at 0x00002d20: .dynamic ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [22]     0x00003f50->0x00004000 at 0x00002f50: .got ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [23]     0x00004000->0x00004080 at 0x00003000: .data ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [24]     0x00004080->0x00004098 at 0x00003080: .bss ALLOC\n"
+~" [25]     0x00000000->0x00000090 at 0x00003080: .comment READONLY HAS_CONTENTS\n"
+~" [26]     0x00006098->0x000061dc at 0x00003110: .gnu.build.attributes READONLY HAS_CONTENTS\n"
+~" [27]     0x00000000->0x00000030 at 0x00003254: .debug_aranges READONLY HAS_CONTENTS\n"
+~" [28]     0x00000000->0x00000881 at 0x00003284: .debug_info READONLY HAS_CONTENTS\n"
+~" [29]     0x00000000->0x00000181 at 0x00003b05: .debug_abbrev READONLY HAS_CONTENTS\n"
+~" [30]     0x00000000->0x00000201 at 0x00003c86: .debug_line READONLY HAS_CONTENTS\n"
+~" [31]     0x00000000->0x0000054e at 0x00003e87: .debug_str READONLY HAS_CONTENTS\n"
+~" [32]     0x00000000->0x000002f7 at 0x000043d5: .debug_line_str READONLY HAS_CONTENTS\n"
+23^done
+(gdb) 
+24^done
+(gdb) 
+=thread-group-started,id="i1",pid="3988477"
+=thread-created,id="1",group-id="i1"
+=library-loaded,id="/lib64/ld-linux-x86-64.so.2",target-name="/lib64/ld-linux-x86-64.so.2",host-name="/lib64/ld-linux-x86-64.so.2",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7fc7280",to="0x00007ffff7feeb8b"}]
+25^running
+*running,thread-id="all"
+(gdb) 
+=library-loaded,id="/lib64/libtdsp.so",target-name="/lib64/libtdsp.so",host-name="/lib64/libtdsp.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7c00ee0",to="0x00007ffff7c02888"}]
+=library-loaded,id="/lib64/libonion.so",target-name="/lib64/libonion.so",host-name="/lib64/libonion.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7a01060",to="0x00007ffff7a024f8"}]
+=library-loaded,id="/lib64/libz.so.1",target-name="/lib64/libz.so.1",host-name="/lib64/libz.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7f9d650",to="0x00007ffff7faadeb"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7f86620",to="0x00007ffff7f93370"}]
+=library-loaded,id="/lib64/libc.so.6",target-name="/lib64/libc.so.6",host-name="/lib64/libc.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff780cac0",to="0x00007ffff7971fed"}]
+=library-loaded,id="/lib64/libdl.so.2",target-name="/lib64/libdl.so.2",host-name="/lib64/libdl.so.2",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7f7d2c0",to="0x00007ffff7f7d385"}]
+~"[Thread debugging using libthread_db enabled]\n"
+~"Using host libthread_db library \"/lib64/libthread_db.so.1\".\n"
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff59070c0",to="0x00007ffff6a96e52"}]
+=library-loaded,id="/lib64/libstdc++.so.6",target-name="/lib64/libstdc++.so.6",host-name="/lib64/libstdc++.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff5208660",to="0x00007ffff5312432"}]
+=library-loaded,id="/lib64/libm.so.6",target-name="/lib64/libm.so.6",host-name="/lib64/libm.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e966a0",to="0x00007ffff7f0d618"}]
+=library-loaded,id="/lib64/libgcc_s.so.1",target-name="/lib64/libgcc_s.so.1",host-name="/lib64/libgcc_s.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e768e0",to="0x00007ffff7e8c955"}]
+=breakpoint-modified,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",addr="0x00007ffff6093e45",func="G1CollectedHeap::expand(unsigned long, WorkGang*, double*)",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1339",thread-groups=["i1"],times="0",original-location="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp:1339"}
+=thread-created,id="2",group-id="i1"
+~"[New Thread 0x7ffff780b6c0 (LWP 3988525)]\n"
+*running,thread-id="2"
+=library-loaded,id="/lib64/librt.so.1",target-name="/lib64/librt.so.1",host-name="/lib64/librt.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e72300",to="0x00007ffff7e72508"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e60390",to="0x00007ffff7e6bd9d"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e32df0",to="0x00007ffff7e508b2"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e1a210",to="0x00007ffff7e1f003"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e0d320",to="0x00007ffff7e1362f"}]
+=thread-created,id="3",group-id="i1"
+~"[New Thread 0x7ffff55ff6c0 (LWP 3988526)]\n"
+*running,thread-id="3"
+=thread-created,id="4",group-id="i1"
+~"[New Thread 0x7ffff44f26c0 (LWP 3988527)]\n"
+*running,thread-id="4"
+=thread-created,id="5",group-id="i1"
+~"[New Thread 0x7ffff43f06c0 (LWP 3988528)]\n"
+*running,thread-id="5"
+=breakpoint-modified,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",addr="0x00007ffff6093e45",func="G1CollectedHeap::expand(unsigned long, WorkGang*, double*)",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1339",thread-groups=["i1"],times="1",original-location="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp:1339"}
+~"[Switching to Thread 0x7ffff780b6c0 (LWP 3988525)]\n"
+~"\n"
+~"Thread 2 \"java\" hit Breakpoint 1, G1CollectedHeap::expand (this=0x7ffff0031f20, expand_bytes=8589934592, pretouch_workers=0x7ffff003ee80, expand_time_ms=0x0) at /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp:1339\n"
+~"1339\t  size_t aligned_expand_bytes = ReservedSpace::page_align_size_up(expand_bytes);\n"
+*stopped,reason="breakpoint-hit",disp="keep",bkptno="1",frame={addr="0x00007ffff6093e45",func="G1CollectedHeap::expand",args=[{name="this",value="0x7ffff0031f20"},{name="expand_bytes",value="8589934592"},{name="pretouch_workers",value="0x7ffff003ee80"},{name="expand_time_ms",value="0x0"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1339",arch="i386:x86-64"},thread-id="2",stopped-threads="all",core="15"
+(gdb) 
+0^done
+(gdb) 
+26^done,threads=[{id="2",target-id="Thread 0x7ffff780b6c0 (LWP 3988525)",name="java",frame={level="0",addr="0x00007ffff6093e45",func="G1CollectedHeap::expand",args=[{name="this",value="0x7ffff0031f20"},{name="expand_bytes",value="8589934592"},{name="pretouch_workers",value="0x7ffff003ee80"},{name="expand_time_ms",value="0x0"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1339",arch="i386:x86-64"},state="stopped",core="15"}]
+(gdb) 
+27^done,value="replay"
+(gdb) 
+28^done
+(gdb) 
+29^done
+(gdb) 
+30^done,value="att"
+(gdb) 
+31^done,value="auto"
+(gdb) 
+~"The target architecture is set to \"auto\" (currently \"i386:x86-64\").\n"
+32^done
+(gdb) 
+33^done,register-names=["rax","rbx","rcx","rdx","rsi","rdi","rbp","rsp","r8","r9","r10","r11","r12","r13","r14","r15","rip","eflags","cs","ss","ds","es","fs","gs","st0","st1","st2","st3","st4","st5","st6","st7","fctrl","fstat","ftag","fiseg","fioff","foseg","fooff","fop","xmm0","xmm1","xmm2","xmm3","xmm4","xmm5","xmm6","xmm7","xmm8","xmm9","xmm10","xmm11","xmm12","xmm13","xmm14","xmm15","mxcsr","ymm0h","ymm1h","ymm2h","ymm3h","ymm4h","ymm5h","ymm6h","ymm7h","ymm8h","ymm9h","ymm10h","ymm11h","ymm12h","ymm13h","ymm14h","ymm15h","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","fs_base","gs_base","orig_rax","al","bl","cl","dl","sil","dil","bpl","spl","r8l","r9l","r10l","r11l","r12l","r13l","r14l","r15l","ah","bh","ch","dh","ax","bx","cx","dx","si","di","bp","","r8w","r9w","r10w","r11w","r12w","r13w","r14w","r15w","eax","ebx","ecx","edx","esi","edi","ebp","esp","r8d","r9d","r10d","r11d","r12d","r13d","r14d","r15d","ymm0","ymm1","ymm2","ymm3","ymm4","ymm5","ymm6","ymm7","ymm8","ymm9","ymm10","ymm11","ymm12","ymm13","ymm14","ymm15"]
+(gdb) 
+34^done,stack=[frame={level="0",addr="0x00007ffff6093e45",func="G1CollectedHeap::expand",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1339",arch="i386:x86-64"},frame={level="1",addr="0x00007ffff609577b",func="G1CollectedHeap::initialize",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1898",arch="i386:x86-64"},frame={level="2",addr="0x00007ffff695f80a",func="Universe::initialize_heap",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="809",arch="i386:x86-64"},frame={level="3",addr="0x00007ffff695f540",func="universe_init",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="694",arch="i386:x86-64"},frame={level="4",addr="0x00007ffff61efdb5",func="init_globals",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",line="119",arch="i386:x86-64"},frame={level="5",addr="0x00007ffff692b1b6",func="Threads::create_vm",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",line="4060",arch="i386:x86-64"},frame={level="6",addr="0x00007ffff63118c0",func="JNI_CreateJavaVM_inner",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4010",arch="i386:x86-64"},frame={level="7",addr="0x00007ffff6311c30",func="JNI_CreateJavaVM",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4103",arch="i386:x86-64"},frame={level="8",addr="0x00007ffff7f8b5c1",func="InitializeJVM",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="1545",arch="i386:x86-64"},frame={level="9",addr="0x00007ffff7f87fb1",func="JavaMain",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="428",arch="i386:x86-64"},frame={level="10",addr="0x00007ffff7f8fe01",func="ThreadJavaMain",file="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",fullname="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",line="765",arch="i386:x86-64"},frame={level="11",addr="0x00007ffff7875277",func="start_thread",from="/lib64/libc.so.6",arch="i386:x86-64"},frame={level="12",addr="0x00007ffff78fc83c",func="clone3",from="/lib64/libc.so.6",arch="i386:x86-64"}]
+(gdb) 
+35^done,value="0x7ffff780a770"
+(gdb) 
+36^done,variables=[{name="this"},{name="expand_bytes"},{name="pretouch_workers"},{name="expand_time_ms"}],filtered="0"
+(gdb) 
+~"type = /* real type = G1CollectedHeap * const */\n"
+~"G1CollectedHeap * const\n"
+37^done
+(gdb) 
+~"type = size_t\n"
+38^done
+(gdb) 
+~"type = /* real type = WorkGang * */\n"
+~"WorkGang *\n"
+39^done
+(gdb) 
+~"type = double *\n"
+40^done
+(gdb) 
+41^done,name="var1_this",numchild="2",value="0x7ffff0031f20",type="G1CollectedHeap * const",thread-id="2",has_more="0"
+0^done
+(gdb) 
+42^done,name="var2_expand_bytes",numchild="0",value="8589934592",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+43^done,name="var3_pretouch_workers",numchild="2",value="0x7ffff003ee80",type="WorkGang *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+44^done,name="var4_expand_time_ms",numchild="1",value="0x0",type="double *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+45^running
+*running,thread-id="all"
+(gdb) 
+*stopped,reason="end-stepping-range",frame={addr="0x00007ffff6093e55",func="G1CollectedHeap::expand",args=[{name="this",value="0x7ffff0031f20"},{name="expand_bytes",value="8589934592"},{name="pretouch_workers",value="0x7ffff003ee80"},{name="expand_time_ms",value="0x0"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1341",arch="i386:x86-64"},thread-id="2",stopped-threads="all",core="0"
+(gdb) 
+46^done,threads=[{id="2",target-id="Thread 0x7ffff780b6c0 (LWP 3988525)",name="java",frame={level="0",addr="0x00007ffff6093e55",func="G1CollectedHeap::expand",args=[{name="this",value="0x7ffff0031f20"},{name="expand_bytes",value="8589934592"},{name="pretouch_workers",value="0x7ffff003ee80"},{name="expand_time_ms",value="0x0"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1341",arch="i386:x86-64"},state="stopped",core="0"}]
+(gdb) 
+47^done,ndeleted="1"
+(gdb) 
+48^done,ndeleted="1"
+(gdb) 
+49^done,ndeleted="1"
+(gdb) 
+50^done,ndeleted="1"
+(gdb) 
+51^done,stack=[frame={level="0",addr="0x00007ffff6093e55",func="G1CollectedHeap::expand",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1341",arch="i386:x86-64"},frame={level="1",addr="0x00007ffff609577b",func="G1CollectedHeap::initialize",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1898",arch="i386:x86-64"},frame={level="2",addr="0x00007ffff695f80a",func="Universe::initialize_heap",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="809",arch="i386:x86-64"},frame={level="3",addr="0x00007ffff695f540",func="universe_init",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="694",arch="i386:x86-64"},frame={level="4",addr="0x00007ffff61efdb5",func="init_globals",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",line="119",arch="i386:x86-64"},frame={level="5",addr="0x00007ffff692b1b6",func="Threads::create_vm",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",line="4060",arch="i386:x86-64"},frame={level="6",addr="0x00007ffff63118c0",func="JNI_CreateJavaVM_inner",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4010",arch="i386:x86-64"},frame={level="7",addr="0x00007ffff6311c30",func="JNI_CreateJavaVM",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4103",arch="i386:x86-64"},frame={level="8",addr="0x00007ffff7f8b5c1",func="InitializeJVM",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="1545",arch="i386:x86-64"},frame={level="9",addr="0x00007ffff7f87fb1",func="JavaMain",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="428",arch="i386:x86-64"},frame={level="10",addr="0x00007ffff7f8fe01",func="ThreadJavaMain",file="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",fullname="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",line="765",arch="i386:x86-64"},frame={level="11",addr="0x00007ffff7875277",func="start_thread",from="/lib64/libc.so.6",arch="i386:x86-64"},frame={level="12",addr="0x00007ffff78fc83c",func="clone3",from="/lib64/libc.so.6",arch="i386:x86-64"}]
+(gdb) 
+52^done,value="0x7ffff780a770"
+(gdb) 
+53^done,variables=[{name="this"},{name="expand_bytes"},{name="pretouch_workers"},{name="expand_time_ms"},{name="aligned_expand_bytes"}],filtered="0"
+(gdb) 
+~"type = /* real type = G1CollectedHeap * const */\n"
+~"G1CollectedHeap * const\n"
+54^done
+(gdb) 
+~"type = size_t\n"
+55^done
+(gdb) 
+~"type = /* real type = WorkGang * */\n"
+~"WorkGang *\n"
+56^done
+(gdb) 
+~"type = double *\n"
+57^done
+(gdb) 
+~"type = size_t\n"
+58^done
+(gdb) 
+59^done,name="var1_this",numchild="2",value="0x7ffff0031f20",type="G1CollectedHeap * const",thread-id="2",has_more="0"
+0^done
+(gdb) 
+60^done,name="var2_expand_bytes",numchild="0",value="8589934592",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+61^done,name="var3_pretouch_workers",numchild="2",value="0x7ffff003ee80",type="WorkGang *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+62^done,name="var4_expand_time_ms",numchild="1",value="0x0",type="double *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+63^done,name="var5_aligned_expand_bytes",numchild="0",value="8589934592",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+64^running
+*running,thread-id="all"
+(gdb) 
+*stopped,reason="end-stepping-range",frame={addr="0x00007ffff6093e72",func="G1CollectedHeap::expand",args=[{name="this",value="0x7ffff0031f20"},{name="expand_bytes",value="8589934592"},{name="pretouch_workers",value="0x7ffff003ee80"},{name="expand_time_ms",value="0x0"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1344",arch="i386:x86-64"},thread-id="2",stopped-threads="all",core="0"
+(gdb) 
+65^done,threads=[{id="2",target-id="Thread 0x7ffff780b6c0 (LWP 3988525)",name="java",frame={level="0",addr="0x00007ffff6093e72",func="G1CollectedHeap::expand",args=[{name="this",value="0x7ffff0031f20"},{name="expand_bytes",value="8589934592"},{name="pretouch_workers",value="0x7ffff003ee80"},{name="expand_time_ms",value="0x0"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1344",arch="i386:x86-64"},state="stopped",core="0"}]
+(gdb) 
+66^done,ndeleted="1"
+(gdb) 
+67^done,ndeleted="1"
+(gdb) 
+68^done,ndeleted="1"
+(gdb) 
+69^done,ndeleted="1"
+(gdb) 
+70^done,ndeleted="1"
+(gdb) 
+71^done,stack=[frame={level="0",addr="0x00007ffff6093e72",func="G1CollectedHeap::expand",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1344",arch="i386:x86-64"},frame={level="1",addr="0x00007ffff609577b",func="G1CollectedHeap::initialize",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1898",arch="i386:x86-64"},frame={level="2",addr="0x00007ffff695f80a",func="Universe::initialize_heap",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="809",arch="i386:x86-64"},frame={level="3",addr="0x00007ffff695f540",func="universe_init",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="694",arch="i386:x86-64"},frame={level="4",addr="0x00007ffff61efdb5",func="init_globals",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",line="119",arch="i386:x86-64"},frame={level="5",addr="0x00007ffff692b1b6",func="Threads::create_vm",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",line="4060",arch="i386:x86-64"},frame={level="6",addr="0x00007ffff63118c0",func="JNI_CreateJavaVM_inner",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4010",arch="i386:x86-64"},frame={level="7",addr="0x00007ffff6311c30",func="JNI_CreateJavaVM",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4103",arch="i386:x86-64"},frame={level="8",addr="0x00007ffff7f8b5c1",func="InitializeJVM",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="1545",arch="i386:x86-64"},frame={level="9",addr="0x00007ffff7f87fb1",func="JavaMain",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="428",arch="i386:x86-64"},frame={level="10",addr="0x00007ffff7f8fe01",func="ThreadJavaMain",file="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",fullname="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",line="765",arch="i386:x86-64"},frame={level="11",addr="0x00007ffff7875277",func="start_thread",from="/lib64/libc.so.6",arch="i386:x86-64"},frame={level="12",addr="0x00007ffff78fc83c",func="clone3",from="/lib64/libc.so.6",arch="i386:x86-64"}]
+(gdb) 
+72^done,value="0x7ffff780a770"
+(gdb) 
+73^done,variables=[{name="this"},{name="expand_bytes"},{name="pretouch_workers"},{name="expand_time_ms"},{name="aligned_expand_bytes"}],filtered="0"
+(gdb) 
+~"type = /* real type = G1CollectedHeap * const */\n"
+~"G1CollectedHeap * const\n"
+74^done
+(gdb) 
+~"type = size_t\n"
+75^done
+(gdb) 
+~"type = /* real type = WorkGang * */\n"
+~"WorkGang *\n"
+76^done
+(gdb) 
+~"type = double *\n"
+77^done
+(gdb) 
+~"type = size_t\n"
+78^done
+(gdb) 
+79^done,name="var1_this",numchild="2",value="0x7ffff0031f20",type="G1CollectedHeap * const",thread-id="2",has_more="0"
+0^done
+(gdb) 
+80^done,name="var2_expand_bytes",numchild="0",value="8589934592",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+81^done,name="var3_pretouch_workers",numchild="2",value="0x7ffff003ee80",type="WorkGang *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+82^done,name="var4_expand_time_ms",numchild="1",value="0x0",type="double *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+83^done,name="var5_aligned_expand_bytes",numchild="0",value="8589934592",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+84^running
+*running,thread-id="all"
+(gdb) 
+*stopped,reason="end-stepping-range",frame={addr="0x00007ffff6093ea2",func="G1CollectedHeap::expand",args=[{name="this",value="0x7ffff0031f20"},{name="expand_bytes",value="8589934592"},{name="pretouch_workers",value="0x7ffff003ee80"},{name="expand_time_ms",value="0x0"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1347",arch="i386:x86-64"},thread-id="2",stopped-threads="all",core="0"
+(gdb) 
+85^done,threads=[{id="2",target-id="Thread 0x7ffff780b6c0 (LWP 3988525)",name="java",frame={level="0",addr="0x00007ffff6093ea2",func="G1CollectedHeap::expand",args=[{name="this",value="0x7ffff0031f20"},{name="expand_bytes",value="8589934592"},{name="pretouch_workers",value="0x7ffff003ee80"},{name="expand_time_ms",value="0x0"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1347",arch="i386:x86-64"},state="stopped",core="0"}]
+(gdb) 
+86^done,ndeleted="1"
+(gdb) 
+87^done,ndeleted="1"
+(gdb) 
+88^done,ndeleted="1"
+(gdb) 
+89^done,ndeleted="1"
+(gdb) 
+90^done,ndeleted="1"
+(gdb) 
+91^done,stack=[frame={level="0",addr="0x00007ffff6093ea2",func="G1CollectedHeap::expand",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1347",arch="i386:x86-64"},frame={level="1",addr="0x00007ffff609577b",func="G1CollectedHeap::initialize",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1898",arch="i386:x86-64"},frame={level="2",addr="0x00007ffff695f80a",func="Universe::initialize_heap",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="809",arch="i386:x86-64"},frame={level="3",addr="0x00007ffff695f540",func="universe_init",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="694",arch="i386:x86-64"},frame={level="4",addr="0x00007ffff61efdb5",func="init_globals",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",line="119",arch="i386:x86-64"},frame={level="5",addr="0x00007ffff692b1b6",func="Threads::create_vm",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",line="4060",arch="i386:x86-64"},frame={level="6",addr="0x00007ffff63118c0",func="JNI_CreateJavaVM_inner",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4010",arch="i386:x86-64"},frame={level="7",addr="0x00007ffff6311c30",func="JNI_CreateJavaVM",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4103",arch="i386:x86-64"},frame={level="8",addr="0x00007ffff7f8b5c1",func="InitializeJVM",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="1545",arch="i386:x86-64"},frame={level="9",addr="0x00007ffff7f87fb1",func="JavaMain",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="428",arch="i386:x86-64"},frame={level="10",addr="0x00007ffff7f8fe01",func="ThreadJavaMain",file="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",fullname="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",line="765",arch="i386:x86-64"},frame={level="11",addr="0x00007ffff7875277",func="start_thread",from="/lib64/libc.so.6",arch="i386:x86-64"},frame={level="12",addr="0x00007ffff78fc83c",func="clone3",from="/lib64/libc.so.6",arch="i386:x86-64"}]
+(gdb) 
+92^done,value="0x7ffff780a770"
+(gdb) 
+93^done,variables=[{name="this"},{name="expand_bytes"},{name="pretouch_workers"},{name="expand_time_ms"},{name="aligned_expand_bytes"}],filtered="0"
+(gdb) 
+~"type = /* real type = G1CollectedHeap * const */\n"
+~"G1CollectedHeap * const\n"
+94^done
+(gdb) 
+~"type = size_t\n"
+95^done
+(gdb) 
+~"type = /* real type = WorkGang * */\n"
+~"WorkGang *\n"
+96^done
+(gdb) 
+~"type = double *\n"
+97^done
+(gdb) 
+~"type = size_t\n"
+98^done
+(gdb) 
+99^done,name="var1_this",numchild="2",value="0x7ffff0031f20",type="G1CollectedHeap * const",thread-id="2",has_more="0"
+0^done
+(gdb) 
+100^done,name="var2_expand_bytes",numchild="0",value="8589934592",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+101^done,name="var3_pretouch_workers",numchild="2",value="0x7ffff003ee80",type="WorkGang *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+102^done,name="var4_expand_time_ms",numchild="1",value="0x0",type="double *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+103^done,name="var5_aligned_expand_bytes",numchild="0",value="8589934592",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+104^running
+*running,thread-id="all"
+(gdb) 
+*stopped,reason="end-stepping-range",frame={addr="0x00007ffff60a0a26",func="G1CollectedHeap::is_maximal_no_gc",args=[{name="this",value="0x7ffff0031f20"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.hpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.hpp",line="1024",arch="i386:x86-64"},thread-id="2",stopped-threads="all",core="11"
+(gdb) 
+105^done,threads=[{id="2",target-id="Thread 0x7ffff780b6c0 (LWP 3988525)",name="java",frame={level="0",addr="0x00007ffff60a0a26",func="G1CollectedHeap::is_maximal_no_gc",args=[{name="this",value="0x7ffff0031f20"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.hpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.hpp",line="1024",arch="i386:x86-64"},state="stopped",core="11"}]
+(gdb) 
+106^done,ndeleted="1"
+(gdb) 
+107^done,ndeleted="1"
+(gdb) 
+108^done,ndeleted="1"
+(gdb) 
+109^done,ndeleted="1"
+(gdb) 
+110^done,ndeleted="1"
+(gdb) 
+111^done,stack=[frame={level="0",addr="0x00007ffff60a0a26",func="G1CollectedHeap::is_maximal_no_gc",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.hpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.hpp",line="1024",arch="i386:x86-64"},frame={level="1",addr="0x00007ffff6093ebb",func="G1CollectedHeap::expand",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1347",arch="i386:x86-64"},frame={level="2",addr="0x00007ffff609577b",func="G1CollectedHeap::initialize",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1898",arch="i386:x86-64"},frame={level="3",addr="0x00007ffff695f80a",func="Universe::initialize_heap",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="809",arch="i386:x86-64"},frame={level="4",addr="0x00007ffff695f540",func="universe_init",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="694",arch="i386:x86-64"},frame={level="5",addr="0x00007ffff61efdb5",func="init_globals",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",line="119",arch="i386:x86-64"},frame={level="6",addr="0x00007ffff692b1b6",func="Threads::create_vm",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",line="4060",arch="i386:x86-64"},frame={level="7",addr="0x00007ffff63118c0",func="JNI_CreateJavaVM_inner",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4010",arch="i386:x86-64"},frame={level="8",addr="0x00007ffff6311c30",func="JNI_CreateJavaVM",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4103",arch="i386:x86-64"},frame={level="9",addr="0x00007ffff7f8b5c1",func="InitializeJVM",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="1545",arch="i386:x86-64"},frame={level="10",addr="0x00007ffff7f87fb1",func="JavaMain",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="428",arch="i386:x86-64"},frame={level="11",addr="0x00007ffff7f8fe01",func="ThreadJavaMain",file="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",fullname="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",line="765",arch="i386:x86-64"},frame={level="12",addr="0x00007ffff7875277",func="start_thread",from="/lib64/libc.so.6",arch="i386:x86-64"},frame={level="13",addr="0x00007ffff78fc83c",func="clone3",from="/lib64/libc.so.6",arch="i386:x86-64"}]
+(gdb) 
+112^done,value="0x7ffff780a710"
+(gdb) 
+113^done,variables=[],filtered="1"
+(gdb) 
+114^running
+*running,thread-id="all"
+(gdb) 
+*stopped,reason="end-stepping-range",frame={addr="0x00007ffff60a0a3d",func="G1CollectedHeap::is_maximal_no_gc",args=[{name="this",value="0x7ffff0031f20"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.hpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.hpp",line="1025",arch="i386:x86-64"},thread-id="2",stopped-threads="all",core="8"
+(gdb) 
+115^done,threads=[{id="2",target-id="Thread 0x7ffff780b6c0 (LWP 3988525)",name="java",frame={level="0",addr="0x00007ffff60a0a3d",func="G1CollectedHeap::is_maximal_no_gc",args=[{name="this",value="0x7ffff0031f20"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.hpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.hpp",line="1025",arch="i386:x86-64"},state="stopped",core="8"}]
+(gdb) 
+116^done,stack=[frame={level="0",addr="0x00007ffff60a0a3d",func="G1CollectedHeap::is_maximal_no_gc",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.hpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.hpp",line="1025",arch="i386:x86-64"},frame={level="1",addr="0x00007ffff6093ebb",func="G1CollectedHeap::expand",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1347",arch="i386:x86-64"},frame={level="2",addr="0x00007ffff609577b",func="G1CollectedHeap::initialize",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1898",arch="i386:x86-64"},frame={level="3",addr="0x00007ffff695f80a",func="Universe::initialize_heap",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="809",arch="i386:x86-64"},frame={level="4",addr="0x00007ffff695f540",func="universe_init",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="694",arch="i386:x86-64"},frame={level="5",addr="0x00007ffff61efdb5",func="init_globals",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",line="119",arch="i386:x86-64"},frame={level="6",addr="0x00007ffff692b1b6",func="Threads::create_vm",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",line="4060",arch="i386:x86-64"},frame={level="7",addr="0x00007ffff63118c0",func="JNI_CreateJavaVM_inner",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4010",arch="i386:x86-64"},frame={level="8",addr="0x00007ffff6311c30",func="JNI_CreateJavaVM",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4103",arch="i386:x86-64"},frame={level="9",addr="0x00007ffff7f8b5c1",func="InitializeJVM",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="1545",arch="i386:x86-64"},frame={level="10",addr="0x00007ffff7f87fb1",func="JavaMain",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="428",arch="i386:x86-64"},frame={level="11",addr="0x00007ffff7f8fe01",func="ThreadJavaMain",file="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",fullname="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",line="765",arch="i386:x86-64"},frame={level="12",addr="0x00007ffff7875277",func="start_thread",from="/lib64/libc.so.6",arch="i386:x86-64"},frame={level="13",addr="0x00007ffff78fc83c",func="clone3",from="/lib64/libc.so.6",arch="i386:x86-64"}]
+(gdb) 
+117^done,value="0x7ffff780a710"
+(gdb) 
+118^done,variables=[],filtered="1"
+(gdb) 
+119^done,name="var1__hrmavailable",numchild="0",value="2048",type="unsigned int",has_more="0"
+0^done
+(gdb) 
+120^done,value="0x7ffff780a710"
+(gdb) 
+121^done,variables=[],filtered="1"
+(gdb) 
+122^running
+*running,thread-id="all"
+(gdb) 
+*stopped,reason="end-stepping-range",frame={addr="0x00007ffff6093ebb",func="G1CollectedHeap::expand",args=[{name="this",value="0x7ffff0031f20"},{name="expand_bytes",value="8589934592"},{name="pretouch_workers",value="0x7ffff003ee80"},{name="expand_time_ms",value="0x0"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1347",arch="i386:x86-64"},thread-id="2",stopped-threads="all",core="8"
+(gdb) 
+123^done,threads=[{id="2",target-id="Thread 0x7ffff780b6c0 (LWP 3988525)",name="java",frame={level="0",addr="0x00007ffff6093ebb",func="G1CollectedHeap::expand",args=[{name="this",value="0x7ffff0031f20"},{name="expand_bytes",value="8589934592"},{name="pretouch_workers",value="0x7ffff003ee80"},{name="expand_time_ms",value="0x0"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1347",arch="i386:x86-64"},state="stopped",core="8"}]
+(gdb) 
+124^done,ndeleted="1"
+(gdb) 
+125^done,stack=[frame={level="0",addr="0x00007ffff6093ebb",func="G1CollectedHeap::expand",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1347",arch="i386:x86-64"},frame={level="1",addr="0x00007ffff609577b",func="G1CollectedHeap::initialize",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1898",arch="i386:x86-64"},frame={level="2",addr="0x00007ffff695f80a",func="Universe::initialize_heap",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="809",arch="i386:x86-64"},frame={level="3",addr="0x00007ffff695f540",func="universe_init",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="694",arch="i386:x86-64"},frame={level="4",addr="0x00007ffff61efdb5",func="init_globals",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",line="119",arch="i386:x86-64"},frame={level="5",addr="0x00007ffff692b1b6",func="Threads::create_vm",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",line="4060",arch="i386:x86-64"},frame={level="6",addr="0x00007ffff63118c0",func="JNI_CreateJavaVM_inner",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4010",arch="i386:x86-64"},frame={level="7",addr="0x00007ffff6311c30",func="JNI_CreateJavaVM",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4103",arch="i386:x86-64"},frame={level="8",addr="0x00007ffff7f8b5c1",func="InitializeJVM",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="1545",arch="i386:x86-64"},frame={level="9",addr="0x00007ffff7f87fb1",func="JavaMain",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="428",arch="i386:x86-64"},frame={level="10",addr="0x00007ffff7f8fe01",func="ThreadJavaMain",file="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",fullname="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",line="765",arch="i386:x86-64"},frame={level="11",addr="0x00007ffff7875277",func="start_thread",from="/lib64/libc.so.6",arch="i386:x86-64"},frame={level="12",addr="0x00007ffff78fc83c",func="clone3",from="/lib64/libc.so.6",arch="i386:x86-64"}]
+(gdb) 
+126^done,value="0x7ffff780a770"
+(gdb) 
+127^done,variables=[{name="this"},{name="expand_bytes"},{name="pretouch_workers"},{name="expand_time_ms"},{name="aligned_expand_bytes"}],filtered="0"
+(gdb) 
+~"type = /* real type = G1CollectedHeap * const */\n"
+~"G1CollectedHeap * const\n"
+128^done
+(gdb) 
+~"type = size_t\n"
+129^done
+(gdb) 
+~"type = /* real type = WorkGang * */\n"
+~"WorkGang *\n"
+130^done
+(gdb) 
+~"type = double *\n"
+131^done
+(gdb) 
+~"type = size_t\n"
+132^done
+(gdb) 
+133^running
+*running,thread-id="all"
+(gdb) 
+*stopped,reason="end-stepping-range",frame={addr="0x00007ffff6093eee",func="G1CollectedHeap::expand",args=[{name="this",value="0x7ffff0031f20"},{name="expand_bytes",value="8589934592"},{name="pretouch_workers",value="0x7ffff003ee80"},{name="expand_time_ms",value="0x0"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1352",arch="i386:x86-64"},thread-id="2",stopped-threads="all",core="13"
+(gdb) 
+134^done,threads=[{id="2",target-id="Thread 0x7ffff780b6c0 (LWP 3988525)",name="java",frame={level="0",addr="0x00007ffff6093eee",func="G1CollectedHeap::expand",args=[{name="this",value="0x7ffff0031f20"},{name="expand_bytes",value="8589934592"},{name="pretouch_workers",value="0x7ffff003ee80"},{name="expand_time_ms",value="0x0"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1352",arch="i386:x86-64"},state="stopped",core="13"}]
+(gdb) 
+135^done,stack=[frame={level="0",addr="0x00007ffff6093eee",func="G1CollectedHeap::expand",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1352",arch="i386:x86-64"},frame={level="1",addr="0x00007ffff609577b",func="G1CollectedHeap::initialize",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1898",arch="i386:x86-64"},frame={level="2",addr="0x00007ffff695f80a",func="Universe::initialize_heap",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="809",arch="i386:x86-64"},frame={level="3",addr="0x00007ffff695f540",func="universe_init",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="694",arch="i386:x86-64"},frame={level="4",addr="0x00007ffff61efdb5",func="init_globals",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",line="119",arch="i386:x86-64"},frame={level="5",addr="0x00007ffff692b1b6",func="Threads::create_vm",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",line="4060",arch="i386:x86-64"},frame={level="6",addr="0x00007ffff63118c0",func="JNI_CreateJavaVM_inner",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4010",arch="i386:x86-64"},frame={level="7",addr="0x00007ffff6311c30",func="JNI_CreateJavaVM",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4103",arch="i386:x86-64"},frame={level="8",addr="0x00007ffff7f8b5c1",func="InitializeJVM",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="1545",arch="i386:x86-64"},frame={level="9",addr="0x00007ffff7f87fb1",func="JavaMain",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="428",arch="i386:x86-64"},frame={level="10",addr="0x00007ffff7f8fe01",func="ThreadJavaMain",file="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",fullname="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",line="765",arch="i386:x86-64"},frame={level="11",addr="0x00007ffff7875277",func="start_thread",from="/lib64/libc.so.6",arch="i386:x86-64"},frame={level="12",addr="0x00007ffff78fc83c",func="clone3",from="/lib64/libc.so.6",arch="i386:x86-64"}]
+(gdb) 
+136^done,value="0x7ffff780a770"
+(gdb) 
+137^done,variables=[{name="this"},{name="expand_bytes"},{name="pretouch_workers"},{name="expand_time_ms"},{name="aligned_expand_bytes"}],filtered="0"
+(gdb) 
+~"type = /* real type = G1CollectedHeap * const */\n"
+~"G1CollectedHeap * const\n"
+138^done
+(gdb) 
+~"type = size_t\n"
+139^done
+(gdb) 
+~"type = /* real type = WorkGang * */\n"
+~"WorkGang *\n"
+140^done
+(gdb) 
+~"type = double *\n"
+141^done
+(gdb) 
+~"type = size_t\n"
+142^done
+(gdb) 
+143^done,name="var1_this",numchild="2",value="0x7ffff0031f20",type="G1CollectedHeap * const",thread-id="2",has_more="0"
+0^done
+(gdb) 
+144^done,name="var2_expand_bytes",numchild="0",value="8589934592",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+145^done,name="var3_pretouch_workers",numchild="2",value="0x7ffff003ee80",type="WorkGang *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+146^done,name="var4_expand_time_ms",numchild="1",value="0x0",type="double *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+147^done,name="var5_aligned_expand_bytes",numchild="0",value="8589934592",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+148^running
+*running,thread-id="all"
+(gdb) 
+*stopped,reason="end-stepping-range",frame={addr="0x00007ffff6093efc",func="G1CollectedHeap::expand",args=[{name="this",value="0x7ffff0031f20"},{name="expand_bytes",value="8589934592"},{name="pretouch_workers",value="0x7ffff003ee80"},{name="expand_time_ms",value="0x0"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1353",arch="i386:x86-64"},thread-id="2",stopped-threads="all",core="11"
+(gdb) 
+149^done,threads=[{id="2",target-id="Thread 0x7ffff780b6c0 (LWP 3988525)",name="java",frame={level="0",addr="0x00007ffff6093efc",func="G1CollectedHeap::expand",args=[{name="this",value="0x7ffff0031f20"},{name="expand_bytes",value="8589934592"},{name="pretouch_workers",value="0x7ffff003ee80"},{name="expand_time_ms",value="0x0"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1353",arch="i386:x86-64"},state="stopped",core="11"}]
+(gdb) 
+150^done,ndeleted="1"
+(gdb) 
+151^done,ndeleted="1"
+(gdb) 
+152^done,ndeleted="1"
+(gdb) 
+153^done,ndeleted="1"
+(gdb) 
+154^done,ndeleted="1"
+(gdb) 
+155^done,stack=[frame={level="0",addr="0x00007ffff6093efc",func="G1CollectedHeap::expand",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1353",arch="i386:x86-64"},frame={level="1",addr="0x00007ffff609577b",func="G1CollectedHeap::initialize",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1898",arch="i386:x86-64"},frame={level="2",addr="0x00007ffff695f80a",func="Universe::initialize_heap",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="809",arch="i386:x86-64"},frame={level="3",addr="0x00007ffff695f540",func="universe_init",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="694",arch="i386:x86-64"},frame={level="4",addr="0x00007ffff61efdb5",func="init_globals",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",line="119",arch="i386:x86-64"},frame={level="5",addr="0x00007ffff692b1b6",func="Threads::create_vm",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",line="4060",arch="i386:x86-64"},frame={level="6",addr="0x00007ffff63118c0",func="JNI_CreateJavaVM_inner",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4010",arch="i386:x86-64"},frame={level="7",addr="0x00007ffff6311c30",func="JNI_CreateJavaVM",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4103",arch="i386:x86-64"},frame={level="8",addr="0x00007ffff7f8b5c1",func="InitializeJVM",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="1545",arch="i386:x86-64"},frame={level="9",addr="0x00007ffff7f87fb1",func="JavaMain",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="428",arch="i386:x86-64"},frame={level="10",addr="0x00007ffff7f8fe01",func="ThreadJavaMain",file="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",fullname="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",line="765",arch="i386:x86-64"},frame={level="11",addr="0x00007ffff7875277",func="start_thread",from="/lib64/libc.so.6",arch="i386:x86-64"},frame={level="12",addr="0x00007ffff78fc83c",func="clone3",from="/lib64/libc.so.6",arch="i386:x86-64"}]
+(gdb) 
+156^done,value="0x7ffff780a770"
+(gdb) 
+157^done,variables=[{name="this"},{name="expand_bytes"},{name="pretouch_workers"},{name="expand_time_ms"},{name="aligned_expand_bytes"},{name="expand_heap_start_time_sec"}],filtered="0"
+(gdb) 
+~"type = /* real type = G1CollectedHeap * const */\n"
+~"G1CollectedHeap * const\n"
+158^done
+(gdb) 
+~"type = size_t\n"
+159^done
+(gdb) 
+~"type = /* real type = WorkGang * */\n"
+~"WorkGang *\n"
+160^done
+(gdb) 
+~"type = double *\n"
+161^done
+(gdb) 
+~"type = size_t\n"
+162^done
+(gdb) 
+~"type = double\n"
+163^done
+(gdb) 
+164^done,name="var1_this",numchild="2",value="0x7ffff0031f20",type="G1CollectedHeap * const",thread-id="2",has_more="0"
+0^done
+(gdb) 
+165^done,name="var2_expand_bytes",numchild="0",value="8589934592",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+166^done,name="var3_pretouch_workers",numchild="2",value="0x7ffff003ee80",type="WorkGang *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+167^done,name="var4_expand_time_ms",numchild="1",value="0x0",type="double *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+168^done,name="var5_aligned_expand_bytes",numchild="0",value="8589934592",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+169^done,name="var6_expand_heap_start_time_sec",numchild="0",value="112.35225051099999",type="double",thread-id="2",has_more="0"
+0^done
+(gdb) 
+170^running
+*running,thread-id="all"
+(gdb) 
+*stopped,reason="end-stepping-range",frame={addr="0x00007ffff6093f15",func="G1CollectedHeap::expand",args=[{name="this",value="0x7ffff0031f20"},{name="expand_bytes",value="8589934592"},{name="pretouch_workers",value="0x7ffff003ee80"},{name="expand_time_ms",value="0x0"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1354",arch="i386:x86-64"},thread-id="2",stopped-threads="all",core="11"
+(gdb) 
+171^done,threads=[{id="2",target-id="Thread 0x7ffff780b6c0 (LWP 3988525)",name="java",frame={level="0",addr="0x00007ffff6093f15",func="G1CollectedHeap::expand",args=[{name="this",value="0x7ffff0031f20"},{name="expand_bytes",value="8589934592"},{name="pretouch_workers",value="0x7ffff003ee80"},{name="expand_time_ms",value="0x0"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1354",arch="i386:x86-64"},state="stopped",core="11"}]
+(gdb) 
+172^done,ndeleted="1"
+(gdb) 
+173^done,ndeleted="1"
+(gdb) 
+174^done,ndeleted="1"
+(gdb) 
+175^done,ndeleted="1"
+(gdb) 
+176^done,ndeleted="1"
+(gdb) 
+177^done,ndeleted="1"
+(gdb) 
+178^done,stack=[frame={level="0",addr="0x00007ffff6093f15",func="G1CollectedHeap::expand",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1354",arch="i386:x86-64"},frame={level="1",addr="0x00007ffff609577b",func="G1CollectedHeap::initialize",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1898",arch="i386:x86-64"},frame={level="2",addr="0x00007ffff695f80a",func="Universe::initialize_heap",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="809",arch="i386:x86-64"},frame={level="3",addr="0x00007ffff695f540",func="universe_init",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="694",arch="i386:x86-64"},frame={level="4",addr="0x00007ffff61efdb5",func="init_globals",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",line="119",arch="i386:x86-64"},frame={level="5",addr="0x00007ffff692b1b6",func="Threads::create_vm",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",line="4060",arch="i386:x86-64"},frame={level="6",addr="0x00007ffff63118c0",func="JNI_CreateJavaVM_inner",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4010",arch="i386:x86-64"},frame={level="7",addr="0x00007ffff6311c30",func="JNI_CreateJavaVM",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4103",arch="i386:x86-64"},frame={level="8",addr="0x00007ffff7f8b5c1",func="InitializeJVM",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="1545",arch="i386:x86-64"},frame={level="9",addr="0x00007ffff7f87fb1",func="JavaMain",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="428",arch="i386:x86-64"},frame={level="10",addr="0x00007ffff7f8fe01",func="ThreadJavaMain",file="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",fullname="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",line="765",arch="i386:x86-64"},frame={level="11",addr="0x00007ffff7875277",func="start_thread",from="/lib64/libc.so.6",arch="i386:x86-64"},frame={level="12",addr="0x00007ffff78fc83c",func="clone3",from="/lib64/libc.so.6",arch="i386:x86-64"}]
+(gdb) 
+179^done,value="0x7ffff780a770"
+(gdb) 
+180^done,variables=[{name="this"},{name="expand_bytes"},{name="pretouch_workers"},{name="expand_time_ms"},{name="aligned_expand_bytes"},{name="expand_heap_start_time_sec"},{name="regions_to_expand"}],filtered="0"
+(gdb) 
+~"type = /* real type = G1CollectedHeap * const */\n"
+~"G1CollectedHeap * const\n"
+181^done
+(gdb) 
+~"type = size_t\n"
+182^done
+(gdb) 
+~"type = /* real type = WorkGang * */\n"
+~"WorkGang *\n"
+183^done
+(gdb) 
+~"type = double *\n"
+184^done
+(gdb) 
+~"type = size_t\n"
+185^done
+(gdb) 
+~"type = double\n"
+186^done
+(gdb) 
+~"type = uint\n"
+187^done
+(gdb) 
+188^done,name="var1_this",numchild="2",value="0x7ffff0031f20",type="G1CollectedHeap * const",thread-id="2",has_more="0"
+0^done
+(gdb) 
+189^done,name="var2_expand_bytes",numchild="0",value="8589934592",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+190^done,name="var3_pretouch_workers",numchild="2",value="0x7ffff003ee80",type="WorkGang *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+191^done,name="var4_expand_time_ms",numchild="1",value="0x0",type="double *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+192^done,name="var5_aligned_expand_bytes",numchild="0",value="8589934592",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+193^done,name="var6_expand_heap_start_time_sec",numchild="0",value="112.35225051099999",type="double",thread-id="2",has_more="0"
+0^done
+(gdb) 
+194^done,name="var7_regions_to_expand",numchild="0",value="2048",type="uint",thread-id="2",has_more="0"
+0^done
+(gdb) 
+195^running
+*running,thread-id="all"
+(gdb) 
+*stopped,reason="end-stepping-range",frame={addr="0x00007ffff6093f77",func="G1CollectedHeap::expand",args=[{name="this",value="0x7ffff0031f20"},{name="expand_bytes",value="8589934592"},{name="pretouch_workers",value="0x7ffff003ee80"},{name="expand_time_ms",value="0x0"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1356",arch="i386:x86-64"},thread-id="2",stopped-threads="all",core="3"
+(gdb) 
+196^done,threads=[{id="2",target-id="Thread 0x7ffff780b6c0 (LWP 3988525)",name="java",frame={level="0",addr="0x00007ffff6093f77",func="G1CollectedHeap::expand",args=[{name="this",value="0x7ffff0031f20"},{name="expand_bytes",value="8589934592"},{name="pretouch_workers",value="0x7ffff003ee80"},{name="expand_time_ms",value="0x0"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1356",arch="i386:x86-64"},state="stopped",core="3"}]
+(gdb) 
+197^done,ndeleted="1"
+(gdb) 
+198^done,ndeleted="1"
+(gdb) 
+199^done,ndeleted="1"
+(gdb) 
+200^done,ndeleted="1"
+(gdb) 
+201^done,ndeleted="1"
+(gdb) 
+202^done,ndeleted="1"
+(gdb) 
+203^done,ndeleted="1"
+(gdb) 
+204^done,stack=[frame={level="0",addr="0x00007ffff6093f77",func="G1CollectedHeap::expand",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1356",arch="i386:x86-64"},frame={level="1",addr="0x00007ffff609577b",func="G1CollectedHeap::initialize",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1898",arch="i386:x86-64"},frame={level="2",addr="0x00007ffff695f80a",func="Universe::initialize_heap",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="809",arch="i386:x86-64"},frame={level="3",addr="0x00007ffff695f540",func="universe_init",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="694",arch="i386:x86-64"},frame={level="4",addr="0x00007ffff61efdb5",func="init_globals",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",line="119",arch="i386:x86-64"},frame={level="5",addr="0x00007ffff692b1b6",func="Threads::create_vm",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",line="4060",arch="i386:x86-64"},frame={level="6",addr="0x00007ffff63118c0",func="JNI_CreateJavaVM_inner",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4010",arch="i386:x86-64"},frame={level="7",addr="0x00007ffff6311c30",func="JNI_CreateJavaVM",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4103",arch="i386:x86-64"},frame={level="8",addr="0x00007ffff7f8b5c1",func="InitializeJVM",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="1545",arch="i386:x86-64"},frame={level="9",addr="0x00007ffff7f87fb1",func="JavaMain",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="428",arch="i386:x86-64"},frame={level="10",addr="0x00007ffff7f8fe01",func="ThreadJavaMain",file="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",fullname="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",line="765",arch="i386:x86-64"},frame={level="11",addr="0x00007ffff7875277",func="start_thread",from="/lib64/libc.so.6",arch="i386:x86-64"},frame={level="12",addr="0x00007ffff78fc83c",func="clone3",from="/lib64/libc.so.6",arch="i386:x86-64"}]
+(gdb) 
+205^done,value="0x7ffff780a770"
+(gdb) 
+206^done,variables=[{name="this"},{name="expand_bytes"},{name="pretouch_workers"},{name="expand_time_ms"},{name="aligned_expand_bytes"},{name="expand_heap_start_time_sec"},{name="regions_to_expand"}],filtered="0"
+(gdb) 
+~"type = /* real type = G1CollectedHeap * const */\n"
+~"G1CollectedHeap * const\n"
+207^done
+(gdb) 
+~"type = size_t\n"
+208^done
+(gdb) 
+~"type = /* real type = WorkGang * */\n"
+~"WorkGang *\n"
+209^done
+(gdb) 
+~"type = double *\n"
+210^done
+(gdb) 
+~"type = size_t\n"
+211^done
+(gdb) 
+~"type = double\n"
+212^done
+(gdb) 
+~"type = uint\n"
+213^done
+(gdb) 
+214^done,name="var1_this",numchild="2",value="0x7ffff0031f20",type="G1CollectedHeap * const",thread-id="2",has_more="0"
+0^done
+(gdb) 
+215^done,name="var2_expand_bytes",numchild="0",value="8589934592",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+216^done,name="var3_pretouch_workers",numchild="2",value="0x7ffff003ee80",type="WorkGang *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+217^done,name="var4_expand_time_ms",numchild="1",value="0x0",type="double *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+218^done,name="var5_aligned_expand_bytes",numchild="0",value="8589934592",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+219^done,name="var6_expand_heap_start_time_sec",numchild="0",value="112.35225051099999",type="double",thread-id="2",has_more="0"
+0^done
+(gdb) 
+220^done,name="var7_regions_to_expand",numchild="0",value="2048",type="uint",thread-id="2",has_more="0"
+0^done
+(gdb) 
+&"kill\n"
+~"Kill the program being debugged? (y or n) [answered Y; input not from terminal]\n"
+=thread-exited,id="1",group-id="i1"
+=thread-exited,id="2",group-id="i1"
+=thread-exited,id="3",group-id="i1"
+=thread-exited,id="4",group-id="i1"
+=thread-exited,id="5",group-id="i1"
+=thread-group-exited,id="i1"
+~"[Inferior 1 (process 3988477) killed]\n"
+221^done
+(gdb) 
+222^exit
+=cmd-param-changed,param="logging enabled",value="on"
+=cmd-param-changed,param="breakpoint pending",value="on"
+=cmd-param-changed,param="print pretty",value="on"
+(gdb) 
+1^done
+(gdb) 
+2^done
+(gdb) 
+3^done
+(gdb) 
+4^done
+(gdb) 
+5^done
+(gdb) 
+6^done
+(gdb) 
+7^done
+(gdb) 
+8^done
+(gdb) 
+9^done
+(gdb) 
+10^done,value="off"
+(gdb) 
+&"handle SIGSTOP stop nopass\n"
+~"Signal        Stop\tPrint\tPass to program\tDescription\n"
+~"SIGSTOP       Yes\tYes\tNo\t\tStopped (signal)\n"
+11^done
+(gdb) 
+&"python import gdb; print(gdb.VERSION);\n"
+~"14.1\n"
+12^done
+(gdb) 
+&"info pretty-printer\n"
+~"global pretty-printers:\n"
+~"  builtin\n"
+~"    mpx_bound128\n"
+13^done
+(gdb) 
+&"python import sys; sys.dont_write_bytecode = True; sys.path.insert(0, \"/codev/ide/CL/clion-2024.1.1/bin/gdb/renderers\"); from default.printers import register_default_printers; register_default_printers(None); from libstdcxx.v6.printers import register_libstdcxx_printers; register_libstdcxx_printers(None); from default.libstdcxx_printers import patch_libstdcxx_printers_module; patch_libstdcxx_printers_module(); \n"
+14^done
+(gdb) 
+15^done
+(gdb) 
+&"python from default.commands import register_commands; register_commands();\n"
+16^done
+(gdb) 
+17^done
+(gdb) 
+&"No source file named /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp.\n"
+18^done,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",addr="<PENDING>",pending="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp:165",times="0",original-location="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp:165"}
+(gdb) 
+19^done
+(gdb) 
+20^done
+(gdb) 
+21^done
+(gdb) 
+22^done
+(gdb) 
+&"maintenance info sections\n"
+~"Exec file: `/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/java', file type elf64-x86-64.\n"
+~" [0]      0x00000318->0x00000334 at 0x00000318: .interp ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [1]      0x00000338->0x00000378 at 0x00000338: .note.gnu.property ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [2]      0x00000378->0x0000039c at 0x00000378: .note.gnu.build-id ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [3]      0x0000039c->0x000003bc at 0x0000039c: .note.ABI-tag ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [4]      0x000003c0->0x0000045c at 0x000003c0: .hash ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [5]      0x00000460->0x00000484 at 0x00000460: .gnu.hash ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [6]      0x00000488->0x00000668 at 0x00000488: .dynsym ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [7]      0x00000668->0x000007eb at 0x00000668: .dynstr ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [8]      0x000007ec->0x00000814 at 0x000007ec: .gnu.version ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [9]      0x00000818->0x00000858 at 0x00000818: .gnu.version_r ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [10]     0x00000858->0x00000a20 at 0x00000858: .rela.dyn ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [11]     0x00000a20->0x00000b70 at 0x00000a20: .rela.plt ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [12]     0x00001000->0x0000101b at 0x00001000: .init ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [13]     0x00001020->0x00001110 at 0x00001020: .plt ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [14]     0x00001110->0x000015b8 at 0x00001110: .text ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [15]     0x000015b8->0x000015c5 at 0x000015b8: .fini ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [16]     0x00002000->0x0000210d at 0x00002000: .rodata ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [17]     0x00002110->0x00002134 at 0x00002110: .eh_frame_hdr ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [18]     0x00002138->0x000021b4 at 0x00002138: .eh_frame ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [19]     0x00003d10->0x00003d18 at 0x00002d10: .init_array ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [20]     0x00003d18->0x00003d20 at 0x00002d18: .fini_array ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [21]     0x00003d20->0x00003f50 at 0x00002d20: .dynamic ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [22]     0x00003f50->0x00004000 at 0x00002f50: .got ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [23]     0x00004000->0x00004080 at 0x00003000: .data ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [24]     0x00004080->0x00004098 at 0x00003080: .bss ALLOC\n"
+~" [25]     0x00000000->0x00000090 at 0x00003080: .comment READONLY HAS_CONTENTS\n"
+~" [26]     0x00006098->0x000061dc at 0x00003110: .gnu.build.attributes READONLY HAS_CONTENTS\n"
+~" [27]     0x00000000->0x00000030 at 0x00003254: .debug_aranges READONLY HAS_CONTENTS\n"
+~" [28]     0x00000000->0x00000881 at 0x00003284: .debug_info READONLY HAS_CONTENTS\n"
+~" [29]     0x00000000->0x00000181 at 0x00003b05: .debug_abbrev READONLY HAS_CONTENTS\n"
+~" [30]     0x00000000->0x00000201 at 0x00003c86: .debug_line READONLY HAS_CONTENTS\n"
+~" [31]     0x00000000->0x0000054e at 0x00003e87: .debug_str READONLY HAS_CONTENTS\n"
+~" [32]     0x00000000->0x000002f7 at 0x000043d5: .debug_line_str READONLY HAS_CONTENTS\n"
+23^done
+(gdb) 
+24^done
+(gdb) 
+=thread-group-started,id="i1",pid="4146612"
+=thread-created,id="1",group-id="i1"
+=library-loaded,id="/lib64/ld-linux-x86-64.so.2",target-name="/lib64/ld-linux-x86-64.so.2",host-name="/lib64/ld-linux-x86-64.so.2",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7fc7280",to="0x00007ffff7feeb8b"}]
+25^running
+*running,thread-id="all"
+(gdb) 
+=library-loaded,id="/lib64/libtdsp.so",target-name="/lib64/libtdsp.so",host-name="/lib64/libtdsp.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7c00ee0",to="0x00007ffff7c02888"}]
+=library-loaded,id="/lib64/libonion.so",target-name="/lib64/libonion.so",host-name="/lib64/libonion.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7a01060",to="0x00007ffff7a024f8"}]
+=library-loaded,id="/lib64/libz.so.1",target-name="/lib64/libz.so.1",host-name="/lib64/libz.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7f9d650",to="0x00007ffff7faadeb"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7f86620",to="0x00007ffff7f93370"}]
+=library-loaded,id="/lib64/libc.so.6",target-name="/lib64/libc.so.6",host-name="/lib64/libc.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff780cac0",to="0x00007ffff7971fed"}]
+=library-loaded,id="/lib64/libdl.so.2",target-name="/lib64/libdl.so.2",host-name="/lib64/libdl.so.2",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7f7d2c0",to="0x00007ffff7f7d385"}]
+~"[Thread debugging using libthread_db enabled]\n"
+~"Using host libthread_db library \"/lib64/libthread_db.so.1\".\n"
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff59070c0",to="0x00007ffff6a96e52"}]
+=library-loaded,id="/lib64/libstdc++.so.6",target-name="/lib64/libstdc++.so.6",host-name="/lib64/libstdc++.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff5208660",to="0x00007ffff5312432"}]
+=library-loaded,id="/lib64/libm.so.6",target-name="/lib64/libm.so.6",host-name="/lib64/libm.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e966a0",to="0x00007ffff7f0d618"}]
+=library-loaded,id="/lib64/libgcc_s.so.1",target-name="/lib64/libgcc_s.so.1",host-name="/lib64/libgcc_s.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e768e0",to="0x00007ffff7e8c955"}]
+=breakpoint-modified,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",addr="0x00007ffff6102213",func="G1PageBasedVirtualSpace::commit_internal(unsigned long, unsigned long)",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",line="165",thread-groups=["i1"],times="0",original-location="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp:165"}
+=thread-created,id="2",group-id="i1"
+~"[New Thread 0x7ffff780b6c0 (LWP 4146644)]\n"
+*running,thread-id="2"
+=library-loaded,id="/lib64/librt.so.1",target-name="/lib64/librt.so.1",host-name="/lib64/librt.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e72300",to="0x00007ffff7e72508"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e60390",to="0x00007ffff7e6bd9d"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e32df0",to="0x00007ffff7e508b2"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e1a210",to="0x00007ffff7e1f003"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e0d320",to="0x00007ffff7e1362f"}]
+=thread-created,id="3",group-id="i1"
+~"[New Thread 0x7ffff55ff6c0 (LWP 4146645)]\n"
+*running,thread-id="3"
+=thread-created,id="4",group-id="i1"
+~"[New Thread 0x7ffff44f26c0 (LWP 4146646)]\n"
+*running,thread-id="4"
+=thread-created,id="5",group-id="i1"
+~"[New Thread 0x7ffff43f06c0 (LWP 4146647)]\n"
+*running,thread-id="5"
+=breakpoint-modified,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",addr="0x00007ffff6102213",func="G1PageBasedVirtualSpace::commit_internal(unsigned long, unsigned long)",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",line="165",thread-groups=["i1"],times="1",original-location="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp:165"}
+~"[Switching to Thread 0x7ffff780b6c0 (LWP 4146644)]\n"
+~"\n"
+~"Thread 2 \"java\" hit Breakpoint 1, G1PageBasedVirtualSpace::commit_internal (this=0x7ffff0042910, start_page=0, end_page=2097152) at /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp:165\n"
+~"165\t  if (need_to_commit_tail) {\n"
+*stopped,reason="breakpoint-hit",disp="keep",bkptno="1",frame={addr="0x00007ffff6102213",func="G1PageBasedVirtualSpace::commit_internal",args=[{name="this",value="0x7ffff0042910"},{name="start_page",value="0"},{name="end_page",value="2097152"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",line="165",arch="i386:x86-64"},thread-id="2",stopped-threads="all",core="6"
+(gdb) 
+0^done
+(gdb) 
+26^done,threads=[{id="2",target-id="Thread 0x7ffff780b6c0 (LWP 4146644)",name="java",frame={level="0",addr="0x00007ffff6102213",func="G1PageBasedVirtualSpace::commit_internal",args=[{name="this",value="0x7ffff0042910"},{name="start_page",value="0"},{name="end_page",value="2097152"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",line="165",arch="i386:x86-64"},state="stopped",core="6"}]
+(gdb) 
+27^done,value="replay"
+(gdb) 
+28^done
+(gdb) 
+29^done
+(gdb) 
+30^done,value="att"
+(gdb) 
+31^done,value="auto"
+(gdb) 
+~"The target architecture is set to \"auto\" (currently \"i386:x86-64\").\n"
+32^done
+(gdb) 
+33^done,register-names=["rax","rbx","rcx","rdx","rsi","rdi","rbp","rsp","r8","r9","r10","r11","r12","r13","r14","r15","rip","eflags","cs","ss","ds","es","fs","gs","st0","st1","st2","st3","st4","st5","st6","st7","fctrl","fstat","ftag","fiseg","fioff","foseg","fooff","fop","xmm0","xmm1","xmm2","xmm3","xmm4","xmm5","xmm6","xmm7","xmm8","xmm9","xmm10","xmm11","xmm12","xmm13","xmm14","xmm15","mxcsr","ymm0h","ymm1h","ymm2h","ymm3h","ymm4h","ymm5h","ymm6h","ymm7h","ymm8h","ymm9h","ymm10h","ymm11h","ymm12h","ymm13h","ymm14h","ymm15h","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","fs_base","gs_base","orig_rax","al","bl","cl","dl","sil","dil","bpl","spl","r8l","r9l","r10l","r11l","r12l","r13l","r14l","r15l","ah","bh","ch","dh","ax","bx","cx","dx","si","di","bp","","r8w","r9w","r10w","r11w","r12w","r13w","r14w","r15w","eax","ebx","ecx","edx","esi","edi","ebp","esp","r8d","r9d","r10d","r11d","r12d","r13d","r14d","r15d","ymm0","ymm1","ymm2","ymm3","ymm4","ymm5","ymm6","ymm7","ymm8","ymm9","ymm10","ymm11","ymm12","ymm13","ymm14","ymm15"]
+(gdb) 
+34^done,stack=[frame={level="0",addr="0x00007ffff6102213",func="G1PageBasedVirtualSpace::commit_internal",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",line="165",arch="i386:x86-64"},frame={level="1",addr="0x00007ffff6102434",func="G1PageBasedVirtualSpace::commit",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",line="204",arch="i386:x86-64"},frame={level="2",addr="0x00007ffff610e5c5",func="G1RegionsLargerThanCommitSizeMapper::commit_regions",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1RegionToSpaceMapper.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1RegionToSpaceMapper.cpp",line="79",arch="i386:x86-64"},frame={level="3",addr="0x00007ffff61c36ba",func="HeapRegionManager::commit_regions",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegionManager.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegionManager.cpp",line="96",arch="i386:x86-64"},frame={level="4",addr="0x00007ffff61c3a61",func="HeapRegionManager::make_regions_available",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegionManager.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegionManager.cpp",line="139",arch="i386:x86-64"},frame={level="5",addr="0x00007ffff61c3e3c",func="HeapRegionManager::expand_at",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegionManager.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegionManager.cpp",line="216",arch="i386:x86-64"},frame={level="6",addr="0x00007ffff61c3dcb",func="HeapRegionManager::expand_by",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegionManager.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegionManager.cpp",line="188",arch="i386:x86-64"},frame={level="7",addr="0x00007ffff6093f93",func="G1CollectedHeap::expand",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1362",arch="i386:x86-64"},frame={level="8",addr="0x00007ffff609577b",func="G1CollectedHeap::initialize",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1904",arch="i386:x86-64"},frame={level="9",addr="0x00007ffff695f80a",func="Universe::initialize_heap",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="809",arch="i386:x86-64"},frame={level="10",addr="0x00007ffff695f540",func="universe_init",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="694",arch="i386:x86-64"},frame={level="11",addr="0x00007ffff61efdb5",func="init_globals",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",line="119",arch="i386:x86-64"},frame={level="12",addr="0x00007ffff692b1b6",func="Threads::create_vm",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",line="4060",arch="i386:x86-64"},frame={level="13",addr="0x00007ffff63118c0",func="JNI_CreateJavaVM_inner",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4010",arch="i386:x86-64"},frame={level="14",addr="0x00007ffff6311c30",func="JNI_CreateJavaVM",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4103",arch="i386:x86-64"},frame={level="15",addr="0x00007ffff7f8b5c1",func="InitializeJVM",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="1545",arch="i386:x86-64"},frame={level="16",addr="0x00007ffff7f87fb1",func="JavaMain",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="428",arch="i386:x86-64"},frame={level="17",addr="0x00007ffff7f8fe01",func="ThreadJavaMain",file="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",fullname="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",line="765",arch="i386:x86-64"},frame={level="18",addr="0x00007ffff7875277",func="start_thread",from="/lib64/libc.so.6",arch="i386:x86-64"},frame={level="19",addr="0x00007ffff78fc83c",func="clone3",from="/lib64/libc.so.6",arch="i386:x86-64"}]
+(gdb) 
+35^done,value="0x7ffff780a570"
+(gdb) 
+36^done,variables=[{name="this"},{name="start_page"},{name="end_page"},{name="pages"},{name="need_to_commit_tail"}],filtered="0"
+(gdb) 
+~"type = G1PageBasedVirtualSpace * const\n"
+37^done
+(gdb) 
+~"type = size_t\n"
+38^done
+(gdb) 
+~"type = size_t\n"
+39^done
+(gdb) 
+~"type = size_t\n"
+40^done
+(gdb) 
+~"type = bool\n"
+41^done
+(gdb) 
+42^done,name="var1_this",numchild="1",value="0x7ffff0042910",type="G1PageBasedVirtualSpace * const",thread-id="2",has_more="0"
+0^done
+(gdb) 
+43^done,name="var2_start_page",numchild="0",value="0",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+44^done,name="var3_end_page",numchild="0",value="2097152",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+45^done,name="var4_pages",numchild="0",value="2097152",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+46^done,name="var5_need_to_commit_tail",numchild="0",value="false",type="bool",thread-id="2",has_more="0"
+0^done
+(gdb) 
+&"kill\n"
+~"Kill the program being debugged? (y or n) [answered Y; input not from terminal]\n"
+=thread-exited,id="1",group-id="i1"
+=thread-exited,id="2",group-id="i1"
+=thread-exited,id="3",group-id="i1"
+=thread-exited,id="4",group-id="i1"
+=thread-exited,id="5",group-id="i1"
+=thread-group-exited,id="i1"
+~"[Inferior 1 (process 4146612) killed]\n"
+47^done
+(gdb) 
+48^exit
+=cmd-param-changed,param="logging enabled",value="on"
+=cmd-param-changed,param="breakpoint pending",value="on"
+=cmd-param-changed,param="print pretty",value="on"
+(gdb) 
+1^done
+(gdb) 
+2^done
+(gdb) 
+3^done
+(gdb) 
+4^done
+(gdb) 
+5^done
+(gdb) 
+6^done
+(gdb) 
+7^done
+(gdb) 
+8^done
+(gdb) 
+9^done
+(gdb) 
+10^done,value="off"
+(gdb) 
+&"handle SIGSTOP stop nopass\n"
+~"Signal        Stop\tPrint\tPass to program\tDescription\n"
+~"SIGSTOP       Yes\tYes\tNo\t\tStopped (signal)\n"
+11^done
+(gdb) 
+&"python import gdb; print(gdb.VERSION);\n"
+~"14.1\n"
+12^done
+(gdb) 
+&"info pretty-printer\n"
+~"global pretty-printers:\n"
+~"  builtin\n"
+~"    mpx_bound128\n"
+13^done
+(gdb) 
+&"python import sys; sys.dont_write_bytecode = True; sys.path.insert(0, \"/codev/ide/CL/clion-2024.1.1/bin/gdb/renderers\"); from default.printers import register_default_printers; register_default_printers(None); from libstdcxx.v6.printers import register_libstdcxx_printers; register_libstdcxx_printers(None); from default.libstdcxx_printers import patch_libstdcxx_printers_module; patch_libstdcxx_printers_module(); \n"
+14^done
+(gdb) 
+15^done
+(gdb) 
+&"python from default.commands import register_commands; register_commands();\n"
+16^done
+(gdb) 
+17^done
+(gdb) 
+&"No source file named /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp.\n"
+18^done,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",addr="<PENDING>",pending="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp:172",times="0",original-location="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp:172"}
+(gdb) 
+19^done
+(gdb) 
+20^done
+(gdb) 
+21^done
+(gdb) 
+22^done
+(gdb) 
+&"maintenance info sections\n"
+~"Exec file: `/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/java', file type elf64-x86-64.\n"
+~" [0]      0x00000318->0x00000334 at 0x00000318: .interp ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [1]      0x00000338->0x00000378 at 0x00000338: .note.gnu.property ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [2]      0x00000378->0x0000039c at 0x00000378: .note.gnu.build-id ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [3]      0x0000039c->0x000003bc at 0x0000039c: .note.ABI-tag ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [4]      0x000003c0->0x0000045c at 0x000003c0: .hash ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [5]      0x00000460->0x00000484 at 0x00000460: .gnu.hash ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [6]      0x00000488->0x00000668 at 0x00000488: .dynsym ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [7]      0x00000668->0x000007eb at 0x00000668: .dynstr ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [8]      0x000007ec->0x00000814 at 0x000007ec: .gnu.version ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [9]      0x00000818->0x00000858 at 0x00000818: .gnu.version_r ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [10]     0x00000858->0x00000a20 at 0x00000858: .rela.dyn ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [11]     0x00000a20->0x00000b70 at 0x00000a20: .rela.plt ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [12]     0x00001000->0x0000101b at 0x00001000: .init ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [13]     0x00001020->0x00001110 at 0x00001020: .plt ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [14]     0x00001110->0x000015b8 at 0x00001110: .text ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [15]     0x000015b8->0x000015c5 at 0x000015b8: .fini ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [16]     0x00002000->0x0000210d at 0x00002000: .rodata ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [17]     0x00002110->0x00002134 at 0x00002110: .eh_frame_hdr ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [18]     0x00002138->0x000021b4 at 0x00002138: .eh_frame ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [19]     0x00003d10->0x00003d18 at 0x00002d10: .init_array ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [20]     0x00003d18->0x00003d20 at 0x00002d18: .fini_array ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [21]     0x00003d20->0x00003f50 at 0x00002d20: .dynamic ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [22]     0x00003f50->0x00004000 at 0x00002f50: .got ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [23]     0x00004000->0x00004080 at 0x00003000: .data ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [24]     0x00004080->0x00004098 at 0x00003080: .bss ALLOC\n"
+~" [25]     0x00000000->0x00000090 at 0x00003080: .comment READONLY HAS_CONTENTS\n"
+~" [26]     0x00006098->0x000061dc at 0x00003110: .gnu.build.attributes READONLY HAS_CONTENTS\n"
+~" [27]     0x00000000->0x00000030 at 0x00003254: .debug_aranges READONLY HAS_CONTENTS\n"
+~" [28]     0x00000000->0x00000881 at 0x00003284: .debug_info READONLY HAS_CONTENTS\n"
+~" [29]     0x00000000->0x00000181 at 0x00003b05: .debug_abbrev READONLY HAS_CONTENTS\n"
+~" [30]     0x00000000->0x00000201 at 0x00003c86: .debug_line READONLY HAS_CONTENTS\n"
+~" [31]     0x00000000->0x0000054e at 0x00003e87: .debug_str READONLY HAS_CONTENTS\n"
+~" [32]     0x00000000->0x000002f7 at 0x000043d5: .debug_line_str READONLY HAS_CONTENTS\n"
+23^done
+(gdb) 
+24^done
+(gdb) 
+=thread-group-started,id="i1",pid="4148651"
+=thread-created,id="1",group-id="i1"
+=library-loaded,id="/lib64/ld-linux-x86-64.so.2",target-name="/lib64/ld-linux-x86-64.so.2",host-name="/lib64/ld-linux-x86-64.so.2",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7fc7280",to="0x00007ffff7feeb8b"}]
+25^running
+*running,thread-id="all"
+(gdb) 
+=library-loaded,id="/lib64/libtdsp.so",target-name="/lib64/libtdsp.so",host-name="/lib64/libtdsp.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7c00ee0",to="0x00007ffff7c02888"}]
+=library-loaded,id="/lib64/libonion.so",target-name="/lib64/libonion.so",host-name="/lib64/libonion.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7a01060",to="0x00007ffff7a024f8"}]
+=library-loaded,id="/lib64/libz.so.1",target-name="/lib64/libz.so.1",host-name="/lib64/libz.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7f9d650",to="0x00007ffff7faadeb"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7f86620",to="0x00007ffff7f93370"}]
+=library-loaded,id="/lib64/libc.so.6",target-name="/lib64/libc.so.6",host-name="/lib64/libc.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff780cac0",to="0x00007ffff7971fed"}]
+=library-loaded,id="/lib64/libdl.so.2",target-name="/lib64/libdl.so.2",host-name="/lib64/libdl.so.2",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7f7d2c0",to="0x00007ffff7f7d385"}]
+~"[Thread debugging using libthread_db enabled]\n"
+~"Using host libthread_db library \"/lib64/libthread_db.so.1\".\n"
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff59070c0",to="0x00007ffff6a96e52"}]
+=library-loaded,id="/lib64/libstdc++.so.6",target-name="/lib64/libstdc++.so.6",host-name="/lib64/libstdc++.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff5208660",to="0x00007ffff5312432"}]
+=library-loaded,id="/lib64/libm.so.6",target-name="/lib64/libm.so.6",host-name="/lib64/libm.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e966a0",to="0x00007ffff7f0d618"}]
+=library-loaded,id="/lib64/libgcc_s.so.1",target-name="/lib64/libgcc_s.so.1",host-name="/lib64/libgcc_s.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e768e0",to="0x00007ffff7e8c955"}]
+=breakpoint-modified,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",addr="0x00007ffff6102225",func="G1PageBasedVirtualSpace::commit_internal(unsigned long, unsigned long)",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",line="172",thread-groups=["i1"],times="0",original-location="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp:172"}
+=thread-created,id="2",group-id="i1"
+~"[New Thread 0x7ffff780b6c0 (LWP 4148677)]\n"
+*running,thread-id="2"
+=library-loaded,id="/lib64/librt.so.1",target-name="/lib64/librt.so.1",host-name="/lib64/librt.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e72300",to="0x00007ffff7e72508"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e60390",to="0x00007ffff7e6bd9d"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e32df0",to="0x00007ffff7e508b2"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e1a210",to="0x00007ffff7e1f003"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e0d320",to="0x00007ffff7e1362f"}]
+=thread-created,id="3",group-id="i1"
+~"[New Thread 0x7ffff55ff6c0 (LWP 4148678)]\n"
+*running,thread-id="3"
+=thread-created,id="4",group-id="i1"
+~"[New Thread 0x7ffff44f26c0 (LWP 4148682)]\n"
+*running,thread-id="4"
+=thread-created,id="5",group-id="i1"
+~"[New Thread 0x7ffff43f06c0 (LWP 4148683)]\n"
+*running,thread-id="5"
+=breakpoint-modified,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",addr="0x00007ffff6102225",func="G1PageBasedVirtualSpace::commit_internal(unsigned long, unsigned long)",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",line="172",thread-groups=["i1"],times="1",original-location="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp:172"}
+~"[Switching to Thread 0x7ffff780b6c0 (LWP 4148677)]\n"
+~"\n"
+~"Thread 2 \"java\" hit Breakpoint 1, G1PageBasedVirtualSpace::commit_internal (this=0x7ffff0042910, start_page=0, end_page=2097152) at /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp:172\n"
+~"172\t    commit_preferred_pages(start_page, pages);\n"
+*stopped,reason="breakpoint-hit",disp="keep",bkptno="1",frame={addr="0x00007ffff6102225",func="G1PageBasedVirtualSpace::commit_internal",args=[{name="this",value="0x7ffff0042910"},{name="start_page",value="0"},{name="end_page",value="2097152"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",line="172",arch="i386:x86-64"},thread-id="2",stopped-threads="all",core="10"
+(gdb) 
+0^done
+(gdb) 
+26^done,threads=[{id="2",target-id="Thread 0x7ffff780b6c0 (LWP 4148677)",name="java",frame={level="0",addr="0x00007ffff6102225",func="G1PageBasedVirtualSpace::commit_internal",args=[{name="this",value="0x7ffff0042910"},{name="start_page",value="0"},{name="end_page",value="2097152"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",line="172",arch="i386:x86-64"},state="stopped",core="10"}]
+(gdb) 
+27^done,value="replay"
+(gdb) 
+28^done
+(gdb) 
+29^done
+(gdb) 
+30^done,value="att"
+(gdb) 
+31^done,value="auto"
+(gdb) 
+~"The target architecture is set to \"auto\" (currently \"i386:x86-64\").\n"
+32^done
+(gdb) 
+33^done,register-names=["rax","rbx","rcx","rdx","rsi","rdi","rbp","rsp","r8","r9","r10","r11","r12","r13","r14","r15","rip","eflags","cs","ss","ds","es","fs","gs","st0","st1","st2","st3","st4","st5","st6","st7","fctrl","fstat","ftag","fiseg","fioff","foseg","fooff","fop","xmm0","xmm1","xmm2","xmm3","xmm4","xmm5","xmm6","xmm7","xmm8","xmm9","xmm10","xmm11","xmm12","xmm13","xmm14","xmm15","mxcsr","ymm0h","ymm1h","ymm2h","ymm3h","ymm4h","ymm5h","ymm6h","ymm7h","ymm8h","ymm9h","ymm10h","ymm11h","ymm12h","ymm13h","ymm14h","ymm15h","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","fs_base","gs_base","orig_rax","al","bl","cl","dl","sil","dil","bpl","spl","r8l","r9l","r10l","r11l","r12l","r13l","r14l","r15l","ah","bh","ch","dh","ax","bx","cx","dx","si","di","bp","","r8w","r9w","r10w","r11w","r12w","r13w","r14w","r15w","eax","ebx","ecx","edx","esi","edi","ebp","esp","r8d","r9d","r10d","r11d","r12d","r13d","r14d","r15d","ymm0","ymm1","ymm2","ymm3","ymm4","ymm5","ymm6","ymm7","ymm8","ymm9","ymm10","ymm11","ymm12","ymm13","ymm14","ymm15"]
+(gdb) 
+34^done,stack=[frame={level="0",addr="0x00007ffff6102225",func="G1PageBasedVirtualSpace::commit_internal",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",line="172",arch="i386:x86-64"},frame={level="1",addr="0x00007ffff6102434",func="G1PageBasedVirtualSpace::commit",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1PageBasedVirtualSpace.cpp",line="206",arch="i386:x86-64"},frame={level="2",addr="0x00007ffff610e5c5",func="G1RegionsLargerThanCommitSizeMapper::commit_regions",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1RegionToSpaceMapper.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1RegionToSpaceMapper.cpp",line="79",arch="i386:x86-64"},frame={level="3",addr="0x00007ffff61c36ba",func="HeapRegionManager::commit_regions",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegionManager.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegionManager.cpp",line="96",arch="i386:x86-64"},frame={level="4",addr="0x00007ffff61c3a61",func="HeapRegionManager::make_regions_available",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegionManager.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegionManager.cpp",line="139",arch="i386:x86-64"},frame={level="5",addr="0x00007ffff61c3e3c",func="HeapRegionManager::expand_at",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegionManager.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegionManager.cpp",line="216",arch="i386:x86-64"},frame={level="6",addr="0x00007ffff61c3dcb",func="HeapRegionManager::expand_by",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegionManager.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegionManager.cpp",line="188",arch="i386:x86-64"},frame={level="7",addr="0x00007ffff6093f93",func="G1CollectedHeap::expand",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1362",arch="i386:x86-64"},frame={level="8",addr="0x00007ffff609577b",func="G1CollectedHeap::initialize",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1904",arch="i386:x86-64"},frame={level="9",addr="0x00007ffff695f80a",func="Universe::initialize_heap",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="809",arch="i386:x86-64"},frame={level="10",addr="0x00007ffff695f540",func="universe_init",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="694",arch="i386:x86-64"},frame={level="11",addr="0x00007ffff61efdb5",func="init_globals",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",line="119",arch="i386:x86-64"},frame={level="12",addr="0x00007ffff692b1b6",func="Threads::create_vm",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",line="4060",arch="i386:x86-64"},frame={level="13",addr="0x00007ffff63118c0",func="JNI_CreateJavaVM_inner",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4010",arch="i386:x86-64"},frame={level="14",addr="0x00007ffff6311c30",func="JNI_CreateJavaVM",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4103",arch="i386:x86-64"},frame={level="15",addr="0x00007ffff7f8b5c1",func="InitializeJVM",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="1545",arch="i386:x86-64"},frame={level="16",addr="0x00007ffff7f87fb1",func="JavaMain",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="428",arch="i386:x86-64"},frame={level="17",addr="0x00007ffff7f8fe01",func="ThreadJavaMain",file="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",fullname="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",line="765",arch="i386:x86-64"},frame={level="18",addr="0x00007ffff7875277",func="start_thread",from="/lib64/libc.so.6",arch="i386:x86-64"},frame={level="19",addr="0x00007ffff78fc83c",func="clone3",from="/lib64/libc.so.6",arch="i386:x86-64"}]
+(gdb) 
+35^done,value="0x7ffff780a570"
+(gdb) 
+36^done,variables=[{name="this"},{name="start_page"},{name="end_page"},{name="pages"},{name="need_to_commit_tail"}],filtered="0"
+(gdb) 
+~"type = G1PageBasedVirtualSpace * const\n"
+37^done
+(gdb) 
+~"type = size_t\n"
+38^done
+(gdb) 
+~"type = size_t\n"
+39^done
+(gdb) 
+~"type = size_t\n"
+40^done
+(gdb) 
+~"type = bool\n"
+41^done
+(gdb) 
+42^done,name="var1_this",numchild="1",value="0x7ffff0042910",type="G1PageBasedVirtualSpace * const",thread-id="2",has_more="0"
+0^done
+(gdb) 
+43^done,name="var2_start_page",numchild="0",value="0",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+44^done,name="var3_end_page",numchild="0",value="2097152",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+45^done,name="var4_pages",numchild="0",value="2097152",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+46^done,name="var5_need_to_commit_tail",numchild="0",value="false",type="bool",thread-id="2",has_more="0"
+0^done
+(gdb) 
+&"kill\n"
+~"Kill the program being debugged? (y or n) [answered Y; input not from terminal]\n"
+=thread-exited,id="1",group-id="i1"
+=thread-exited,id="2",group-id="i1"
+=thread-exited,id="3",group-id="i1"
+=thread-exited,id="4",group-id="i1"
+=thread-exited,id="5",group-id="i1"
+=thread-group-exited,id="i1"
+~"[Inferior 1 (process 4148651) killed]\n"
+47^done
+(gdb) 
+48^exit
+=cmd-param-changed,param="logging enabled",value="on"
+=cmd-param-changed,param="breakpoint pending",value="on"
+=cmd-param-changed,param="print pretty",value="on"
+(gdb) 
+1^done
+(gdb) 
+2^done
+(gdb) 
+3^done
+(gdb) 
+4^done
+(gdb) 
+5^done
+(gdb) 
+6^done
+(gdb) 
+7^done
+(gdb) 
+8^done
+(gdb) 
+9^done
+(gdb) 
+10^done,value="off"
+(gdb) 
+&"handle SIGSTOP stop nopass\n"
+~"Signal        Stop\tPrint\tPass to program\tDescription\n"
+~"SIGSTOP       Yes\tYes\tNo\t\tStopped (signal)\n"
+11^done
+(gdb) 
+&"python import gdb; print(gdb.VERSION);\n"
+~"14.1\n"
+12^done
+(gdb) 
+&"info pretty-printer\n"
+~"global pretty-printers:\n"
+~"  builtin\n"
+~"    mpx_bound128\n"
+13^done
+(gdb) 
+&"python import sys; sys.dont_write_bytecode = True; sys.path.insert(0, \"/codev/ide/CL/clion-2024.1.1/bin/gdb/renderers\"); from default.printers import register_default_printers; register_default_printers(None); from libstdcxx.v6.printers import register_libstdcxx_printers; register_libstdcxx_printers(None); from default.libstdcxx_printers import patch_libstdcxx_printers_module; patch_libstdcxx_printers_module(); \n"
+14^done
+(gdb) 
+15^done
+(gdb) 
+&"python from default.commands import register_commands; register_commands();\n"
+16^done
+(gdb) 
+17^done
+(gdb) 
+&"No source file named /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp.\n"
+18^done,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",addr="<PENDING>",pending="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp:1974",times="0",original-location="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp:1974"}
+(gdb) 
+19^done
+(gdb) 
+20^done
+(gdb) 
+21^done
+(gdb) 
+22^done
+(gdb) 
+&"maintenance info sections\n"
+~"Exec file: `/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/java', file type elf64-x86-64.\n"
+~" [0]      0x00000318->0x00000334 at 0x00000318: .interp ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [1]      0x00000338->0x00000378 at 0x00000338: .note.gnu.property ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [2]      0x00000378->0x0000039c at 0x00000378: .note.gnu.build-id ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [3]      0x0000039c->0x000003bc at 0x0000039c: .note.ABI-tag ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [4]      0x000003c0->0x0000045c at 0x000003c0: .hash ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [5]      0x00000460->0x00000484 at 0x00000460: .gnu.hash ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [6]      0x00000488->0x00000668 at 0x00000488: .dynsym ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [7]      0x00000668->0x000007eb at 0x00000668: .dynstr ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [8]      0x000007ec->0x00000814 at 0x000007ec: .gnu.version ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [9]      0x00000818->0x00000858 at 0x00000818: .gnu.version_r ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [10]     0x00000858->0x00000a20 at 0x00000858: .rela.dyn ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [11]     0x00000a20->0x00000b70 at 0x00000a20: .rela.plt ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [12]     0x00001000->0x0000101b at 0x00001000: .init ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [13]     0x00001020->0x00001110 at 0x00001020: .plt ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [14]     0x00001110->0x000015b8 at 0x00001110: .text ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [15]     0x000015b8->0x000015c5 at 0x000015b8: .fini ALLOC LOAD READONLY CODE HAS_CONTENTS\n"
+~" [16]     0x00002000->0x0000210d at 0x00002000: .rodata ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [17]     0x00002110->0x00002134 at 0x00002110: .eh_frame_hdr ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [18]     0x00002138->0x000021b4 at 0x00002138: .eh_frame ALLOC LOAD READONLY DATA HAS_CONTENTS\n"
+~" [19]     0x00003d10->0x00003d18 at 0x00002d10: .init_array ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [20]     0x00003d18->0x00003d20 at 0x00002d18: .fini_array ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [21]     0x00003d20->0x00003f50 at 0x00002d20: .dynamic ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [22]     0x00003f50->0x00004000 at 0x00002f50: .got ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [23]     0x00004000->0x00004080 at 0x00003000: .data ALLOC LOAD DATA HAS_CONTENTS\n"
+~" [24]     0x00004080->0x00004098 at 0x00003080: .bss ALLOC\n"
+~" [25]     0x00000000->0x00000090 at 0x00003080: .comment READONLY HAS_CONTENTS\n"
+~" [26]     0x00006098->0x000061dc at 0x00003110: .gnu.build.attributes READONLY HAS_CONTENTS\n"
+~" [27]     0x00000000->0x00000030 at 0x00003254: .debug_aranges READONLY HAS_CONTENTS\n"
+~" [28]     0x00000000->0x00000881 at 0x00003284: .debug_info READONLY HAS_CONTENTS\n"
+~" [29]     0x00000000->0x00000181 at 0x00003b05: .debug_abbrev READONLY HAS_CONTENTS\n"
+~" [30]     0x00000000->0x00000201 at 0x00003c86: .debug_line READONLY HAS_CONTENTS\n"
+~" [31]     0x00000000->0x0000054e at 0x00003e87: .debug_str READONLY HAS_CONTENTS\n"
+~" [32]     0x00000000->0x000002f7 at 0x000043d5: .debug_line_str READONLY HAS_CONTENTS\n"
+23^done
+(gdb) 
+24^done
+(gdb) 
+=thread-group-started,id="i1",pid="248790"
+=thread-created,id="1",group-id="i1"
+=library-loaded,id="/lib64/ld-linux-x86-64.so.2",target-name="/lib64/ld-linux-x86-64.so.2",host-name="/lib64/ld-linux-x86-64.so.2",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7fc7280",to="0x00007ffff7feeb8b"}]
+25^running
+*running,thread-id="all"
+(gdb) 
+=library-loaded,id="/lib64/libtdsp.so",target-name="/lib64/libtdsp.so",host-name="/lib64/libtdsp.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7c00ee0",to="0x00007ffff7c02888"}]
+=library-loaded,id="/lib64/libonion.so",target-name="/lib64/libonion.so",host-name="/lib64/libonion.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7a01060",to="0x00007ffff7a024f8"}]
+=library-loaded,id="/lib64/libz.so.1",target-name="/lib64/libz.so.1",host-name="/lib64/libz.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7f9d650",to="0x00007ffff7faadeb"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/../lib/jli/libjli.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7f86620",to="0x00007ffff7f93370"}]
+=library-loaded,id="/lib64/libc.so.6",target-name="/lib64/libc.so.6",host-name="/lib64/libc.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff780cac0",to="0x00007ffff7971fed"}]
+=library-loaded,id="/lib64/libdl.so.2",target-name="/lib64/libdl.so.2",host-name="/lib64/libdl.so.2",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7f7d2c0",to="0x00007ffff7f7d385"}]
+~"[Thread debugging using libthread_db enabled]\n"
+~"Using host libthread_db library \"/lib64/libthread_db.so.1\".\n"
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff59070c0",to="0x00007ffff6a96e52"}]
+=library-loaded,id="/lib64/libstdc++.so.6",target-name="/lib64/libstdc++.so.6",host-name="/lib64/libstdc++.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff5208660",to="0x00007ffff5312432"}]
+=library-loaded,id="/lib64/libm.so.6",target-name="/lib64/libm.so.6",host-name="/lib64/libm.so.6",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e966a0",to="0x00007ffff7f0d618"}]
+=library-loaded,id="/lib64/libgcc_s.so.1",target-name="/lib64/libgcc_s.so.1",host-name="/lib64/libgcc_s.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e768e0",to="0x00007ffff7e8c955"}]
+=breakpoint-modified,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",addr="0x00007ffff6095a42",func="G1CollectedHeap::initialize()",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1974",thread-groups=["i1"],times="0",original-location="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp:1974"}
+=thread-created,id="2",group-id="i1"
+~"[New Thread 0x7ffff780b6c0 (LWP 248840)]\n"
+*running,thread-id="2"
+=library-loaded,id="/lib64/librt.so.1",target-name="/lib64/librt.so.1",host-name="/lib64/librt.so.1",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e72300",to="0x00007ffff7e72508"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libverify.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e60390",to="0x00007ffff7e6bd9d"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjava.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e32df0",to="0x00007ffff7e508b2"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libjimage.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e1a210",to="0x00007ffff7e1f003"}]
+=library-loaded,id="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",target-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",host-name="/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/libzip.so",symbols-loaded="0",thread-group="i1",ranges=[{from="0x00007ffff7e0d320",to="0x00007ffff7e1362f"}]
+=thread-created,id="3",group-id="i1"
+~"[New Thread 0x7ffff55ff6c0 (LWP 248841)]\n"
+*running,thread-id="3"
+=thread-created,id="4",group-id="i1"
+~"[New Thread 0x7ffff44f26c0 (LWP 248842)]\n"
+*running,thread-id="4"
+=thread-created,id="5",group-id="i1"
+~"[New Thread 0x7ffff43f06c0 (LWP 248843)]\n"
+*running,thread-id="5"
+=thread-created,id="6",group-id="i1"
+~"[New Thread 0x7fffcf4f46c0 (LWP 248844)]\n"
+*running,thread-id="6"
+=thread-created,id="7",group-id="i1"
+~"[New Thread 0x7fffcf3f26c0 (LWP 248845)]\n"
+*running,thread-id="7"
+=breakpoint-modified,bkpt={number="1",type="breakpoint",disp="keep",enabled="y",addr="0x00007ffff6095a42",func="G1CollectedHeap::initialize()",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1974",thread-groups=["i1"],times="1",original-location="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp:1974"}
+~"[Switching to Thread 0x7ffff780b6c0 (LWP 248840)]\n"
+~"\n"
+~"Thread 2 \"java\" hit Breakpoint 1, G1CollectedHeap::initialize (this=0x7ffff0031f20) at /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp:1974\n"
+~"1974\t  return JNI_OK;\n"
+*stopped,reason="breakpoint-hit",disp="keep",bkptno="1",frame={addr="0x00007ffff6095a42",func="G1CollectedHeap::initialize",args=[{name="this",value="0x7ffff0031f20"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1974",arch="i386:x86-64"},thread-id="2",stopped-threads="all",core="1"
+(gdb) 
+0^done
+(gdb) 
+26^done,threads=[{id="2",target-id="Thread 0x7ffff780b6c0 (LWP 248840)",name="java",frame={level="0",addr="0x00007ffff6095a42",func="G1CollectedHeap::initialize",args=[{name="this",value="0x7ffff0031f20"}],file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1974",arch="i386:x86-64"},state="stopped",core="1"}]
+(gdb) 
+27^done,value="replay"
+(gdb) 
+28^done
+(gdb) 
+29^done
+(gdb) 
+30^done,value="att"
+(gdb) 
+31^done,value="auto"
+(gdb) 
+~"The target architecture is set to \"auto\" (currently \"i386:x86-64\").\n"
+32^done
+(gdb) 
+33^done,register-names=["rax","rbx","rcx","rdx","rsi","rdi","rbp","rsp","r8","r9","r10","r11","r12","r13","r14","r15","rip","eflags","cs","ss","ds","es","fs","gs","st0","st1","st2","st3","st4","st5","st6","st7","fctrl","fstat","ftag","fiseg","fioff","foseg","fooff","fop","xmm0","xmm1","xmm2","xmm3","xmm4","xmm5","xmm6","xmm7","xmm8","xmm9","xmm10","xmm11","xmm12","xmm13","xmm14","xmm15","mxcsr","ymm0h","ymm1h","ymm2h","ymm3h","ymm4h","ymm5h","ymm6h","ymm7h","ymm8h","ymm9h","ymm10h","ymm11h","ymm12h","ymm13h","ymm14h","ymm15h","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","","fs_base","gs_base","orig_rax","al","bl","cl","dl","sil","dil","bpl","spl","r8l","r9l","r10l","r11l","r12l","r13l","r14l","r15l","ah","bh","ch","dh","ax","bx","cx","dx","si","di","bp","","r8w","r9w","r10w","r11w","r12w","r13w","r14w","r15w","eax","ebx","ecx","edx","esi","edi","ebp","esp","r8d","r9d","r10d","r11d","r12d","r13d","r14d","r15d","ymm0","ymm1","ymm2","ymm3","ymm4","ymm5","ymm6","ymm7","ymm8","ymm9","ymm10","ymm11","ymm12","ymm13","ymm14","ymm15"]
+(gdb) 
+34^done,stack=[frame={level="0",addr="0x00007ffff6095a42",func="G1CollectedHeap::initialize",file="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp",line="1974",arch="i386:x86-64"},frame={level="1",addr="0x00007ffff695f80a",func="Universe::initialize_heap",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="809",arch="i386:x86-64"},frame={level="2",addr="0x00007ffff695f540",func="universe_init",file="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp",line="694",arch="i386:x86-64"},frame={level="3",addr="0x00007ffff61efdb5",func="init_globals",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp",line="119",arch="i386:x86-64"},frame={level="4",addr="0x00007ffff692b1b6",func="Threads::create_vm",file="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp",line="4060",arch="i386:x86-64"},frame={level="5",addr="0x00007ffff63118c0",func="JNI_CreateJavaVM_inner",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4010",arch="i386:x86-64"},frame={level="6",addr="0x00007ffff6311c30",func="JNI_CreateJavaVM",file="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",fullname="/data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp",line="4103",arch="i386:x86-64"},frame={level="7",addr="0x00007ffff7f8b5c1",func="InitializeJVM",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="1545",arch="i386:x86-64"},frame={level="8",addr="0x00007ffff7f87fb1",func="JavaMain",file="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",fullname="/data/workspace/openjdk11-core/src/java.base/share/native/libjli/java.c",line="428",arch="i386:x86-64"},frame={level="9",addr="0x00007ffff7f8fe01",func="ThreadJavaMain",file="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",fullname="/data/workspace/openjdk11-core/src/java.base/unix/native/libjli/java_md_solinux.c",line="765",arch="i386:x86-64"},frame={level="10",addr="0x00007ffff7875277",func="start_thread",from="/lib64/libc.so.6",arch="i386:x86-64"},frame={level="11",addr="0x00007ffff78fc83c",func="clone3",from="/lib64/libc.so.6",arch="i386:x86-64"}]
+(gdb) 
+35^done,value="0x7ffff780a900"
+(gdb) 
+36^done,variables=[{name="this"},{name="x"},{name="init_byte_size"},{name="max_byte_size"},{name="heap_alignment"},{name="heap_rs"},{name="ct"},{name="bs"},{name="g1_rs"},{name="page_size"},{name="heap_storage"},{name="bot_storage"},{name="cardtable_storage"},{name="card_counts_storage"},{name="bitmap_size"},{name="prev_bitmap_storage"},{name="next_bitmap_storage"},{name="max_region_idx"},{name="max_cards_per_region"},{name="ecode"},{name="dummy_region"}],filtered="0"
+(gdb) 
+~"type = /* real type = G1CollectedHeap * const */\n"
+~"G1CollectedHeap * const\n"
+37^done
+(gdb) 
+~"type = /* real type = MutexLocker */\n"
+~"MutexLocker\n"
+38^done
+(gdb) 
+~"type = size_t\n"
+39^done
+(gdb) 
+~"type = size_t\n"
+40^done
+(gdb) 
+~"type = size_t\n"
+41^done
+(gdb) 
+~"type = ReservedSpace\n"
+42^done
+(gdb) 
+~"type = /* real type = G1CardTable * */\n"
+~"G1CardTable *\n"
+43^done
+(gdb) 
+~"type = /* real type = G1BarrierSet * */\n"
+~"G1BarrierSet *\n"
+44^done
+(gdb) 
+~"type = ReservedSpace\n"
+45^done
+(gdb) 
+~"type = size_t\n"
+46^done
+(gdb) 
+~"type = /* real type = G1RegionsLargerThanCommitSizeMapper * */\n"
+~"G1RegionToSpaceMapper *\n"
+47^done
+(gdb) 
+~"type = /* real type = G1RegionsLargerThanCommitSizeMapper * */\n"
+~"G1RegionToSpaceMapper *\n"
+48^done
+(gdb) 
+~"type = /* real type = G1RegionsLargerThanCommitSizeMapper * */\n"
+~"G1RegionToSpaceMapper *\n"
+49^done
+(gdb) 
+~"type = /* real type = G1RegionsLargerThanCommitSizeMapper * */\n"
+~"G1RegionToSpaceMapper *\n"
+50^done
+(gdb) 
+~"type = size_t\n"
+51^done
+(gdb) 
+~"type = /* real type = G1RegionsLargerThanCommitSizeMapper * */\n"
+~"G1RegionToSpaceMapper *\n"
+52^done
+(gdb) 
+~"type = /* real type = G1RegionsLargerThanCommitSizeMapper * */\n"
+~"G1RegionToSpaceMapper *\n"
+53^done
+(gdb) 
+~"type = const uint\n"
+54^done
+(gdb) 
+~"type = size_t\n"
+55^done
+(gdb) 
+~"type = jint\n"
+56^done
+(gdb) 
+~"type = /* real type = HeapRegion * */\n"
+~"HeapRegion *\n"
+57^done
+(gdb) 
+58^done
+(gdb) 
+59^done,value="0x7ffff780aa30"
+(gdb) 
+60^done,variables=[],filtered="1"
+(gdb) 
+61^done,value="0x7ffff780a900"
+(gdb) 
+62^done,variables=[{name="this"},{name="x"},{name="init_byte_size"},{name="max_byte_size"},{name="heap_alignment"},{name="heap_rs"},{name="ct"},{name="bs"},{name="g1_rs"},{name="page_size"},{name="heap_storage"},{name="bot_storage"},{name="cardtable_storage"},{name="card_counts_storage"},{name="bitmap_size"},{name="prev_bitmap_storage"},{name="next_bitmap_storage"},{name="max_region_idx"},{name="max_cards_per_region"},{name="ecode"},{name="dummy_region"}],filtered="0"
+(gdb) 
+~"type = /* real type = G1CollectedHeap * const */\n"
+~"G1CollectedHeap * const\n"
+63^done
+(gdb) 
+~"type = /* real type = MutexLocker */\n"
+~"MutexLocker\n"
+64^done
+(gdb) 
+~"type = size_t\n"
+65^done
+(gdb) 
+~"type = size_t\n"
+66^done
+(gdb) 
+~"type = size_t\n"
+67^done
+(gdb) 
+~"type = ReservedSpace\n"
+68^done
+(gdb) 
+~"type = /* real type = G1CardTable * */\n"
+~"G1CardTable *\n"
+69^done
+(gdb) 
+~"type = /* real type = G1BarrierSet * */\n"
+~"G1BarrierSet *\n"
+70^done
+(gdb) 
+~"type = ReservedSpace\n"
+71^done
+(gdb) 
+~"type = size_t\n"
+72^done
+(gdb) 
+~"type = /* real type = G1RegionsLargerThanCommitSizeMapper * */\n"
+~"G1RegionToSpaceMapper *\n"
+73^done
+(gdb) 
+~"type = /* real type = G1RegionsLargerThanCommitSizeMapper * */\n"
+~"G1RegionToSpaceMapper *\n"
+74^done
+(gdb) 
+~"type = /* real type = G1RegionsLargerThanCommitSizeMapper * */\n"
+~"G1RegionToSpaceMapper *\n"
+75^done
+(gdb) 
+~"type = /* real type = G1RegionsLargerThanCommitSizeMapper * */\n"
+~"G1RegionToSpaceMapper *\n"
+76^done
+(gdb) 
+~"type = size_t\n"
+77^done
+(gdb) 
+~"type = /* real type = G1RegionsLargerThanCommitSizeMapper * */\n"
+~"G1RegionToSpaceMapper *\n"
+78^done
+(gdb) 
+~"type = /* real type = G1RegionsLargerThanCommitSizeMapper * */\n"
+~"G1RegionToSpaceMapper *\n"
+79^done
+(gdb) 
+~"type = const uint\n"
+80^done
+(gdb) 
+~"type = size_t\n"
+81^done
+(gdb) 
+~"type = jint\n"
+82^done
+(gdb) 
+~"type = /* real type = HeapRegion * */\n"
+~"HeapRegion *\n"
+83^done
+(gdb) 
+84^done,name="var1_this",numchild="2",value="0x7ffff0031f20",type="G1CollectedHeap * const",thread-id="2",has_more="0"
+0^done
+(gdb) 
+85^done,name="var2_x",numchild="2",value="{...}",type="MutexLocker",thread-id="2",has_more="0"
+0^done
+(gdb) 
+86^done,name="var3_init_byte_size",numchild="0",value="8589934592",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+87^done,name="var4_max_byte_size",numchild="0",value="8589934592",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+88^done,name="var5_heap_alignment",numchild="0",value="4194304",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+89^done,name="var6_heap_rs",numchild="2",value="{...}",type="ReservedSpace",thread-id="2",has_more="0"
+0^done
+(gdb) 
+90^done,name="var7_ct",numchild="2",value="0x7ffff00424d0",type="G1CardTable *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+91^done,name="var8_bs",numchild="2",value="0x7ffff00425f0",type="G1BarrierSet *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+92^done,name="var9_g1_rs",numchild="2",value="{...}",type="ReservedSpace",thread-id="2",has_more="0"
+0^done
+(gdb) 
+93^done,name="var10_page_size",numchild="0",value="4096",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+94^done,name="var11_heap_storage",numchild="2",value="0x7ffff0042900",type="G1RegionsLargerThanCommitSizeMapper *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+95^done,name="var12_bot_storage",numchild="2",value="0x7ffff0042b10",type="G1RegionsLargerThanCommitSizeMapper *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+96^done,name="var13_cardtable_storage",numchild="2",value="0x7ffff0042f60",type="G1RegionsLargerThanCommitSizeMapper *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+97^done,name="var14_card_counts_storage",numchild="2",value="0x7ffff00433b0",type="G1RegionsLargerThanCommitSizeMapper *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+98^done,name="var15_bitmap_size",numchild="0",value="134217728",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+99^done,name="var16_prev_bitmap_storage",numchild="2",value="0x7ffff0043800",type="G1RegionsLargerThanCommitSizeMapper *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+100^done,name="var17_next_bitmap_storage",numchild="2",value="0x7ffff0044a50",type="G1RegionsLargerThanCommitSizeMapper *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+101^done,name="var18_max_region_idx",numchild="0",value="2147483647",type="const uint",thread-id="2",has_more="0"
+0^done
+(gdb) 
+102^done,name="var19_max_cards_per_region",numchild="0",value="2147483647",type="size_t",thread-id="2",has_more="0"
+0^done
+(gdb) 
+103^done,name="var20_ecode",numchild="0",value="0",type="jint",thread-id="2",has_more="0"
+0^done
+(gdb) 
+104^done,name="var21_dummy_region",numchild="4",value="0x7ffff0c820f0",type="HeapRegion *",thread-id="2",has_more="0"
+0^done
+(gdb) 
+105^done,value="0x7ffff780aa30"
+(gdb) 
+106^done,variables=[],filtered="1"
+(gdb) 
+&"kill\n"
+~"Kill the program being debugged? (y or n) [answered Y; input not from terminal]\n"
+=thread-exited,id="1",group-id="i1"
+=thread-exited,id="2",group-id="i1"
+=thread-exited,id="3",group-id="i1"
+=thread-exited,id="4",group-id="i1"
+=thread-exited,id="5",group-id="i1"
+=thread-exited,id="6",group-id="i1"
+=thread-exited,id="7",group-id="i1"
+=thread-group-exited,id="i1"
+~"[Inferior 1 (process 248790) killed]\n"
+107^done
+(gdb) 
+108^exit

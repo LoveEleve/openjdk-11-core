@@ -77,21 +77,45 @@ G1Policy::~G1Policy() {
 G1CollectorState* G1Policy::collector_state() const { return _g1h->collector_state(); }
 
 void G1Policy::init(G1CollectedHeap* g1h, G1CollectionSet* collection_set) {
-  _g1h = g1h;
-  _collection_set = collection_set;
+  _g1h = g1h; // 设置G1堆引用
+  _collection_set = collection_set; // 设置收集集合引用
 
   assert(Heap_lock->owned_by_self(), "Locking discipline.");
-
+  // forcus 默认为true，也即自适应年轻代长度
+  // note 根据应用程序分配速率动态调整年轻代大小
+  /*
+   * 8GB情况下:
+   *  - heap_regions = 2048
+   *  - min_desired_young_length = 2048 * 5% = 102个Region (408MB)
+      - max_desired_young_length = 2048 * 60% = 1228个Region (4.9GB)
+      - 自适应模式：年轻代大小会根据分配速率在102-1228个Region间动态调整
+   */
   if (!adaptive_young_list_length()) {
     _young_list_fixed_length = _young_gen_sizer.min_desired_young_length();
   }
+  // forcus 年轻代大小边界调整
+  // 确保年轻代最大大小不超过堆的总Region数 , 通常限制为堆大小的60%左右
   _young_gen_sizer.adjust_max_new_size(_g1h->max_regions());
-
+  // forcus 空闲Region统计初始化 初始为2048(所有region都是空闲的)
   _free_regions_at_end_of_collection = _g1h->num_free_regions();
-
+  // forcus 年轻代长度目标更新
+  // 这个方法会调用一系列计算来确定年轻代的最大长度和目标长度
+  /*
+        **计算因素**：
+            - **记忆集长度预测**：预测跨代引用的数量
+            - **GC暂停时间目标**：用户设置的MaxGCPauseMillis
+            - **分配速率**：应用程序的内存分配速度
+            - **存活率预测**：年轻代对象的存活概率
+        假设MaxGCPauseMillis = 200ms
+            预测的记忆集长度 = 1000
+            计算得出：
+            - young_list_target_length = 128个Region (512MB)
+            - young_list_max_length = 256个Region (1GB)
+   */
   update_young_list_max_and_target_length();
   // We may immediately start allocating regions and placing them on the
   // collection set list. Initialize the per-collection set info
+  // forcus 收集集合增量构建初始化
   _collection_set->start_incremental_building();
 }
 

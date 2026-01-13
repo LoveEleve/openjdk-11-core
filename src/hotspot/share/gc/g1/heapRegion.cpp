@@ -229,29 +229,41 @@ void HeapRegion::clear_humongous() {
 HeapRegion::HeapRegion(uint hrm_index,
                        G1BlockOffsetTable* bot,
                        MemRegion mr) :
-    G1ContiguousSpace(bot),
-    _hrm_index(hrm_index),
-    _humongous_start_region(NULL),
-    _evacuation_failed(false),
-    _prev_marked_bytes(0), _next_marked_bytes(0), _gc_efficiency(0.0),
-    _next(NULL), _prev(NULL),
+    G1ContiguousSpace(bot), // 初始化父类
+    _hrm_index(hrm_index), // 设置Region索引
+    _humongous_start_region(NULL), // 巨型对象起始Region
+    _evacuation_failed(false), // 疏散失败标记
+    // -- 并发标记相关的字节计数
+    _prev_marked_bytes(0),  // 前次标记字节数
+    _next_marked_bytes(0), // 下次标记字节数
+    _gc_efficiency(0.0), // GC效率
+    _next(NULL), _prev(NULL), // 链表指针
 #ifdef ASSERT
-    _containing_set(NULL),
+    _containing_set(NULL), // 调试：包含集合
 #endif // ASSERT
-     _young_index_in_cset(-1), _surv_rate_group(NULL), _age_index(-1),
-    _rem_set(NULL), _recorded_rs_length(0), _predicted_elapsed_time_ms(0)
+     _young_index_in_cset(-1), // 年轻代收集集合索引
+     _surv_rate_group(NULL), // 存活率组
+     _age_index(-1), // 年龄索引
+    _rem_set(NULL), // 记忆集
+    _recorded_rs_length(0), // 记录的记忆集长度
+    _predicted_elapsed_time_ms(0) // 预测的处理时间
 {
+  // forcus 创建HeapRegionRemSet对象
+  /*
+   * 用于跟踪指向该Region的跨代引用，提高增量收集的效率
+   */
   _rem_set = new HeapRegionRemSet(bot, this);
-
+  // forcus 初始化Region内存空间
   initialize(mr);
 }
 
 void HeapRegion::initialize(MemRegion mr, bool clear_space, bool mangle_space) {
   assert(_rem_set->is_empty(), "Remembered set must be empty");
-
+  // forcus 调用父类初始化
   G1ContiguousSpace::initialize(mr, clear_space, mangle_space);
-
+  // 清理Region状态
   hr_clear(false /*par*/, false /*clear_space*/);
+  // forcus 设置region起始地址到_top指针中
   set_top(bottom());
 }
 

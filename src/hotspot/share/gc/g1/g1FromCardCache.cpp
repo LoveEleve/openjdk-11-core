@@ -69,7 +69,7 @@ void G1FromCardCache::invalidate(uint start_idx, size_t new_num_regions) {
 
   for (uint i = 0; i < G1RemSet::num_par_rem_sets(); i++) {
     for (uint j = start_idx; j < end_idx; j++) {
-      set(i, j, InvalidCard);
+      set(i, j, InvalidCard); // forcus 设置为无效卡片
     }
   }
 }
