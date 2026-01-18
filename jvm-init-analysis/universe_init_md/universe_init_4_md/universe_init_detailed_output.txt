@@ -1,0 +1,69 @@
+Warning: 'set logging on', an alias for the command 'set logging enabled', is deprecated.
+Use 'set logging enabled on'.
+
+warning: Currently logging to gdb.txt.  Turn the logging off and on to make the new setting effective.
+Already logging to gdb.txt.
+============================================================================
+universe_init() 8GB G1GC 详细调试
+============================================================================
+Function "universe_init" not defined.
+Breakpoint 1 (universe_init) pending.
+No source file named universe.cpp.
+Breakpoint 2 (universe.cpp:754) pending.
+开始运行...
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+----_JAVA_LAUNCHER_DEBUG----
+Launcher state:
+	First application arg index: 6
+	debug:on
+	javargs:off
+	program name:java
+	launcher name:openjdk
+	javaw:off
+	fullversion:11.0.17-internal+0-adhoc.root.openjdk11-core
+Java args:
+Command line args:
+argv[0] = /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/bin/java
+argv[1] = -Xms8g
+argv[2] = -Xmx8g
+argv[3] = -XX:+UseG1GC
+argv[4] = -XX:-UseLargePages
+argv[5] = HelloWorld
+JRE path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk
+jvm.cfg[0] = ->-server<-
+jvm.cfg[1] = ->-client<-
+21 micro seconds to parse jvm.cfg
+Default VM: server
+Does `/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/lib/server/libjvm.so' exist ... yes.
+mustsetenv: FALSE
+JVM path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/lib/server/libjvm.so
+827888 micro seconds to LoadJavaVM
+[New Thread 0x7ffff780b6c0 (LWP 1271716)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1271716)]
+
+Thread 2 "java" hit Breakpoint 1.2, universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:677
+warning: Source file is more recent than executable.
+677	     ================================
+
+=== [阶段1] universe_init() 入口 ===
+当前位置:
+#0  universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:677
+
+初始化前状态:
+_fully_initialized =$1 = false
+_collectedHeap =$2 = (CollectedHeap *) 0x0
+_narrow_oop._base =$3 = (address) 0x0
+_narrow_oop._shift =$4 = 0
+[New Thread 0x7ffff51ff6c0 (LWP 1272262)]
+
+Thread 2 "java" hit Breakpoint 2, Universe::create_heap () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:754
+754	  return JNI_OK;
+
+=== [阶段2] universe_init() 完成 (返回前) ===
+
+--- 堆信息 ---
+_collectedHeap 地址 =$5 = (CollectedHeap *) 0x0
+
+_collectedHeap->_reserved._start =universe_init_detailed_debug.gdb:49: Error in sourced command file:
+Cannot access memory at address 0x10

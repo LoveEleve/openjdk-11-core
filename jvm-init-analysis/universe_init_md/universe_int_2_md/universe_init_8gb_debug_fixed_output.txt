@@ -1,0 +1,69 @@
+Warning: 'set logging on', an alias for the command 'set logging enabled', is deprecated.
+Use 'set logging enabled on'.
+
+Reading symbols from /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/java...
+Function "universe_init" not defined.
+Breakpoint 1 (universe_init) pending.
+Function "Universe::initialize_heap" not defined.
+Breakpoint 2 (Universe::initialize_heap) pending.
+Function "G1CollectedHeap::initialize" not defined.
+Breakpoint 3 (G1CollectedHeap::initialize) pending.
+Function "Universe::reserve_heap" not defined.
+Breakpoint 4 (Universe::reserve_heap) pending.
+===== 启动JVM并运行到universe_init() =====
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+----_JAVA_LAUNCHER_DEBUG----
+Launcher state:
+	First application arg index: 6
+	debug:on
+	javargs:off
+	program name:java
+	launcher name:openjdk
+	javaw:off
+	fullversion:11.0.17-internal+0-adhoc.root.openjdk11-core
+Java args:
+Command line args:
+argv[0] = /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/java
+argv[1] = -Xms8g
+argv[2] = -Xmx8g
+argv[3] = -XX:+UseG1GC
+argv[4] = -XX:-UseLargePages
+argv[5] = HelloWorld
+JRE path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk
+jvm.cfg[0] = ->-server<-
+jvm.cfg[1] = ->-client<-
+52 micro seconds to parse jvm.cfg
+Default VM: server
+Does `/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so' exist ... yes.
+mustsetenv: FALSE
+JVM path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so
+846266 micro seconds to LoadJavaVM
+[New Thread 0x7ffff780b6c0 (LWP 1230954)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1230954)]
+
+Thread 2 "java" hit Breakpoint 1.2, universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:683
+683	  assert(!Universe::_fully_initialized, "called after initialize_vtables");
+===== 1. universe_init()函数入口分析 =====
+函数地址:$1 = (jint (*)(void)) 0x7ffff695f491 <universe_init()>
+当前栈帧:#0  universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:683
+#1  0x00007ffff61efdb5 in init_globals () at /data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp:119
+#2  0x00007ffff692b1b6 in Threads::create_vm (args=0x7ffff780add0, canTryAgain=0x7ffff780acc3) at /data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp:4060
+===== 2. 分析JavaClasses::compute_hard_coded_offsets() =====
+
+Thread 2 "java" hit Breakpoint 2, Universe::initialize_heap () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:805
+805	jint Universe::initialize_heap() {
+执行硬编码偏移量计算...===== 3. 分析Universe::initialize_heap()调用 =====
+[New Thread 0x7ffff51ff6c0 (LWP 1230961)]
+
+Thread 2 "java" hit Breakpoint 3, G1CollectedHeap::initialize (this=0x7ffff0032530) at /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp:1567
+1567	  os::enable_vtime();
+堆初始化前的Universe状态:$2 = (CollectedHeap *) 0x7ffff0032530
+===== 4. 深度分析G1CollectedHeap::initialize() =====
+
+Thread 2 "java" hit Breakpoint 4, Universe::reserve_heap (heap_size=8589934592, alignment=4194304) at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:888
+888	ReservedSpace Universe::reserve_heap(size_t heap_size, size_t alignment) {
+G1堆初始化参数:/data/workspace/openjdk11-core/md/universe_init_md/universe_int_2_md/universe_init_8gb_g1gc_debug_fixed.gdb:44: Error in sourced command file:
+No symbol "this" in current context.
+Missing separate debuginfos, use: dnf debuginfo-install glibc-2.38-45.tl4.x86_64 libgcc-12.3.1.7-1.tl4.x86_64 libstdc++-12.3.1.7-1.tl4.x86_64 zlib-1.2.13-9.tl4.x86_64
+(gdb) 

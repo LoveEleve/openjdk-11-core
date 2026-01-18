@@ -1,0 +1,68 @@
+Warning: 'set logging on', an alias for the command 'set logging enabled', is deprecated.
+Use 'set logging enabled on'.
+
+Reading symbols from /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/java...
+Function "universe_init" not defined.
+Breakpoint 1 (universe_init) pending.
+Function "Universe::initialize_heap" not defined.
+Breakpoint 2 (Universe::initialize_heap) pending.
+Function "G1CollectedHeap::initialize" not defined.
+Breakpoint 3 (G1CollectedHeap::initialize) pending.
+Function "HeapRegion::setup_heap_region_size" not defined.
+Breakpoint 4 (HeapRegion::setup_heap_region_size) pending.
+Function "JavaClasses::compute_hard_coded_offsets" not defined.
+Breakpoint 5 (JavaClasses::compute_hard_coded_offsets) pending.
+===== 启动JVM并运行到universe_init() =====
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+----_JAVA_LAUNCHER_DEBUG----
+Launcher state:
+	First application arg index: 6
+	debug:on
+	javargs:off
+	program name:java
+	launcher name:openjdk
+	javaw:off
+	fullversion:11.0.17-internal+0-adhoc.root.openjdk11-core
+Java args:
+Command line args:
+argv[0] = /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/java
+argv[1] = -Xms8g
+argv[2] = -Xmx8g
+argv[3] = -XX:+UseG1GC
+argv[4] = -XX:-UseLargePages
+argv[5] = HelloWorld
+JRE path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk
+jvm.cfg[0] = ->-server<-
+jvm.cfg[1] = ->-client<-
+24 micro seconds to parse jvm.cfg
+Default VM: server
+Does `/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so' exist ... yes.
+mustsetenv: FALSE
+JVM path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so
+1012025 micro seconds to LoadJavaVM
+[New Thread 0x7ffff780b6c0 (LWP 1242226)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1242226)]
+
+Thread 2 "java" hit Breakpoint 1.2, universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:683
+683	  assert(!Universe::_fully_initialized, "called after initialize_vtables");
+===== 1. universe_init()函数入口详细分析 =====
+函数地址:$1 = (jint (*)(void)) 0x7ffff695f491 <universe_init()>
+当前调用栈:#0  universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:683
+#1  0x00007ffff61efdb5 in init_globals () at /data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp:119
+#2  0x00007ffff692b1b6 in Threads::create_vm (args=0x7ffff780add0, canTryAgain=0x7ffff780acc3) at /data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp:4060
+#3  0x00007ffff63118c0 in JNI_CreateJavaVM_inner (vm=0x7ffff780ae28, penv=0x7ffff780ae30, args=0x7ffff780add0) at /data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp:4010
+#4  0x00007ffff6311c30 in JNI_CreateJavaVM (vm=0x7ffff780ae28, penv=0x7ffff780ae30, args=0x7ffff780add0) at /data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp:4103
+当前线程信息:  Id   Target Id                                  Frame 
+  1    Thread 0x7ffff7f7a740 (LWP 1242182) "java" 0x00007ffff78720c6 in __futex_abstimed_wait_common () from /lib64/libc.so.6
+* 2    Thread 0x7ffff780b6c0 (LWP 1242226) "java" universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:683
+===== 2. JavaClasses::compute_hard_coded_offsets()详细分析 =====
+
+Thread 2 "java" hit Breakpoint 5, JavaClasses::compute_hard_coded_offsets () at /data/workspace/openjdk11-core/src/hotspot/share/classfile/javaClasses.cpp:4465
+4465	  java_lang_boxing_object::value_offset      = member_offset(java_lang_boxing_object::hc_value_offset);
+硬编码偏移量计算开始...关键Java类字段偏移量:String类字段偏移量:$2 = 0
+$3 = 0
+Object类字段偏移量:/data/workspace/openjdk11-core/md/universe_init_md/universe_init_3_md/universe_init_accurate_debug.gdb:44: Error in sourced command file:
+No symbol "java_lang_Object" in current context.
+Missing separate debuginfos, use: dnf debuginfo-install glibc-2.38-45.tl4.x86_64 libgcc-12.3.1.7-1.tl4.x86_64 libstdc++-12.3.1.7-1.tl4.x86_64 zlib-1.2.13-9.tl4.x86_64
+(gdb) 

@@ -1,0 +1,16 @@
+=== 第02章：内存模型与对象创建 - GDB验证脚本 ===
+目标：验证8GB G1堆的完整内存布局
+配置：8GB堆 + G1GC + 压缩指针 + 非大页
+
+Function "HelloWorld.main" not defined.
+Breakpoint 1 (HelloWorld.main) pending.
+开始内存布局验证...
+使用参数: -Xms8g -Xmx8g -XX:+UseG1GC HelloWorld
+
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+
+Program received signal SIGPIPE, Broken pipe.
+0x00007ffff78ef574 in write () from /lib64/libc.so.6
+
+=== 内存布局验证脚本执行完成 ===

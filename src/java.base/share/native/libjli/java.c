@@ -528,7 +528,7 @@ JavaMain(void* _args)
      * applications own main class but rather a helper class. To keep things
      * consistent in the UI we need to track and report the application main class.
      */
-    // forcus:调用java主类的main方法
+    // forcus:获取java主类的
     appClass = GetApplicationClass(env);
     NULL_CHECK_RETURN_VALUE(appClass, -1);
 

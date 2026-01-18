@@ -1,0 +1,320 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="JVM Source Analysis" version="21.0.0" type="device">
+  <diagram id="compilation-system" name="编译系统">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1300" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- 标题 -->
+        <mxCell id="title" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;&lt;b&gt;JVM编译系统详解&lt;/b&gt;&lt;/font&gt;&lt;br&gt;源码: compileBroker.cpp, nmethod.hpp, codeCache.hpp, compilerOracle.hpp" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="550" y="20" width="700" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== 分层编译概览 ==================== -->
+        <mxCell id="tier-title" value="&lt;b&gt;分层编译 (Tiered Compilation)&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=#f8cecc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="700" height="25" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="tier-box" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="120" width="700" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="tier0" value="&lt;b&gt;Tier 0&lt;/b&gt;&lt;br&gt;解释执行&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;无优化&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="50" y="135" width="80" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="tier1" value="&lt;b&gt;Tier 1&lt;/b&gt;&lt;br&gt;C1简单编译&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;无Profile&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="150" y="135" width="90" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="tier2" value="&lt;b&gt;Tier 2&lt;/b&gt;&lt;br&gt;C1受限Profile&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;调用计数&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="260" y="135" width="90" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="tier3" value="&lt;b&gt;Tier 3&lt;/b&gt;&lt;br&gt;C1完整Profile&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;分支+类型&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="370" y="135" width="100" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="tier4" value="&lt;b&gt;Tier 4&lt;/b&gt;&lt;br&gt;C2优化编译&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;最高性能&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="490" y="135" width="100" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="tier-note" value="&lt;b&gt;典型路径:&lt;/b&gt;&lt;br&gt;0 → 3 → 4 (常规)&lt;br&gt;0 → 2 → 3 → 4 (C2繁忙)&lt;br&gt;0 → 3 → 1 (简单方法)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;spacingLeft=10;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="610" y="135" width="120" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="arrow-01" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;" edge="1" parent="1" source="tier0" target="tier1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;" edge="1" parent="1" source="tier1" target="tier2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;" edge="1" parent="1" source="tier2" target="tier3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;" edge="1" parent="1" source="tier3" target="tier4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== CompileBroker 结构 ==================== -->
+        <mxCell id="cb-title" value="&lt;b&gt;CompileBroker (编译代理)&lt;/b&gt;&lt;br&gt;(compileBroker.hpp)" style="text;html=1;strokeColor=none;fillColor=#f8cecc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="240" width="350" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="compilebroker" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="280" width="350" height="380" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cb-c1-queue" value="&lt;b&gt;_c1_compile_queue&lt;/b&gt; : CompileQueue* (静态)&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ C1编译队列&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;Tier 1/2/3编译任务&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="290" width="330" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cb-c2-queue" value="&lt;b&gt;_c2_compile_queue&lt;/b&gt; : CompileQueue* (静态)&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ C2编译队列&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;Tier 4优化编译任务&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="345" width="330" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cb-c1-threads" value="&lt;b&gt;_c1_compiler_threads&lt;/b&gt; : CompilerThread**&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;C1编译器线程数组&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#0066cc&quot;&gt;数量 = CICompilerCount / 3&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="400" width="330" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cb-c2-threads" value="&lt;b&gt;_c2_compiler_threads&lt;/b&gt; : CompilerThread**&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;C2编译器线程数组&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#0066cc&quot;&gt;数量 = CICompilerCount * 2/3&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="455" width="330" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cb-total-compile" value="&lt;b&gt;_total_compile_count&lt;/b&gt; : int&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;总编译次数&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="510" width="160" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cb-total-bailout" value="&lt;b&gt;_total_bailout_count&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;编译失败次数&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="220" y="510" width="160" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cb-total-osr" value="&lt;b&gt;_total_osr_compile_count&lt;/b&gt; : int&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;OSR编译次数&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="550" width="160" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cb-should-block" value="&lt;b&gt;_should_block&lt;/b&gt; : bool&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;是否阻塞编译&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="220" y="550" width="160" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cb-methods" value="&lt;b&gt;关键方法:&lt;/b&gt;&lt;br&gt;compile_method() - 提交编译任务&lt;br&gt;compiler_thread_loop() - 编译线程主循环&lt;br&gt;invoke_compiler_on_method() - 实际编译" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=10;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="590" width="330" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== CompileTask 结构 ==================== -->
+        <mxCell id="ct-title" value="&lt;b&gt;CompileTask (编译任务)&lt;/b&gt;&lt;br&gt;(compileBroker.hpp)" style="text;html=1;strokeColor=none;fillColor=#d5e8d4;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="420" y="240" width="300" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="compiletask" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="420" y="280" width="300" height="280" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ct-method" value="&lt;b&gt;_method&lt;/b&gt; : Method*&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ 待编译的方法&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="430" y="290" width="280" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ct-osr-bci" value="&lt;b&gt;_osr_bci&lt;/b&gt; : int&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;OSR入口字节码索引&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#0066cc&quot;&gt;-1表示非OSR编译&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="430" y="335" width="280" height="45" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ct-comp-level" value="&lt;b&gt;_comp_level&lt;/b&gt; : int&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ 编译级别 (0-4)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="430" y="385" width="135" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ct-compile-id" value="&lt;b&gt;_compile_id&lt;/b&gt; : int&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;编译ID&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="575" y="385" width="135" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ct-hot-count" value="&lt;b&gt;_hot_count&lt;/b&gt; : int&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;热度计数&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="430" y="430" width="135" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ct-is-blocking" value="&lt;b&gt;_is_blocking&lt;/b&gt; : bool&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;是否阻塞调用者&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="575" y="430" width="135" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ct-next" value="&lt;b&gt;_next&lt;/b&gt; : CompileTask*&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;队列中下一个任务&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="430" y="470" width="135" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ct-prev" value="&lt;b&gt;_prev&lt;/b&gt; : CompileTask*&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;队列中上一个任务&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="575" y="470" width="135" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ct-code" value="&lt;b&gt;_code&lt;/b&gt; : nmethod*&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;编译结果&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="430" y="510" width="280" height="35" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== nmethod 结构 ==================== -->
+        <mxCell id="nm-title" value="&lt;b&gt;nmethod (编译后代码)&lt;/b&gt;&lt;br&gt;(nmethod.hpp)" style="text;html=1;strokeColor=none;fillColor=#f8cecc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="750" y="90" width="350" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="nmethod" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="750" y="130" width="350" height="530" as="geometry" />
+        </mxCell>
+        
+        <!-- nmethod 基本信息 -->
+        <mxCell id="nm-section1" value="&lt;b&gt;【基本信息】&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=#dae8fc;align=center;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="760" y="140" width="330" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="nm-method" value="&lt;b&gt;_method&lt;/b&gt; : Method*&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ 对应的Java方法&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="760" y="165" width="330" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="nm-entry" value="&lt;b&gt;_entry_point&lt;/b&gt; : address&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ 代码入口地址&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;从编译代码调用时的入口&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="760" y="205" width="330" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="nm-verified-entry" value="&lt;b&gt;_verified_entry_point&lt;/b&gt; : address&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;已验证入口 (跳过类型检查)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="760" y="260" width="330" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="nm-osr-entry" value="&lt;b&gt;_osr_entry_point&lt;/b&gt; : address&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;OSR入口 (栈上替换)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="760" y="300" width="330" height="35" as="geometry" />
+        </mxCell>
+        
+        <!-- nmethod 代码布局 -->
+        <mxCell id="nm-section2" value="&lt;b&gt;【代码布局】&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=#dae8fc;align=center;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="760" y="340" width="330" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="nm-code-begin" value="&lt;b&gt;_code_offset&lt;/b&gt; : int&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;代码段偏移&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="760" y="365" width="160" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="nm-stub-offset" value="&lt;b&gt;_stub_offset&lt;/b&gt; : int&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;桩代码偏移&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="930" y="365" width="160" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="nm-oops-offset" value="&lt;b&gt;_oops_offset&lt;/b&gt; : int&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;oop引用表偏移&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="760" y="405" width="160" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="nm-metadata-offset" value="&lt;b&gt;_metadata_offset&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;元数据表偏移&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="930" y="405" width="160" height="35" as="geometry" />
+        </mxCell>
+        
+        <!-- nmethod 状态 -->
+        <mxCell id="nm-section3" value="&lt;b&gt;【状态和标志】&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=#dae8fc;align=center;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="760" y="445" width="330" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="nm-state" value="&lt;b&gt;_state&lt;/b&gt; : int&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ 状态&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#0066cc&quot;&gt;in_use / not_entrant / zombie / unloaded&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="760" y="470" width="330" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="nm-comp-level" value="&lt;b&gt;_comp_level&lt;/b&gt; : int&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;编译级别&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="760" y="525" width="160" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="nm-compile-id" value="&lt;b&gt;_compile_id&lt;/b&gt; : int&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;编译ID&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="930" y="525" width="160" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="nm-hotness" value="&lt;b&gt;_hotness_counter&lt;/b&gt; : int&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;热度计数 (用于淘汰)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="760" y="565" width="160" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="nm-marked-for-deopt" value="&lt;b&gt;_marked_for_deoptimization&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;标记去优化&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="930" y="565" width="160" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="nm-exception" value="&lt;b&gt;_exception_offset&lt;/b&gt; : int&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;异常处理表偏移&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="760" y="605" width="160" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="nm-deopt" value="&lt;b&gt;_deoptimize_offset&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;去优化入口偏移&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="930" y="605" width="160" height="35" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== CodeCache 结构 ==================== -->
+        <mxCell id="cc-title" value="&lt;b&gt;CodeCache (代码缓存)&lt;/b&gt;&lt;br&gt;(codeCache.hpp)" style="text;html=1;strokeColor=none;fillColor=#dae8fc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="90" width="280" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="codecache" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="130" width="280" height="350" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cc-heaps" value="&lt;b&gt;_heaps&lt;/b&gt; : GrowableArray&amp;lt;CodeHeap*&amp;gt;*&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ 代码堆数组&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;分段存储不同类型代码&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="140" width="260" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cc-non-nmethod" value="&lt;b&gt;non-nmethods堆&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;存储桩代码、适配器等&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#0066cc&quot;&gt;默认5MB (NonNMethodCodeHeapSize)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="195" width="260" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cc-profiled" value="&lt;b&gt;profiled nmethods堆&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;存储Tier 2/3编译代码&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#0066cc&quot;&gt;默认120MB (ProfiledCodeHeapSize)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="250" width="260" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cc-non-profiled" value="&lt;b&gt;non-profiled nmethods堆&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;存储Tier 1/4编译代码&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#0066cc&quot;&gt;默认120MB (NonProfiledCodeHeapSize)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="305" width="260" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cc-total" value="&lt;b&gt;总大小&lt;/b&gt; = 240MB (ReservedCodeCacheSize)&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ 代码缓存满会停止编译!&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="360" width="260" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cc-methods" value="&lt;b&gt;关键方法:&lt;/b&gt;&lt;br&gt;allocate() - 分配代码空间&lt;br&gt;find_blob() - 查找代码块&lt;br&gt;mark_for_deoptimization() - 标记去优化" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=10;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="405" width="260" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== MethodCounters 结构 ==================== -->
+        <mxCell id="mc-title" value="&lt;b&gt;MethodCounters (方法计数器)&lt;/b&gt;&lt;br&gt;(methodCounters.hpp)" style="text;html=1;strokeColor=none;fillColor=#d5e8d4;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="420" y="580" width="300" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="methodcounters" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="420" y="620" width="300" height="200" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="mc-invoke" value="&lt;b&gt;_invoke_mask&lt;/b&gt; : int&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;调用计数掩码&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="430" y="630" width="140" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="mc-backedge" value="&lt;b&gt;_backedge_mask&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;回边计数掩码&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="580" y="630" width="130" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="mc-invocation-counter" value="&lt;b&gt;_invocation_counter&lt;/b&gt; : InvocationCounter&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ 调用计数器&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#0066cc&quot;&gt;达到阈值触发编译 (默认10000)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="430" y="670" width="280" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="mc-backedge-counter" value="&lt;b&gt;_backedge_counter&lt;/b&gt; : InvocationCounter&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ 回边计数器&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#0066cc&quot;&gt;循环热点检测，触发OSR编译&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="430" y="725" width="280" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="mc-rate" value="&lt;b&gt;_rate&lt;/b&gt; : float&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;调用频率&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="430" y="780" width="280" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== Deoptimization ==================== -->
+        <mxCell id="deopt-title" value="&lt;b&gt;Deoptimization (去优化)&lt;/b&gt;&lt;br&gt;(deoptimization.hpp)" style="text;html=1;strokeColor=none;fillColor=#f8cecc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="500" width="280" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="deopt" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="540" width="280" height="200" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="deopt-reasons" value="&lt;b&gt;去优化原因:&lt;/b&gt;&lt;br&gt;• Reason_null_check - 空指针检查&lt;br&gt;• Reason_class_check - 类型检查失败&lt;br&gt;• Reason_array_check - 数组边界&lt;br&gt;• Reason_intrinsic - 内置方法失败&lt;br&gt;• Reason_bimorphic - 双态调用变多态&lt;br&gt;• Reason_unloaded - 类卸载" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=10;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="550" width="260" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="deopt-action" value="&lt;b&gt;去优化动作:&lt;/b&gt;&lt;br&gt;• Action_none - 无动作&lt;br&gt;• Action_recompile - 重新编译&lt;br&gt;• Action_make_not_entrant - 标记不可进入&lt;br&gt;• Action_make_not_compilable - 禁止编译" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=10;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="655" width="260" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- 面试要点 -->
+        <mxCell id="interview-note" value="&lt;b&gt;面试要点&lt;/b&gt;:&lt;br&gt;1. 分层编译: 0(解释)→3(C1+Profile)→4(C2优化)是常规路径&lt;br&gt;2. 调用计数器+回边计数器决定编译触发，默认阈值10000&lt;br&gt;3. OSR(On-Stack Replacement)允许循环中替换为编译代码&lt;br&gt;4. nmethod状态: in_use→not_entrant→zombie→unloaded&lt;br&gt;5. CodeCache分三段: non-nmethods(5MB) + profiled(120MB) + non-profiled(120MB)&lt;br&gt;6. 去优化原因: 类型推测失败、类卸载、内联失效等" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;spacingLeft=10;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="750" y="680" width="350" height="130" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

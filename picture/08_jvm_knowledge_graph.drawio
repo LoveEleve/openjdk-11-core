@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-01-14T00:00:00.000Z" agent="JVM Knowledge Graph" version="21.0.0" type="device">
+  <diagram id="jvm-knowledge-graph" name="JVM源码知识图谱">
+    <mxGraphModel dx="2000" dy="1500" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="1800" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <!-- 标题 -->
+        <mxCell id="title" value="🧠 OpenJDK 11 HotSpot JVM 源码知识图谱" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=28;fontStyle=1;fontColor=#1a1a2e;" vertex="1" parent="1">
+          <mxGeometry x="600" y="20" width="800" height="50" as="geometry"/>
+        </mxCell>
+        
+        <!-- ==================== 核心层：对象系统 ==================== -->
+        <mxCell id="core-title" value="🎯 核心层：对象系统 (oops/)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#e94560;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="300" height="30" as="geometry"/>
+        </mxCell>
+        
+        <!-- oopDesc -->
+        <mxCell id="oopDesc" value="oopDesc&#xa;(oop.hpp)&#xa;─────────────&#xa;⭐ _mark: markOop&#xa;⭐ _metadata._klass: Klass*&#xa;─────────────&#xa;所有Java对象的C++表示基类&#xa;header_size() = 2 words (16B)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=5;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="120" width="200" height="130" as="geometry"/>
+        </mxCell>
+        
+        <!-- markOopDesc -->
+        <mxCell id="markOopDesc" value="markOopDesc&#xa;(markOop.hpp)&#xa;─────────────&#xa;64位布局:&#xa;[unused:25|hash:31|unused:1|age:4|biased:1|lock:2]&#xa;─────────────&#xa;lock状态:&#xa;• 00 = 轻量级锁(指向栈Lock Record)&#xa;• 01 = 无锁/偏向锁&#xa;• 10 = 重量级锁(指向ObjectMonitor)&#xa;• 11 = GC标记&#xa;─────────────&#xa;age_bits=4, max_age=15&#xa;hash_bits=31&#xa;epoch_bits=2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="270" width="200" height="200" as="geometry"/>
+        </mxCell>
+        
+        <!-- Klass -->
+        <mxCell id="Klass" value="Klass&#xa;(klass.hpp)&#xa;─────────────&#xa;⭐ _layout_helper: jint&#xa;⭐ _name: Symbol*&#xa;⭐ _super: Klass*&#xa;⭐ _java_mirror: OopHandle&#xa;_class_loader_data: ClassLoaderData*&#xa;_prototype_header: markOop&#xa;_vtable_len: int&#xa;_primary_supers[8]: Klass*&#xa;─────────────&#xa;类元数据基类&#xa;oop/klass二元模型" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="280" y="120" width="200" height="190" as="geometry"/>
+        </mxCell>
+        
+        <!-- InstanceKlass -->
+        <mxCell id="InstanceKlass" value="InstanceKlass&#xa;(instanceKlass.hpp)&#xa;─────────────&#xa;⭐ _constants: ConstantPool*&#xa;⭐ _methods: Array&lt;Method*&gt;*&#xa;⭐ _fields: Array&lt;u2&gt;*&#xa;_local_interfaces: Array&lt;Klass*&gt;*&#xa;_init_state: u1 (ClassState)&#xa;_oop_map_cache: OopMapCache*&#xa;_osr_nmethods_head: nmethod*&#xa;─────────────&#xa;ClassState:&#xa;• allocated → loaded → linked&#xa;• → being_initialized&#xa;• → fully_initialized&#xa;─────────────&#xa;嵌入: vtable + itable + oop-map" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="280" y="330" width="200" height="220" as="geometry"/>
+        </mxCell>
+        
+        <!-- 连接线 -->
+        <mxCell id="edge1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;" edge="1" parent="1" source="oopDesc" target="markOopDesc">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;" edge="1" parent="1" source="oopDesc" target="Klass">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;dashed=1;" edge="1" parent="1" source="Klass" target="InstanceKlass">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- ==================== 运行时层 ==================== -->
+        <mxCell id="runtime-title" value="⚡ 运行时层：线程与同步 (runtime/)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#e94560;" vertex="1" parent="1">
+          <mxGeometry x="520" y="80" width="300" height="30" as="geometry"/>
+        </mxCell>
+        
+        <!-- Thread -->
+        <mxCell id="Thread" value="Thread&#xa;(thread.hpp)&#xa;─────────────&#xa;_gc_data: GCThreadLocalData&#xa;_SR_lock: Monitor*&#xa;_suspend_flags: volatile uint32_t&#xa;⭐ _tlab: ThreadLocalAllocBuffer&#xa;_polling_page: volatile void*&#xa;omFreeList: ObjectMonitor*&#xa;omInUseList: ObjectMonitor*&#xa;─────────────&#xa;线程基类&#xa;继承自ThreadShadow" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="520" y="120" width="200" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- JavaThread -->
+        <mxCell id="JavaThread" value="JavaThread&#xa;(thread.hpp:1000+)&#xa;─────────────&#xa;⭐ _anchor: JavaFrameAnchor&#xa;⭐ _thread_state: JavaThreadState&#xa;_vm_result: oop&#xa;_pending_exception: oop&#xa;_jni_environment: JNIEnv&#xa;_stack_base/size: address/size_t&#xa;_safepoint_state: ThreadSafepointState*&#xa;─────────────&#xa;JavaThreadState:&#xa;• _thread_in_Java&#xa;• _thread_in_vm&#xa;• _thread_in_native&#xa;• _thread_blocked" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="520" y="320" width="200" height="200" as="geometry"/>
+        </mxCell>
+        
+        <!-- ObjectMonitor -->
+        <mxCell id="ObjectMonitor" value="ObjectMonitor&#xa;(objectMonitor.hpp)&#xa;─────────────&#xa;⭐ _header: volatile markOop&#xa;⭐ _object: void* volatile&#xa;⭐ _owner: void* volatile&#xa;⭐ _recursions: volatile intptr_t&#xa;⭐ _EntryList: ObjectWaiter* volatile&#xa;⭐ _cxq: ObjectWaiter* volatile&#xa;⭐ _WaitSet: ObjectWaiter* volatile&#xa;_succ: Thread* volatile&#xa;_Spinner: volatile int&#xa;_SpinDuration: volatile int&#xa;─────────────&#xa;重量级锁实现&#xa;Knob_SpinLimit控制自旋" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="760" y="120" width="200" height="210" as="geometry"/>
+        </mxCell>
+        
+        <!-- SafepointSynchronize -->
+        <mxCell id="SafepointSync" value="SafepointSynchronize&#xa;(safepoint.hpp)&#xa;─────────────&#xa;⭐ _state: SynchronizeState&#xa;⭐ _safepoint_counter: volatile int&#xa;_waiting_to_block: volatile int&#xa;_end_of_last_safepoint: long&#xa;─────────────&#xa;SynchronizeState:&#xa;• _not_synchronized = 0&#xa;• _synchronizing = 1&#xa;• _synchronized = 2&#xa;─────────────&#xa;SafepointCleanupTasks:&#xa;• DEFLATE_MONITORS&#xa;• UPDATE_INLINE_CACHES&#xa;• SYMBOL_TABLE_REHASH" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="760" y="350" width="200" height="200" as="geometry"/>
+        </mxCell>
+        
+        <!-- 连接线 -->
+        <mxCell id="edge4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;dashed=1;" edge="1" parent="1" source="Thread" target="JavaThread">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;" edge="1" parent="1" source="markOopDesc" target="ObjectMonitor">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- ==================== GC层 ==================== -->
+        <mxCell id="gc-title" value="🗑️ GC层：G1垃圾收集 (gc/g1/)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#e94560;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="80" width="300" height="30" as="geometry"/>
+        </mxCell>
+        
+        <!-- G1CollectedHeap -->
+        <mxCell id="G1Heap" value="G1CollectedHeap&#xa;(g1CollectedHeap.hpp)&#xa;─────────────&#xa;⭐ _hrm: HeapRegionManager&#xa;⭐ _g1_policy: G1Policy*&#xa;⭐ _cm: G1ConcurrentMark*&#xa;_young_gen_sampling_thread&#xa;_ref_processor_stw/cm&#xa;_bot: G1BlockOffsetTable*&#xa;_dirty_card_queue_set&#xa;─────────────&#xa;G1堆管理核心&#xa;do_collection_pause()入口" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="120" width="200" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- HeapRegion -->
+        <mxCell id="HeapRegion" value="HeapRegion&#xa;(heapRegion.hpp)&#xa;─────────────&#xa;⭐ _hrm_index: uint&#xa;⭐ _type: HeapRegionType&#xa;⭐ _rem_set: HeapRegionRemSet*&#xa;_prev_marked_bytes: size_t&#xa;_next_marked_bytes: size_t&#xa;_prev_top_at_mark_start&#xa;_next_top_at_mark_start&#xa;_gc_efficiency: double&#xa;─────────────&#xa;GrainBytes: 1MB~32MB&#xa;类型: Free/Eden/Survivor/Old/Humongous" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="320" width="200" height="190" as="geometry"/>
+        </mxCell>
+        
+        <!-- TLAB -->
+        <mxCell id="TLAB" value="ThreadLocalAllocBuffer&#xa;(threadLocalAllocBuffer.hpp)&#xa;─────────────&#xa;⭐ _start: HeapWord*&#xa;⭐ _top: HeapWord*&#xa;⭐ _end: HeapWord*&#xa;_allocation_end: HeapWord*&#xa;_desired_size: size_t&#xa;_refill_waste_limit: size_t&#xa;─────────────&#xa;线程本地分配缓冲区&#xa;无锁快速分配&#xa;默认占Eden 1%&#xa;分配: _top += size" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="120" width="200" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- G1ConcurrentMark -->
+        <mxCell id="G1CM" value="G1ConcurrentMark&#xa;(g1ConcurrentMark.hpp)&#xa;─────────────&#xa;_mark_bitmap_1/2: G1CMBitMap*&#xa;_prev/next_mark_bitmap&#xa;_global_mark_stack&#xa;_finger: HeapWord*&#xa;_concurrent_marking_in_progress&#xa;─────────────&#xa;并发标记阶段:&#xa;1. Initial Mark (STW)&#xa;2. Root Region Scan&#xa;3. Concurrent Mark&#xa;4. Remark (STW)&#xa;5. Cleanup" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="320" width="200" height="190" as="geometry"/>
+        </mxCell>
+        
+        <!-- 连接线 -->
+        <mxCell id="edge6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;" edge="1" parent="1" source="G1Heap" target="HeapRegion">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;" edge="1" parent="1" source="G1Heap" target="G1CM">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;" edge="1" parent="1" source="Thread" target="TLAB">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- ==================== 编译层 ==================== -->
+        <mxCell id="compiler-title" value="🔧 编译层：JIT编译 (compiler/ + code/)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#e94560;" vertex="1" parent="1">
+          <mxGeometry x="1480" y="80" width="350" height="30" as="geometry"/>
+        </mxCell>
+        
+        <!-- CompileBroker -->
+        <mxCell id="CompileBroker" value="CompileBroker&#xa;(compileBroker.hpp)&#xa;─────────────&#xa;_c1_compile_queue: CompileQueue*&#xa;_c2_compile_queue: CompileQueue*&#xa;_compiler_threads: CompilerThread**&#xa;_compilers[2]: AbstractCompiler*&#xa;─────────────&#xa;分层编译:&#xa;Level 0: 解释执行&#xa;Level 1: C1无profiling&#xa;Level 2: C1有限profiling&#xa;Level 3: C1完整profiling&#xa;Level 4: C2完整优化" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1480" y="120" width="200" height="190" as="geometry"/>
+        </mxCell>
+        
+        <!-- nmethod -->
+        <mxCell id="nmethod" value="nmethod&#xa;(nmethod.hpp)&#xa;─────────────&#xa;⭐ _entry_point: address&#xa;⭐ _verified_entry_point: address&#xa;_osr_entry_point: address&#xa;_compile_id: int&#xa;_comp_level: int&#xa;_state: signed char&#xa;_hotness_counter: int&#xa;─────────────&#xa;布局:&#xa;[header|reloc|consts|code|&#xa;stub|oops|metadata|scopes|&#xa;deps|handler|nul_chk]&#xa;─────────────&#xa;状态: not_installed→in_use&#xa;→not_entrant→zombie→unloaded" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1480" y="330" width="200" height="220" as="geometry"/>
+        </mxCell>
+        
+        <!-- CodeCache -->
+        <mxCell id="CodeCache" value="CodeCache&#xa;(codeCache.hpp)&#xa;─────────────&#xa;_heaps: GrowableArray&lt;CodeHeap*&gt;*&#xa;_low_bound: address&#xa;_high_bound: address&#xa;─────────────&#xa;三个堆(JDK9+):&#xa;• non-nmethods (JVM内部)&#xa;• profiled (C1编译)&#xa;• non-profiled (C2编译)&#xa;─────────────&#xa;默认: 240MB (分层)&#xa;48MB (非分层)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1720" y="120" width="200" height="190" as="geometry"/>
+        </mxCell>
+        
+        <!-- Deoptimization -->
+        <mxCell id="Deopt" value="Deoptimization&#xa;(deoptimization.hpp)&#xa;─────────────&#xa;触发原因:&#xa;• Reason_null_check&#xa;• Reason_class_check&#xa;• Reason_array_check&#xa;• Reason_unreached&#xa;• Reason_unstable_if&#xa;─────────────&#xa;去优化流程:&#xa;1. 收集栈帧信息&#xa;2. 创建解释器帧&#xa;3. 恢复执行状态&#xa;4. 跳转解释器" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1720" y="330" width="200" height="190" as="geometry"/>
+        </mxCell>
+        
+        <!-- 连接线 -->
+        <mxCell id="edge9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;" edge="1" parent="1" source="CompileBroker" target="nmethod">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="edge10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#666666;" edge="1" parent="1" source="nmethod" target="CodeCache">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        
+        <!-- ==================== 类加载层 ==================== -->
+        <mxCell id="classfile-title" value="📚 类加载层 (classfile/)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#e94560;" vertex="1" parent="1">
+          <mxGeometry x="40" y="560" width="300" height="30" as="geometry"/>
+        </mxCell>
+        
+        <!-- ClassFileParser -->
+        <mxCell id="ClassFileParser" value="ClassFileParser&#xa;(classFileParser.hpp)&#xa;─────────────&#xa;_stream: ClassFileStream*&#xa;_cp: ConstantPool*&#xa;_fields: Array&lt;u2&gt;*&#xa;_methods: Array&lt;Method*&gt;*&#xa;_local_interfaces&#xa;─────────────&#xa;解析流程:&#xa;1. parse_stream() 入口&#xa;2. parse_constant_pool()&#xa;3. parse_interfaces()&#xa;4. parse_fields()&#xa;5. parse_methods()&#xa;6. create_instance_klass()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="600" width="200" height="200" as="geometry"/>
+        </mxCell>
+        
+        <!-- SystemDictionary -->
+        <mxCell id="SystemDictionary" value="SystemDictionary&#xa;(systemDictionary.hpp)&#xa;─────────────&#xa;_dictionary: Dictionary*&#xa;_shared_dictionary: Dictionary*&#xa;_placeholder_table: PlaceholderTable*&#xa;_loader_constraints: LoaderConstraintTable*&#xa;─────────────&#xa;核心方法:&#xa;• resolve_or_null()&#xa;• resolve_or_fail()&#xa;• find_class()&#xa;• define_instance_class()&#xa;─────────────&#xa;类查找/加载/定义的核心" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="280" y="600" width="200" height="200" as="geometry"/>
+        </mxCell>
+        
+        <!-- ClassLoader -->
+        <mxCell id="ClassLoaderCpp" value="ClassLoader&#xa;(classLoader.hpp)&#xa;─────────────&#xa;_first_append_entry: ClassPathEntry*&#xa;_last_append_entry: ClassPathEntry*&#xa;_shared_paths_misc_info&#xa;─────────────&#xa;ClassPathEntry类型:&#xa;• ClassPathDirEntry&#xa;• ClassPathZipEntry&#xa;• ModuleClassPathList&#xa;─────────────&#xa;load_class() 加载入口&#xa;双亲委派在Java层实现" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="820" width="200" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- ConstantPool -->
+        <mxCell id="ConstantPool" value="ConstantPool&#xa;(constantPool.hpp)&#xa;─────────────&#xa;_tags: Array&lt;u1&gt;*&#xa;_cache: ConstantPoolCache*&#xa;_pool_holder: InstanceKlass*&#xa;_operands: Array&lt;u2&gt;*&#xa;_resolved_references: OopHandle&#xa;─────────────&#xa;Tag类型:&#xa;JVM_CONSTANT_Utf8&#xa;JVM_CONSTANT_Class&#xa;JVM_CONSTANT_Methodref&#xa;JVM_CONSTANT_InvokeDynamic" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="280" y="820" width="200" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- ==================== 解释器层 ==================== -->
+        <mxCell id="interp-title" value="🔄 解释器层 (interpreter/)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#e94560;" vertex="1" parent="1">
+          <mxGeometry x="520" y="560" width="300" height="30" as="geometry"/>
+        </mxCell>
+        
+        <!-- TemplateInterpreter -->
+        <mxCell id="TemplateInterp" value="TemplateInterpreter&#xa;(templateInterpreter.hpp)&#xa;─────────────&#xa;_code: InterpreterCodelet*&#xa;_active_table: DispatchTable&#xa;_normal_table: DispatchTable&#xa;─────────────&#xa;模板解释器:&#xa;每个字节码对应&#xa;一段汇编代码模板&#xa;─────────────&#xa;关键入口:&#xa;• method_entry()&#xa;• normal_entry()&#xa;• native_entry()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="520" y="600" width="200" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- Bytecodes -->
+        <mxCell id="Bytecodes" value="Bytecodes&#xa;(bytecodes.hpp)&#xa;─────────────&#xa;256个字节码定义&#xa;─────────────&#xa;常用字节码:&#xa;• _aload_0 = 42&#xa;• _invokevirtual = 182&#xa;• _invokespecial = 183&#xa;• _invokestatic = 184&#xa;• _invokeinterface = 185&#xa;• _invokedynamic = 186&#xa;• _new = 187&#xa;• _monitorenter = 194&#xa;• _monitorexit = 195" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="760" y="600" width="200" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- LinkResolver -->
+        <mxCell id="LinkResolver" value="LinkResolver&#xa;(linkResolver.hpp)&#xa;─────────────&#xa;解析方法调用:&#xa;• resolve_invoke()&#xa;• resolve_virtual_call()&#xa;• resolve_interface_call()&#xa;• resolve_static_call()&#xa;─────────────&#xa;CallInfo结果:&#xa;_resolved_method: Method*&#xa;_selected_method: Method*&#xa;_call_kind: CallKind&#xa;_call_index: int" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="520" y="800" width="200" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- Method -->
+        <mxCell id="Method" value="Method&#xa;(method.hpp)&#xa;─────────────&#xa;⭐ _constMethod: ConstMethod*&#xa;⭐ _method_data: MethodData*&#xa;⭐ _method_counters: MethodCounters*&#xa;_access_flags: AccessFlags&#xa;_intrinsic_id: u2&#xa;_from_compiled_entry: address&#xa;_from_interpreted_entry: address&#xa;_i2i_entry: address&#xa;_code: CompiledMethod* volatile&#xa;─────────────&#xa;方法表示&#xa;含编译入口和解释入口" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="760" y="800" width="200" height="190" as="geometry"/>
+        </mxCell>
+        
+        <!-- ==================== 内存管理层 ==================== -->
+        <mxCell id="memory-title" value="💾 内存管理层 (memory/)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#e94560;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="560" width="300" height="30" as="geometry"/>
+        </mxCell>
+        
+        <!-- Universe -->
+        <mxCell id="Universe" value="Universe&#xa;(universe.hpp)&#xa;─────────────&#xa;_collectedHeap: CollectedHeap*&#xa;_main_thread_group: oop&#xa;_system_thread_group: oop&#xa;_boolArrayKlassObj: Klass*&#xa;...ArrayKlassObj&#xa;─────────────&#xa;JVM全局状态&#xa;genesis() 初始化入口&#xa;─────────────&#xa;HeapBasedNarrowOop:&#xa;压缩指针基址" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="600" width="200" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- Metaspace -->
+        <mxCell id="Metaspace" value="Metaspace&#xa;(metaspace.hpp)&#xa;─────────────&#xa;_class_vsm: VirtualSpaceList*&#xa;_metadata_vsm: VirtualSpaceList*&#xa;_chunk_manager_class&#xa;_chunk_manager_metadata&#xa;─────────────&#xa;元空间(替代PermGen)&#xa;存储类元数据&#xa;─────────────&#xa;ChunkManager管理:&#xa;• SmallChunk: 512B&#xa;• MediumChunk: 4KB&#xa;• HumongousChunk: &gt;4KB" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="600" width="200" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- CollectedHeap -->
+        <mxCell id="CollectedHeap" value="CollectedHeap&#xa;(collectedHeap.hpp)&#xa;─────────────&#xa;_reserved: MemRegion&#xa;_barrier_set: BarrierSet*&#xa;_gc_cause: GCCause::Cause&#xa;_total_collections: unsigned int&#xa;─────────────&#xa;堆抽象基类&#xa;子类:&#xa;• G1CollectedHeap&#xa;• ParallelScavengeHeap&#xa;• SerialHeap&#xa;• EpsilonHeap" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="800" width="200" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- BarrierSet -->
+        <mxCell id="BarrierSet" value="BarrierSet&#xa;(barrierSet.hpp)&#xa;─────────────&#xa;_barrier_set_assembler&#xa;_barrier_set_c1&#xa;_barrier_set_c2&#xa;─────────────&#xa;写屏障实现:&#xa;• CardTableBarrierSet&#xa;• G1BarrierSet&#xa;─────────────&#xa;G1写屏障:&#xa;pre_write_barrier (SATB)&#xa;post_write_barrier (卡表)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="800" width="200" height="180" as="geometry"/>
+        </mxCell>
+        
+        <!-- ==================== 核心关系图 ==================== -->
+        <mxCell id="relations-title" value="🔗 核心关系与数据流" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#e94560;" vertex="1" parent="1">
+          <mxGeometry x="1480" y="560" width="300" height="30" as="geometry"/>
+        </mxCell>
+        
+        <!-- 对象分配流程 -->
+        <mxCell id="alloc-flow" value="📦 对象分配流程&#xa;─────────────────────&#xa;1. TLAB快速路径&#xa;   _top += size (无锁)&#xa;   ↓ 失败&#xa;2. TLAB慢速路径&#xa;   refill TLAB from Eden&#xa;   ↓ 失败&#xa;3. Eden直接分配&#xa;   CAS分配&#xa;   ↓ 失败&#xa;4. 触发Young GC&#xa;   ↓ 仍失败&#xa;5. Old区分配&#xa;   ↓ 仍失败&#xa;6. Full GC&#xa;   ↓ 仍失败&#xa;7. OOM" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1480" y="600" width="180" height="250" as="geometry"/>
+        </mxCell>
+        
+        <!-- 锁升级流程 -->
+        <mxCell id="lock-flow" value="🔐 锁升级流程&#xa;─────────────────────&#xa;1. 无锁状态&#xa;   [hashcode|age|0|01]&#xa;   ↓ 首次获取&#xa;2. 偏向锁&#xa;   [threadID|epoch|age|1|01]&#xa;   ↓ 竞争&#xa;3. 轻量级锁&#xa;   [Lock Record ptr|00]&#xa;   CAS替换Mark Word&#xa;   ↓ 自旋失败&#xa;4. 重量级锁&#xa;   [ObjectMonitor ptr|10]&#xa;   inflate()膨胀&#xa;   park()阻塞" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1680" y="600" width="180" height="250" as="geometry"/>
+        </mxCell>
+        
+        <!-- 方法调用流程 -->
+        <mxCell id="invoke-flow" value="📞 方法调用流程&#xa;─────────────────────&#xa;1. 字节码dispatch&#xa;   invokevirtual/interface/...&#xa;   ↓&#xa;2. LinkResolver解析&#xa;   resolve_invoke()&#xa;   查找目标方法&#xa;   ↓&#xa;3. 判断入口&#xa;   _from_interpreted_entry?&#xa;   _from_compiled_entry?&#xa;   ↓&#xa;4a. 解释执行&#xa;    TemplateInterpreter&#xa;   ↓&#xa;4b. 编译执行&#xa;    nmethod入口" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1880" y="600" width="180" height="250" as="geometry"/>
+        </mxCell>
+        
+        <!-- G1 GC流程 -->
+        <mxCell id="gc-flow" value="🗑️ G1 GC流程&#xa;─────────────────────&#xa;Young GC (STW):&#xa;1. 选择CSet (所有Young)&#xa;2. 根扫描&#xa;3. RSet扫描&#xa;4. 复制存活对象&#xa;5. 清理Region&#xa;&#xa;Mixed GC:&#xa;1. 并发标记完成后&#xa;2. 选择CSet (Young+部分Old)&#xa;3. 同Young GC流程&#xa;&#xa;并发标记:&#xa;Initial Mark → Root Scan&#xa;→ Concurrent Mark → Remark&#xa;→ Cleanup" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1480" y="870" width="180" height="250" as="geometry"/>
+        </mxCell>
+        
+        <!-- 编译流程 -->
+        <mxCell id="compile-flow" value="⚙️ JIT编译流程&#xa;─────────────────────&#xa;1. 方法调用计数&#xa;   MethodCounters&#xa;   ↓ 达到阈值&#xa;2. 提交编译任务&#xa;   CompileBroker::compile_method&#xa;   ↓&#xa;3. 编译线程处理&#xa;   C1/C2 CompilerThread&#xa;   ↓&#xa;4. 生成nmethod&#xa;   安装到CodeCache&#xa;   ↓&#xa;5. 替换入口&#xa;   _from_compiled_entry&#xa;   ↓&#xa;6. OSR (可选)&#xa;   栈上替换" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1680" y="870" width="180" height="250" as="geometry"/>
+        </mxCell>
+        
+        <!-- 类加载流程 -->
+        <mxCell id="load-flow" value="📚 类加载流程&#xa;─────────────────────&#xa;1. 加载 (Loading)&#xa;   ClassLoader.load_class()&#xa;   读取.class字节流&#xa;   ↓&#xa;2. 解析 (Parsing)&#xa;   ClassFileParser.parse_stream()&#xa;   生成InstanceKlass&#xa;   ↓&#xa;3. 链接 (Linking)&#xa;   验证 → 准备 → 解析&#xa;   ↓&#xa;4. 初始化 (Initialization)&#xa;   执行&lt;clinit&gt;&#xa;   ClassState → fully_initialized" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="1880" y="870" width="180" height="250" as="geometry"/>
+        </mxCell>
+        
+        <!-- 图例 -->
+        <mxCell id="legend" value="📋 图例&#xa;─────────────────────&#xa;⭐ = 面试高频字段&#xa;黄色 = 对象/数据结构&#xa;蓝色 = 类/元数据&#xa;绿色 = 方法/函数&#xa;紫色 = 线程/并发&#xa;红色 = 编译/执行&#xa;灰色 = 流程说明" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#333333;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1020" width="180" height="140" as="geometry"/>
+        </mxCell>
+        
+        <!-- 源码文件索引 -->
+        <mxCell id="file-index" value="📁 核心源码文件索引&#xa;────────────────────────────────────────&#xa;对象系统: oops/ (oop.hpp, markOop.hpp, klass.hpp, instanceKlass.hpp)&#xa;运行时:   runtime/ (thread.hpp, objectMonitor.hpp, safepoint.hpp, synchronizer.cpp)&#xa;GC:       gc/g1/ (g1CollectedHeap.hpp, heapRegion.hpp, g1ConcurrentMark.hpp)&#xa;          gc/shared/ (threadLocalAllocBuffer.hpp, collectedHeap.hpp)&#xa;编译器:   compiler/ (compileBroker.hpp), code/ (nmethod.hpp, codeCache.hpp)&#xa;          c1/ (c1_*.cpp), opto/ (compile.cpp, escape.cpp)&#xa;类加载:   classfile/ (classFileParser.cpp, systemDictionary.cpp, classLoader.cpp)&#xa;解释器:   interpreter/ (templateInterpreter.cpp, bytecodes.hpp, linkResolver.cpp)&#xa;内存:     memory/ (universe.hpp, metaspace.hpp, allocation.hpp)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e6e6e6;strokeColor=#333333;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="240" y="1020" width="600" height="140" as="geometry"/>
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

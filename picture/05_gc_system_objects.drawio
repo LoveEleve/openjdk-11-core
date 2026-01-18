@@ -1,0 +1,334 @@
+<mxfile host="app.diagrams.net" modified="2024-01-01T00:00:00.000Z" agent="JVM Source Analysis" version="21.0.0" type="device">
+  <diagram id="gc-system" name="GC系统核心对象">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- 标题 -->
+        <mxCell id="title" value="&lt;font style=&quot;font-size: 24px;&quot;&gt;&lt;b&gt;G1 GC系统核心对象详解&lt;/b&gt;&lt;/font&gt;&lt;br&gt;源码: g1CollectedHeap.cpp, g1ConcurrentMark.cpp, g1RemSet.cpp" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="550" y="20" width="700" height="50" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== G1 GC 流程概览 ==================== -->
+        <mxCell id="flow-title" value="&lt;b&gt;G1 GC 流程概览&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=#f8cecc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="700" height="25" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="flow-box" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="120" width="700" height="100" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="young-gc" value="&lt;b&gt;Young GC&lt;/b&gt;&lt;br&gt;(STW)&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;复制Eden+Survivor&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="50" y="135" width="100" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="init-mark" value="&lt;b&gt;Initial Mark&lt;/b&gt;&lt;br&gt;(STW, 随Young GC)&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;标记GC Roots&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="170" y="135" width="110" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="conc-mark" value="&lt;b&gt;Concurrent Mark&lt;/b&gt;&lt;br&gt;(并发)&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;遍历对象图&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="300" y="135" width="100" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="remark" value="&lt;b&gt;Remark&lt;/b&gt;&lt;br&gt;(STW)&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;处理SATB&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="420" y="135" width="90" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cleanup" value="&lt;b&gt;Cleanup&lt;/b&gt;&lt;br&gt;(部分STW)&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;计算存活率&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="530" y="135" width="90" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="mixed-gc" value="&lt;b&gt;Mixed GC&lt;/b&gt;&lt;br&gt;(STW)&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;回收Young+部分Old&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="640" y="135" width="90" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="arrow1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;" edge="1" parent="1" source="young-gc" target="init-mark">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;" edge="1" parent="1" source="init-mark" target="conc-mark">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;" edge="1" parent="1" source="conc-mark" target="remark">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;" edge="1" parent="1" source="remark" target="cleanup">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;" edge="1" parent="1" source="cleanup" target="mixed-gc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== G1CollectionSet 结构 ==================== -->
+        <mxCell id="cset-title" value="&lt;b&gt;G1CollectionSet (回收集合)&lt;/b&gt;&lt;br&gt;(g1CollectionSet.hpp)" style="text;html=1;strokeColor=none;fillColor=#f8cecc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="240" width="320" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cset" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="280" width="320" height="280" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cset-collection" value="&lt;b&gt;_collection_set_regions&lt;/b&gt; : uint*&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ 回收Region索引数组&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;本次GC要回收的所有Region&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="290" width="300" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cset-length" value="&lt;b&gt;_collection_set_cur_length&lt;/b&gt; : uint&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;当前回收集合大小&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="345" width="300" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cset-eden" value="&lt;b&gt;_eden_region_length&lt;/b&gt; : uint&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;Eden Region数量&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="385" width="145" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cset-survivor" value="&lt;b&gt;_survivor_region_length&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;Survivor数量&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="205" y="385" width="145" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cset-old" value="&lt;b&gt;_old_region_length&lt;/b&gt; : uint&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;老年代Region数量 (Mixed GC)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="430" width="300" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cset-candidates" value="&lt;b&gt;_candidates&lt;/b&gt; : G1CollectionSetCandidates*&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;候选老年代Region&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#0066cc&quot;&gt;按回收效率排序&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="475" width="300" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cset-bytes" value="&lt;b&gt;_bytes_used_before&lt;/b&gt; : size_t&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;GC前已用字节数&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="530" width="300" height="25" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== G1ConcurrentMark 详细 ==================== -->
+        <mxCell id="cm-title" value="&lt;b&gt;G1ConcurrentMark (并发标记)&lt;/b&gt;&lt;br&gt;(g1ConcurrentMark.hpp)" style="text;html=1;strokeColor=none;fillColor=#dae8fc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="390" y="240" width="320" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cm" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="390" y="280" width="320" height="380" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cm-bitmap1" value="&lt;b&gt;_mark_bitmap_1&lt;/b&gt; : G1CMBitMap&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ 标记位图1&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="400" y="290" width="145" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cm-bitmap2" value="&lt;b&gt;_mark_bitmap_2&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ 标记位图2&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="555" y="290" width="145" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cm-prev-bitmap" value="&lt;b&gt;_prev_mark_bitmap&lt;/b&gt; : G1CMBitMap*&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;上次标记完成的位图&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#0066cc&quot;&gt;用于判断对象存活&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="400" y="335" width="300" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cm-next-bitmap" value="&lt;b&gt;_next_mark_bitmap&lt;/b&gt; : G1CMBitMap*&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;当前正在标记的位图&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#0066cc&quot;&gt;标记完成后与prev交换&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="400" y="390" width="300" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cm-stack" value="&lt;b&gt;_global_mark_stack&lt;/b&gt; : G1CMMarkStack&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ 全局标记栈&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;存放待扫描的灰色对象&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#0066cc&quot;&gt;默认4MB&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="400" y="445" width="300" height="60" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cm-tasks" value="&lt;b&gt;_tasks&lt;/b&gt; : G1CMTask**&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;并发标记任务数组&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#0066cc&quot;&gt;每个GC线程一个task&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="400" y="510" width="300" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cm-finger" value="&lt;b&gt;_finger&lt;/b&gt; : HeapWord*&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;标记进度指针&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="400" y="565" width="145" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cm-concurrent" value="&lt;b&gt;_concurrent&lt;/b&gt; : bool&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;是否并发执行&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="555" y="565" width="145" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cm-root-regions" value="&lt;b&gt;_root_regions&lt;/b&gt; : G1CMRootRegions&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;根Region (Survivor)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="400" y="605" width="300" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="cm-completed" value="&lt;b&gt;_mark_stack_max_size&lt;/b&gt; : size_t&lt;br&gt;&lt;font color=&quot;#0066cc&quot;&gt;默认4MB (MarkStackSize)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="400" y="645" width="300" height="25" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== G1CMBitMap 结构 ==================== -->
+        <mxCell id="bitmap-title" value="&lt;b&gt;G1CMBitMap (标记位图)&lt;/b&gt;&lt;br&gt;(g1ConcurrentMark.hpp)" style="text;html=1;strokeColor=none;fillColor=#d5e8d4;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="740" y="240" width="280" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="bitmap" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="740" y="280" width="280" height="180" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="bm-map" value="&lt;b&gt;_bm&lt;/b&gt; : BitMap&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ 实际位图数据&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;每bit对应一个对象起始位置&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="750" y="290" width="260" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="bm-covered" value="&lt;b&gt;_covered&lt;/b&gt; : MemRegion&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;覆盖的堆区域&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="750" y="345" width="260" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="bm-shifter" value="&lt;b&gt;_shifter&lt;/b&gt; : int&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;地址到位图索引的位移&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#0066cc&quot;&gt;= log2(HeapWordSize) = 3&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="750" y="385" width="260" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="bm-size" value="&lt;b&gt;大小计算:&lt;/b&gt; 8GB堆 / 8字节 / 8 = 128MB" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=10;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="750" y="440" width="260" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== G1CMTask 结构 ==================== -->
+        <mxCell id="task-title" value="&lt;b&gt;G1CMTask (标记任务)&lt;/b&gt;&lt;br&gt;(g1ConcurrentMark.hpp)" style="text;html=1;strokeColor=none;fillColor=#e1d5e7;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="740" y="480" width="280" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="task" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="740" y="520" width="280" height="200" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="task-worker-id" value="&lt;b&gt;_worker_id&lt;/b&gt; : uint&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;工作线程ID&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="750" y="530" width="260" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="task-local-stack" value="&lt;b&gt;_task_queue&lt;/b&gt; : G1CMTaskQueue*&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ 本地任务队列&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;work-stealing支持&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="750" y="570" width="260" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="task-finger" value="&lt;b&gt;_finger&lt;/b&gt; : HeapWord*&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;本地扫描进度&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="750" y="625" width="125" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="task-region" value="&lt;b&gt;_curr_region&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;当前扫描Region&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="885" y="625" width="125" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="task-words" value="&lt;b&gt;_words_scanned&lt;/b&gt; : size_t&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;已扫描字数 (用于中断判断)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="750" y="670" width="260" height="35" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== SATB 队列 ==================== -->
+        <mxCell id="satb-title" value="&lt;b&gt;SATBMarkQueue (SATB队列)&lt;/b&gt;&lt;br&gt;(satbMarkQueue.hpp)" style="text;html=1;strokeColor=none;fillColor=#f8cecc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="240" width="280" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="satb" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="280" width="280" height="200" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="satb-buf" value="&lt;b&gt;_buf&lt;/b&gt; : void**&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ 缓冲区数组&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;存储被覆盖的旧引用&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="290" width="260" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="satb-index" value="&lt;b&gt;_index&lt;/b&gt; : size_t&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;当前写入位置&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="345" width="125" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="satb-capacity" value="&lt;b&gt;_capacity&lt;/b&gt; : size_t&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;缓冲区容量&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1195" y="345" width="125" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="satb-active" value="&lt;b&gt;_active&lt;/b&gt; : bool&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;是否激活 (并发标记期间)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="390" width="260" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="satb-note" value="&lt;b&gt;SATB原理:&lt;/b&gt;&lt;br&gt;Pre-write barrier记录被覆盖的旧引用&lt;br&gt;保证并发标记的正确性 (三色标记)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=10;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="430" width="260" height="45" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== DirtyCardQueue ==================== -->
+        <mxCell id="dcq-title" value="&lt;b&gt;DirtyCardQueue (脏卡队列)&lt;/b&gt;&lt;br&gt;(dirtyCardQueue.hpp)" style="text;html=1;strokeColor=none;fillColor=#d5e8d4;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="500" width="280" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="dcq" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1050" y="540" width="280" height="180" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="dcq-buf" value="&lt;b&gt;_buf&lt;/b&gt; : void**&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ 脏卡地址数组&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;Post-write barrier记录&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="550" width="260" height="50" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="dcq-index" value="&lt;b&gt;_index&lt;/b&gt; : size_t&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;当前写入位置&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="605" width="125" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="dcq-capacity" value="&lt;b&gt;_capacity&lt;/b&gt; : size_t&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;缓冲区容量&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1195" y="605" width="125" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="dcq-note" value="&lt;b&gt;用途:&lt;/b&gt; 记录跨Region引用的卡&lt;br&gt;Refinement线程处理后更新RemSet" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;align=left;spacingLeft=10;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1060" y="650" width="260" height="35" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== ReferenceProcessor ==================== -->
+        <mxCell id="ref-title" value="&lt;b&gt;ReferenceProcessor (引用处理)&lt;/b&gt;&lt;br&gt;(referenceProcessor.hpp)" style="text;html=1;strokeColor=none;fillColor=#e1d5e7;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="580" width="320" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="refproc" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="620" width="320" height="250" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ref-soft" value="&lt;b&gt;_discoveredSoftRefs&lt;/b&gt; : DiscoveredList*&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ 软引用列表&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;内存不足时回收&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="630" width="300" height="45" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ref-weak" value="&lt;b&gt;_discoveredWeakRefs&lt;/b&gt; : DiscoveredList*&lt;br&gt;&lt;font color=&quot;#cc0000&quot;&gt;⭐ 弱引用列表&lt;/font&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;GC时总是回收&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="680" width="300" height="45" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ref-final" value="&lt;b&gt;_discoveredFinalRefs&lt;/b&gt; : DiscoveredList*&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;Final引用 (Finalizer)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="730" width="300" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ref-phantom" value="&lt;b&gt;_discoveredPhantomRefs&lt;/b&gt; : DiscoveredList*&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;虚引用 (用于跟踪回收)&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="770" width="300" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ref-policy" value="&lt;b&gt;_policy&lt;/b&gt; : ReferencePolicy*&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;软引用清理策略&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="810" width="145" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ref-mt" value="&lt;b&gt;_processing_is_mt&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;是否多线程处理&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="205" y="810" width="145" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="ref-enqueue" value="&lt;b&gt;_enqueuing_is_done&lt;/b&gt; : bool&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;入队是否完成&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="850" width="300" height="25" as="geometry" />
+        </mxCell>
+        
+        <!-- ==================== G1EvacuationInfo ==================== -->
+        <mxCell id="evac-title" value="&lt;b&gt;G1EvacuationInfo (疏散信息)&lt;/b&gt;&lt;br&gt;(g1EvacuationInfo.hpp)" style="text;html=1;strokeColor=none;fillColor=#dae8fc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="390" y="680" width="320" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="evac" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="390" y="720" width="320" height="150" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="evac-cset" value="&lt;b&gt;_collectionset_regions&lt;/b&gt; : uint&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;回收集合Region数&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="400" y="730" width="150" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="evac-alloc" value="&lt;b&gt;_alloc_regions&lt;/b&gt; : uint&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;分配的Region数&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="730" width="140" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="evac-used-before" value="&lt;b&gt;_collectionset_used_before&lt;/b&gt; : size_t&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;GC前已用空间&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="400" y="770" width="150" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="evac-used-after" value="&lt;b&gt;_collectionset_used_after&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;GC后已用空间&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="770" width="140" height="40" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="evac-regions-freed" value="&lt;b&gt;_regions_freed&lt;/b&gt; : uint&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;释放的Region数&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="400" y="815" width="150" height="35" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="evac-bytes-copied" value="&lt;b&gt;_bytes_copied&lt;/b&gt; : size_t&lt;br&gt;&lt;font color=&quot;#666666&quot;&gt;复制的字节数&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;align=left;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="560" y="815" width="140" height="35" as="geometry" />
+        </mxCell>
+        
+        <!-- 面试要点 -->
+        <mxCell id="interview-note" value="&lt;b&gt;面试要点&lt;/b&gt;:&lt;br&gt;1. G1将堆划分为Region，Young GC只回收Eden+Survivor，Mixed GC额外回收部分Old&lt;br&gt;2. 标记位图使用双缓冲，prev_bitmap用于判断存活，next_bitmap用于当前标记&lt;br&gt;3. SATB(Snapshot-At-The-Beginning)通过pre-write barrier记录旧引用，保证并发标记正确性&lt;br&gt;4. 脏卡队列记录跨Region引用，Refinement线程异步更新RemSet&lt;br&gt;5. Collection Set按回收效率选择Region，实现可预测暂停时间&lt;br&gt;6. 软引用在内存不足时回收，弱引用每次GC都回收，虚引用用于跟踪对象回收" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;align=left;spacingLeft=10;spacingTop=5;" vertex="1" parent="1">
+          <mxGeometry x="740" y="740" width="400" height="130" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

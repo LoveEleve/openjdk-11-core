@@ -1,0 +1,61 @@
+=== JVM启动流程GDB分析脚本 ===
+目标：追踪完整启动调用链和性能数据
+配置：8GB堆 + G1GC + 非大页 + 非NUMA
+
+Breakpoint 1 at 0x1208: file /data/workspace/openjdk11-core/src/java.base/share/native/launcher/main.c, line 98.
+Breakpoint 2 at 0x1050
+Function "JavaMain" not defined.
+Breakpoint 3 (JavaMain) pending.
+Function "InitializeJVM" not defined.
+Breakpoint 4 (InitializeJVM) pending.
+Function "JNI_CreateJavaVM" not defined.
+Breakpoint 5 (JNI_CreateJavaVM) pending.
+Function "Threads::create_vm" not defined.
+Breakpoint 6 (Threads::create_vm) pending.
+Function "universe_init" not defined.
+Breakpoint 7 (universe_init) pending.
+Function "Universe::genesis" not defined.
+Breakpoint 8 (Universe::genesis) pending.
+Function "Universe::initialize_heap" not defined.
+Breakpoint 9 (Universe::initialize_heap) pending.
+Function "G1CollectedHeap::initialize" not defined.
+Breakpoint 10 (G1CollectedHeap::initialize) pending.
+Function "G1HeapRegionManager::create_manager" not defined.
+Breakpoint 11 (G1HeapRegionManager::create_manager) pending.
+Function "G1Policy::create_policy" not defined.
+Breakpoint 12 (G1Policy::create_policy) pending.
+Function "SystemDictionary::initialize" not defined.
+Breakpoint 13 (SystemDictionary::initialize) pending.
+Function "ClassLoaderData::the_null_class_loader_data" not defined.
+Breakpoint 14 (ClassLoaderData::the_null_class_loader_data) pending.
+Function "SystemDictionary::initialize_preloaded_classes" not defined.
+Breakpoint 15 (SystemDictionary::initialize_preloaded_classes) pending.
+Function "interpreter_init" not defined.
+Breakpoint 16 (interpreter_init) pending.
+Function "TemplateTable::initialize" not defined.
+Breakpoint 17 (TemplateTable::initialize) pending.
+Function "AbstractInterpreter::initialize" not defined.
+Breakpoint 18 (AbstractInterpreter::initialize) pending.
+Function "CompileBroker::compilation_init" not defined.
+Breakpoint 19 (CompileBroker::compilation_init) pending.
+Function "CompileBroker::make_compiler_threads" not defined.
+Breakpoint 20 (CompileBroker::make_compiler_threads) pending.
+Function "java_lang_System::initialize" not defined.
+Breakpoint 21 (java_lang_System::initialize) pending.
+Function "JavaCalls::call_static" not defined.
+Breakpoint 22 (JavaCalls::call_static) pending.
+Function "HelloWorld.main" not defined.
+Breakpoint 23 (HelloWorld.main) pending.
+开始JVM启动流程分析...
+使用参数: -Xms8g -Xmx8g -XX:+UseG1GC HelloWorld
+
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+
+Breakpoint 1, main (argc=5, argv=0x7fffffffdaa8) at /data/workspace/openjdk11-core/src/java.base/share/native/launcher/main.c:98
+98	{
+[1768709073.138436] 
+=JVM进程启动 =
+main() 函数开始执行
+chapter_01_startup.gdb:257: Error in sourced command file:
+'__GI_getpid' has unknown return type; cast the call to its declared return type

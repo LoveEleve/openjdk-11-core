@@ -1,0 +1,125 @@
+Warning: 'set logging on', an alias for the command 'set logging enabled', is deprecated.
+Use 'set logging enabled on'.
+
+Reading symbols from /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/java...
+Function "universe_init" not defined.
+Breakpoint 1 (universe_init) pending.
+Function "JavaClasses::compute_hard_coded_offsets" not defined.
+Breakpoint 2 (JavaClasses::compute_hard_coded_offsets) pending.
+No source file named javaClasses.cpp.
+Breakpoint 3 (javaClasses.cpp:4473) pending.
+Function "Universe::initialize_heap" not defined.
+Breakpoint 4 (Universe::initialize_heap) pending.
+Function "Universe::create_heap" not defined.
+Breakpoint 5 (Universe::create_heap) pending.
+Function "G1CollectedHeap::initialize" not defined.
+Breakpoint 6 (G1CollectedHeap::initialize) pending.
+No source file named universe.cpp.
+Breakpoint 7 (universe.cpp:813) pending.
+Function "SystemDictionary::initialize_oop_storage" not defined.
+Breakpoint 8 (SystemDictionary::initialize_oop_storage) pending.
+Function "Metaspace::global_initialize" not defined.
+Breakpoint 9 (Metaspace::global_initialize) pending.
+Function "MetaspaceCounters::initialize_performance_counters" not defined.
+Breakpoint 10 (MetaspaceCounters::initialize_performance_counters) pending.
+Function "AOTLoader::universe_init" not defined.
+Breakpoint 11 (AOTLoader::universe_init) pending.
+Function "ClassLoaderData::init_null_class_loader_data" not defined.
+Breakpoint 12 (ClassLoaderData::init_null_class_loader_data) pending.
+No source file named universe.cpp.
+Breakpoint 13 (universe.cpp:720) pending.
+No source file named universe.cpp.
+Breakpoint 14 (universe.cpp:721) pending.
+No source file named universe.cpp.
+Breakpoint 15 (universe.cpp:722) pending.
+No source file named universe.cpp.
+Breakpoint 16 (universe.cpp:723) pending.
+No source file named universe.cpp.
+Breakpoint 17 (universe.cpp:724) pending.
+No source file named universe.cpp.
+Breakpoint 18 (universe.cpp:725) pending.
+No source file named universe.cpp.
+Breakpoint 19 (universe.cpp:726) pending.
+Function "SymbolTable::create_table" not defined.
+Breakpoint 20 (SymbolTable::create_table) pending.
+Function "StringTable::create_table" not defined.
+Breakpoint 21 (StringTable::create_table) pending.
+Function "ResolvedMethodTable::create_table" not defined.
+Breakpoint 22 (ResolvedMethodTable::create_table) pending.
+No source file named universe.cpp.
+Breakpoint 23 (universe.cpp:754) pending.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+----_JAVA_LAUNCHER_DEBUG----
+Launcher state:
+	First application arg index: 4
+	debug:on
+	javargs:off
+	program name:java
+	launcher name:openjdk
+	javaw:off
+	fullversion:11.0.17-internal+0-adhoc.root.openjdk11-core
+Java args:
+Command line args:
+argv[0] = /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/java
+argv[1] = -Xms8g
+argv[2] = -Xmx8g
+argv[3] = HelloWorld
+JRE path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk
+jvm.cfg[0] = ->-server<-
+jvm.cfg[1] = ->-client<-
+30 micro seconds to parse jvm.cfg
+Default VM: server
+Does `/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so' exist ... yes.
+mustsetenv: FALSE
+JVM path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so
+1565655 micro seconds to LoadJavaVM
+[New Thread 0x7ffff780b6c0 (LWP 1211076)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1211076)]
+
+Thread 2 "java" hit Breakpoint 1.2, universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:683
+683	  assert(!Universe::_fully_initialized, "called after initialize_vtables");
+
+=== universe_init() 函数开始执行 ===
+函数地址: 0x7ffff695f491
+当前线程: 2
+Universe::_fully_initialized: 0
+
+Thread 2 "java" hit Breakpoint 2, JavaClasses::compute_hard_coded_offsets () at /data/workspace/openjdk11-core/src/hotspot/share/classfile/javaClasses.cpp:4465
+4465	  java_lang_boxing_object::value_offset      = member_offset(java_lang_boxing_object::hc_value_offset);
+
+=== 1. JavaClasses::compute_hard_coded_offsets() ===
+函数地址: 0x7ffff623ef24
+作用：计算JVM需要直接访问的Java类字段偏移量
+
+Thread 2 "java" hit Breakpoint 3, JavaClasses::compute_hard_coded_offsets () at /data/workspace/openjdk11-core/src/hotspot/share/classfile/javaClasses.cpp:4473
+4473	}
+硬编码偏移量计算完成:
+  java_lang_boxing_object::value_offset = 12
+  java_lang_ref_Reference::referent_offset = 12
+  java_lang_ref_Reference::queue_offset = 16
+
+Thread 2 "java" hit Breakpoint 4, Universe::initialize_heap () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:805
+805	jint Universe::initialize_heap() {
+
+=== 2. Universe::initialize_heap() ===
+函数地址: 0x7ffff695f7c4
+作用：初始化JVM堆内存
+当前_collectedHeap: (nil)
+
+Thread 2 "java" hit Breakpoint 5, Universe::create_heap () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:758
+758	  assert(_collectedHeap == NULL, "Heap already created");
+
+--- Universe::create_heap() ---
+函数地址: 0x7ffff695f742
+作用：创建G1CollectedHeap对象
+[New Thread 0x7ffff51ff6c0 (LWP 1211114)]
+
+Thread 2 "java" hit Breakpoint 6, G1CollectedHeap::initialize (this=0x7ffff0032480) at /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp:1567
+1567	  os::enable_vtime();
+
+--- G1CollectedHeap::initialize() ---
+/data/workspace/openjdk11-core/md/universe_init_md/universe_init_debug.gdb:205: Error in sourced command file:
+Cannot reference virtual member function "initialize"
+Missing separate debuginfos, use: dnf debuginfo-install glibc-2.38-45.tl4.x86_64 libgcc-12.3.1.7-1.tl4.x86_64 libstdc++-12.3.1.7-1.tl4.x86_64 zlib-1.2.13-9.tl4.x86_64
+(gdb) 

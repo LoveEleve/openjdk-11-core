@@ -1,0 +1,68 @@
+Warning: 'set logging on', an alias for the command 'set logging enabled', is deprecated.
+Use 'set logging enabled on'.
+
+No source file named init.cpp.
+Breakpoint 1 (init.cpp:120) pending.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+----_JAVA_LAUNCHER_DEBUG----
+Launcher state:
+	First application arg index: 6
+	debug:on
+	javargs:off
+	program name:java
+	launcher name:openjdk
+	javaw:off
+	fullversion:11.0.17-internal+0-adhoc.root.openjdk11-core
+Java args:
+Command line args:
+argv[0] = /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/bin/java
+argv[1] = -Xms8g
+argv[2] = -Xmx8g
+argv[3] = -XX:+UseG1GC
+argv[4] = -XX:-UseLargePages
+argv[5] = HelloWorld
+JRE path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk
+jvm.cfg[0] = ->-server<-
+jvm.cfg[1] = ->-client<-
+23 micro seconds to parse jvm.cfg
+Default VM: server
+Does `/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/lib/server/libjvm.so' exist ... yes.
+mustsetenv: FALSE
+JVM path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/lib/server/libjvm.so
+739387 micro seconds to LoadJavaVM
+[New Thread 0x7ffff780b6c0 (LWP 1273685)]
+[New Thread 0x7ffff51ff6c0 (LWP 1273686)]
+[New Thread 0x7ffff43f06c0 (LWP 1273687)]
+[New Thread 0x7ffff42ee6c0 (LWP 1273688)]
+[New Thread 0x7fffc09f96c0 (LWP 1273689)]
+[New Thread 0x7fffc08f76c0 (LWP 1273690)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1273685)]
+
+Thread 2 "java" hit Breakpoint 1, init_globals () at /data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp:120
+warning: Source file is more recent than executable.
+120	                                  // stubRoutines_init1 and metaspace_init.
+
+=== 堆详细信息 ===
+
+--- G1CollectedHeap对象 ---
+$1 = (CollectedHeap *) 0x7ffff00326b0
+$2 = 0x7ffff00326b0
+
+--- 堆内存区域 (_reserved) ---
+$3 = {
+  _start = 0x600000000,
+  _word_size = 1073741824
+}
+$4 = 0x600000000
+
+--- HeapRegion配置 ---
+$5 = 4194304
+$6 = 22
+$7 = 524288
+$8 = 8192
+
+--- G1堆特有属性 ---
+$9 = 2048
+heap_details_debug.gdb:30: Error in sourced command file:
+There is no member or method named _length.

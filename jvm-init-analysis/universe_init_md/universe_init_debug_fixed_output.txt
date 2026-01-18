@@ -1,0 +1,250 @@
+Warning: 'set logging on', an alias for the command 'set logging enabled', is deprecated.
+Use 'set logging enabled on'.
+
+Reading symbols from /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/java...
+Function "universe_init" not defined.
+Breakpoint 1 (universe_init) pending.
+Function "JavaClasses::compute_hard_coded_offsets" not defined.
+Breakpoint 2 (JavaClasses::compute_hard_coded_offsets) pending.
+No source file named javaClasses.cpp.
+Breakpoint 3 (javaClasses.cpp:4473) pending.
+Function "Universe::initialize_heap" not defined.
+Breakpoint 4 (Universe::initialize_heap) pending.
+Function "Universe::create_heap" not defined.
+Breakpoint 5 (Universe::create_heap) pending.
+No source file named g1CollectedHeap.cpp.
+Breakpoint 6 (g1CollectedHeap.cpp:1567) pending.
+No source file named universe.cpp.
+Breakpoint 7 (universe.cpp:813) pending.
+Function "SystemDictionary::initialize_oop_storage" not defined.
+Breakpoint 8 (SystemDictionary::initialize_oop_storage) pending.
+Function "Metaspace::global_initialize" not defined.
+Breakpoint 9 (Metaspace::global_initialize) pending.
+Function "MetaspaceCounters::initialize_performance_counters" not defined.
+Breakpoint 10 (MetaspaceCounters::initialize_performance_counters) pending.
+Function "AOTLoader::universe_init" not defined.
+Breakpoint 11 (AOTLoader::universe_init) pending.
+Function "ClassLoaderData::init_null_class_loader_data" not defined.
+Breakpoint 12 (ClassLoaderData::init_null_class_loader_data) pending.
+No source file named universe.cpp.
+Breakpoint 13 (universe.cpp:720) pending.
+Function "SymbolTable::create_table" not defined.
+Breakpoint 14 (SymbolTable::create_table) pending.
+Function "StringTable::create_table" not defined.
+Breakpoint 15 (StringTable::create_table) pending.
+Function "ResolvedMethodTable::create_table" not defined.
+Breakpoint 16 (ResolvedMethodTable::create_table) pending.
+No source file named universe.cpp.
+Breakpoint 17 (universe.cpp:754) pending.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+----_JAVA_LAUNCHER_DEBUG----
+Launcher state:
+	First application arg index: 4
+	debug:on
+	javargs:off
+	program name:java
+	launcher name:openjdk
+	javaw:off
+	fullversion:11.0.17-internal+0-adhoc.root.openjdk11-core
+Java args:
+Command line args:
+argv[0] = /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/bin/java
+argv[1] = -Xms8g
+argv[2] = -Xmx8g
+argv[3] = HelloWorld
+JRE path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk
+jvm.cfg[0] = ->-server<-
+jvm.cfg[1] = ->-client<-
+26 micro seconds to parse jvm.cfg
+Default VM: server
+Does `/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so' exist ... yes.
+mustsetenv: FALSE
+JVM path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib/server/libjvm.so
+1484587 micro seconds to LoadJavaVM
+[New Thread 0x7ffff780b6c0 (LWP 1211533)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1211533)]
+
+Thread 2 "java" hit Breakpoint 1.2, universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:683
+683	  assert(!Universe::_fully_initialized, "called after initialize_vtables");
+
+=== universe_init() 函数开始执行 ===
+函数地址: 0x7ffff695f491
+当前线程: 2
+Universe::_fully_initialized: 0
+
+Thread 2 "java" hit Breakpoint 2, JavaClasses::compute_hard_coded_offsets () at /data/workspace/openjdk11-core/src/hotspot/share/classfile/javaClasses.cpp:4465
+4465	  java_lang_boxing_object::value_offset      = member_offset(java_lang_boxing_object::hc_value_offset);
+
+=== 1. JavaClasses::compute_hard_coded_offsets() ===
+函数地址: 0x7ffff623ef24
+作用：计算JVM需要直接访问的Java类字段偏移量
+
+Thread 2 "java" hit Breakpoint 3, JavaClasses::compute_hard_coded_offsets () at /data/workspace/openjdk11-core/src/hotspot/share/classfile/javaClasses.cpp:4473
+4473	}
+硬编码偏移量计算完成:
+  java_lang_boxing_object::value_offset = 12
+  java_lang_ref_Reference::referent_offset = 12
+  java_lang_ref_Reference::queue_offset = 16
+
+Thread 2 "java" hit Breakpoint 4, Universe::initialize_heap () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:805
+805	jint Universe::initialize_heap() {
+
+=== 2. Universe::initialize_heap() ===
+函数地址: 0x7ffff695f7c4
+作用：初始化JVM堆内存
+当前_collectedHeap: (nil)
+
+Thread 2 "java" hit Breakpoint 5, Universe::create_heap () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:758
+758	  assert(_collectedHeap == NULL, "Heap already created");
+
+--- Universe::create_heap() ---
+函数地址: 0x7ffff695f742
+作用：创建G1CollectedHeap对象
+[New Thread 0x7ffff51ff6c0 (LWP 1211540)]
+
+Thread 2 "java" hit Breakpoint 6, G1CollectedHeap::initialize (this=0x7ffff0032480) at /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp:1567
+1567	  os::enable_vtime();
+
+--- G1CollectedHeap::initialize() ---
+G1堆对象地址: 0x7ffff0032480
+作用：真正初始化G1堆内存
+[New Thread 0x7ffff43f06c0 (LWP 1211541)]
+[New Thread 0x7ffff42ee6c0 (LWP 1211542)]
+[New Thread 0x7fffc33f36c0 (LWP 1211543)]
+[New Thread 0x7fffc32f16c0 (LWP 1211544)]
+
+Thread 2 "java" hit Breakpoint 7, Universe::initialize_heap () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:813
+813	  log_info(gc)("Using %s", _collectedHeap->name());
+堆初始化完成:
+  _collectedHeap: 0x7ffff0032480
+  堆名称: G1
+  最大TLAB大小: 262144
+
+Thread 2 "java" hit Breakpoint 8, SystemDictionary::initialize_oop_storage () at /data/workspace/openjdk11-core/src/hotspot/share/classfile/systemDictionary.cpp:3049
+3049	                   VMWeakActive_lock);
+
+=== 3. SystemDictionary::initialize_oop_storage() ===
+函数地址: 0x7ffff68e8fe8
+作用：初始化系统字典的OOP存储
+
+Thread 2 "java" hit Breakpoint 9, Metaspace::global_initialize () at /data/workspace/openjdk11-core/src/hotspot/share/memory/metaspace.cpp:1293
+1293	  MetaspaceGC::initialize();
+
+=== 4. Metaspace::global_initialize() ===
+函数地址: 0x7ffff663d2ca
+作用：全局初始化元空间
+
+Thread 2 "java" hit Breakpoint 10, MetaspaceCounters::initialize_performance_counters () at /data/workspace/openjdk11-core/src/hotspot/share/memory/metaspaceCounters.cpp:81
+81	  if (UsePerfData) {
+
+=== 5. MetaspaceCounters::initialize_performance_counters() ===
+函数地址: 0x7ffff66412da
+作用：初始化元空间性能计数器
+
+Thread 2 "java" hit Breakpoint 1.1, AOTLoader::universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/aot/aotLoader.cpp:172
+172	  if (UseAOT && libraries_count() > 0) {
+
+=== universe_init() 函数开始执行 ===
+函数地址: 0x7ffff5b7f884
+当前线程: 2
+Universe::_fully_initialized: 0
+
+Thread 2 "java" hit Breakpoint 12, ClassLoaderData::init_null_class_loader_data () at /data/workspace/openjdk11-core/src/hotspot/share/classfile/classLoaderData.cpp:90
+90	void ClassLoaderData::init_null_class_loader_data() {
+
+=== 7. ClassLoaderData::init_null_class_loader_data() ===
+函数地址: 0x7ffff5e14fda
+作用：初始化空类加载器数据
+
+Thread 2 "java" hit Breakpoint 13, universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:720
+720	  Universe::_finalizer_register_cache = new LatestMethodCache();
+
+=== 8. LatestMethodCache对象创建 ===
+创建6个LatestMethodCache对象:
+
+Thread 2 "java" hit Breakpoint 14, SymbolTable::create_table () at /data/workspace/openjdk11-core/src/hotspot/share/classfile/symbolTable.hpp:176
+176	    assert(_the_table == NULL, "One symbol table allowed.");
+
+=== 9. SymbolTable::create_table() ===
+函数地址: 0x7ffff66480d2
+作用：创建符号表
+
+Thread 2 "java" hit Breakpoint 15, StringTable::create_table () at /data/workspace/openjdk11-core/src/hotspot/share/classfile/stringTable.hpp:108
+108	    assert(_the_table == NULL, "One string table allowed.");
+
+=== 10. StringTable::create_table() ===
+函数地址: 0x7ffff6962c5e
+作用：创建字符串表
+
+Thread 2 "java" hit Breakpoint 16, ResolvedMethodTable::create_table () at /data/workspace/openjdk11-core/src/hotspot/share/prims/resolvedMethodTable.hpp:85
+85	    assert(_the_table == NULL, "One symbol table allowed.");
+
+=== 11. ResolvedMethodTable::create_table() ===
+函数地址: 0x7ffff6962da7
+作用：创建已解析方法表
+
+Thread 2 "java" hit Breakpoint 17, universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:754
+754	  return JNI_OK;
+
+=== universe_init() 函数执行完成 ===
+返回状态: JNI_OK (0)
+Universe初始化完成！
+[New Thread 0x7fffc296e6c0 (LWP 1211548)]
+[New Thread 0x7fffc286c6c0 (LWP 1211549)]
+[New Thread 0x7fffc276c6c0 (LWP 1211550)]
+[New Thread 0x7fffc26146c0 (LWP 1211551)]
+[New Thread 0x7fffc21ff6c0 (LWP 1211552)]
+[New Thread 0x7fffc20ff6c0 (LWP 1211553)]
+[New Thread 0x7fffc1fff6c0 (LWP 1211554)]
+[New Thread 0x7fffc1eff6c0 (LWP 1211555)]
+[New Thread 0x7fffc1dff6c0 (LWP 1211556)]
+[New Thread 0x7fffc1cff6c0 (LWP 1211707)]
+[New Thread 0x7fffc1bff6c0 (LWP 1211725)]
+[New Thread 0x7fffc1aff6c0 (LWP 1211726)]
+[New Thread 0x7fffc19ff6c0 (LWP 1211727)]
+[New Thread 0x7fffc18ff6c0 (LWP 1211728)]
+[New Thread 0x7fffc17ff6c0 (LWP 1211729)]
+[New Thread 0x7fffc16ff6c0 (LWP 1211730)]
+[New Thread 0x7fffc15ff6c0 (LWP 1211735)]
+JavaVM args:
+    version 0x00010002, ignoreUnrecognized is JNI_FALSE, nOptions is 7
+    option[ 0] = '-Dsun.java.launcher.diag=true'
+    option[ 1] = '-Djava.class.path=/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:'
+    option[ 2] = '-Xms8g'
+    option[ 3] = '-Xmx8g'
+    option[ 4] = '-Dsun.java.command=HelloWorld'
+    option[ 5] = '-Dsun.java.launcher=SUN_STANDARD'
+    option[ 6] = '-Dsun.java.launcher.pid=1211492'
+2417967 micro seconds to InitializeJVM
+Hello World
+[Thread 0x7fffc15ff6c0 (LWP 1211735) exited]
+[Thread 0x7fffc32f16c0 (LWP 1211544) exited]
+[Thread 0x7fffc33f36c0 (LWP 1211543) exited]
+[Thread 0x7ffff43f06c0 (LWP 1211541) exited]
+[Thread 0x7fffc26146c0 (LWP 1211551) exited]
+[Thread 0x7fffc296e6c0 (LWP 1211548) exited]
+Main class is 'HelloWorld'
+App's argc is 0
+33453 micro seconds to load main class
+----_JAVA_LAUNCHER_DEBUG----
+[Thread 0x7ffff780b6c0 (LWP 1211533) exited]
+[Thread 0x7fffc16ff6c0 (LWP 1211730) exited]
+[Thread 0x7fffc17ff6c0 (LWP 1211729) exited]
+[Thread 0x7fffc18ff6c0 (LWP 1211728) exited]
+[Thread 0x7fffc19ff6c0 (LWP 1211727) exited]
+[Thread 0x7fffc1bff6c0 (LWP 1211725) exited]
+[Thread 0x7fffc1cff6c0 (LWP 1211707) exited]
+[Thread 0x7fffc1dff6c0 (LWP 1211556) exited]
+[Thread 0x7fffc1eff6c0 (LWP 1211555) exited]
+[Thread 0x7fffc1fff6c0 (LWP 1211554) exited]
+[Thread 0x7fffc20ff6c0 (LWP 1211553) exited]
+[Thread 0x7fffc21ff6c0 (LWP 1211552) exited]
+[Thread 0x7fffc276c6c0 (LWP 1211550) exited]
+[Thread 0x7fffc286c6c0 (LWP 1211549) exited]
+[Thread 0x7ffff42ee6c0 (LWP 1211542) exited]
+[Thread 0x7ffff51ff6c0 (LWP 1211540) exited]
+[Thread 0x7ffff7f7a740 (LWP 1211492) exited]
+[Thread 0x7fffc1aff6c0 (LWP 1211726) exited]
+[New process 1211492]
+[Inferior 1 (process 1211492) exited normally]

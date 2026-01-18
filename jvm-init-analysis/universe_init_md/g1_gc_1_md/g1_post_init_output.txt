@@ -1,0 +1,99 @@
+Warning: 'set logging on', an alias for the command 'set logging enabled', is deprecated.
+Use 'set logging enabled on'.
+
+No source file named thread.cpp.
+Breakpoint 1 (thread.cpp:3869) pending.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+----_JAVA_LAUNCHER_DEBUG----
+Launcher state:
+	First application arg index: 6
+	debug:on
+	javargs:off
+	program name:java
+	launcher name:openjdk
+	javaw:off
+	fullversion:11.0.17-internal+0-adhoc.root.openjdk11-core
+Java args:
+Command line args:
+argv[0] = /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/bin/java
+argv[1] = -Xms8g
+argv[2] = -Xmx8g
+argv[3] = -XX:+UseG1GC
+argv[4] = -XX:-UseLargePages
+argv[5] = HelloWorld
+JRE path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk
+jvm.cfg[0] = ->-server<-
+jvm.cfg[1] = ->-client<-
+23 micro seconds to parse jvm.cfg
+Default VM: server
+Does `/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/lib/server/libjvm.so' exist ... yes.
+mustsetenv: FALSE
+JVM path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/lib/server/libjvm.so
+794333 micro seconds to LoadJavaVM
+[New Thread 0x7ffff780b6c0 (LWP 1284349)]
+[New Thread 0x7ffff51ff6c0 (LWP 1284350)]
+[New Thread 0x7ffff43f06c0 (LWP 1284351)]
+[New Thread 0x7ffff42ee6c0 (LWP 1284352)]
+[New Thread 0x7fffc09f96c0 (LWP 1284353)]
+[New Thread 0x7fffc08f76c0 (LWP 1284354)]
+[New Thread 0x7fffc07f56c0 (LWP 1284355)]
+[New Thread 0x7fffc06f36c0 (LWP 1284356)]
+[New Thread 0x7fffc05f36c0 (LWP 1284357)]
+[New Thread 0x7fffc01ff6c0 (LWP 1284358)]
+[New Thread 0x7fffc00ff6c0 (LWP 1284359)]
+[New Thread 0x7fffb97ff6c0 (LWP 1284360)]
+[New Thread 0x7fffb96ff6c0 (LWP 1284361)]
+[New Thread 0x7fffb95ff6c0 (LWP 1284362)]
+[New Thread 0x7fffb94ff6c0 (LWP 1284365)]
+[New Thread 0x7fffb93ff6c0 (LWP 1284366)]
+[New Thread 0x7fffb92ff6c0 (LWP 1284367)]
+[New Thread 0x7fffb91ff6c0 (LWP 1284368)]
+JavaVM args:
+    version 0x00010002, ignoreUnrecognized is JNI_FALSE, nOptions is 9
+    option[ 0] = '-Dsun.java.launcher.diag=true'
+    option[ 1] = '-Djava.class.path=/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:'
+    option[ 2] = '-Xms8g'
+    option[ 3] = '-Xmx8g'
+    option[ 4] = '-XX:+UseG1GC'
+    option[ 5] = '-XX:-UseLargePages'
+    option[ 6] = '-Dsun.java.command=HelloWorld'
+    option[ 7] = '-Dsun.java.launcher=SUN_STANDARD'
+    option[ 8] = '-Dsun.java.launcher.pid=1284341'
+531492 micro seconds to InitializeJVM
+[New Thread 0x7fffb90fd6c0 (LWP 1284369)]
+Hello, World!
+[Thread 0x7fffb91ff6c0 (LWP 1284368) exited]
+[Thread 0x7fffc08f76c0 (LWP 1284354) exited]
+[Thread 0x7fffc09f96c0 (LWP 1284353) exited]
+[Thread 0x7ffff43f06c0 (LWP 1284351) exited]
+[Thread 0x7fffc01ff6c0 (LWP 1284358) exited]
+[Thread 0x7fffc07f56c0 (LWP 1284355) exited]
+Main class is 'HelloWorld'
+App's argc is 0
+38806 micro seconds to load main class
+----_JAVA_LAUNCHER_DEBUG----
+[Thread 0x7ffff780b6c0 (LWP 1284349) exited]
+[Thread 0x7fffb90fd6c0 (LWP 1284369) exited]
+[Thread 0x7fffb92ff6c0 (LWP 1284367) exited]
+[Thread 0x7fffb93ff6c0 (LWP 1284366) exited]
+[Thread 0x7fffb94ff6c0 (LWP 1284365) exited]
+[Thread 0x7fffb96ff6c0 (LWP 1284361) exited]
+[Thread 0x7fffb97ff6c0 (LWP 1284360) exited]
+[Thread 0x7fffc00ff6c0 (LWP 1284359) exited]
+[Thread 0x7fffc05f36c0 (LWP 1284357) exited]
+[Thread 0x7fffc06f36c0 (LWP 1284356) exited]
+[Thread 0x7ffff42ee6c0 (LWP 1284352) exited]
+[Thread 0x7ffff51ff6c0 (LWP 1284350) exited]
+[Thread 0x7ffff7f7a740 (LWP 1284341) exited]
+[Thread 0x7fffb95ff6c0 (LWP 1284362) exited]
+[New process 1284341]
+[Inferior 1 (process 1284341) exited normally]
+
+================================================================
+=== G1 GC 对象模型验证 (init_globals 完成后) ===
+================================================================
+
+=== 1. HeapRegion 静态配置 ===
+g1_post_init_debug.gdb:18: Error in sourced command file:
+No symbol "HeapRegion" in current context.

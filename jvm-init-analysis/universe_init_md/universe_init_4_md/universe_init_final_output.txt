@@ -1,0 +1,212 @@
+Warning: 'set logging on', an alias for the command 'set logging enabled', is deprecated.
+Use 'set logging enabled on'.
+
+============================================================================
+universe_init() 8GB G1GC 详细调试
+============================================================================
+Function "universe_init" not defined.
+Breakpoint 1 (universe_init) pending.
+Function "Universe::initialize_heap" not defined.
+Breakpoint 2 (Universe::initialize_heap) pending.
+Function "HeapRegion::setup_heap_region_size" not defined.
+Breakpoint 3 (HeapRegion::setup_heap_region_size) pending.
+Function "Metaspace::global_initialize" not defined.
+Breakpoint 4 (Metaspace::global_initialize) pending.
+Function "SymbolTable::create_table" not defined.
+Breakpoint 5 (SymbolTable::create_table) pending.
+Function "StringTable::create_table" not defined.
+Breakpoint 6 (StringTable::create_table) pending.
+开始运行...
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+----_JAVA_LAUNCHER_DEBUG----
+Launcher state:
+	First application arg index: 6
+	debug:on
+	javargs:off
+	program name:java
+	launcher name:openjdk
+	javaw:off
+	fullversion:11.0.17-internal+0-adhoc.root.openjdk11-core
+Java args:
+Command line args:
+argv[0] = /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/bin/java
+argv[1] = -Xms8g
+argv[2] = -Xmx8g
+argv[3] = -XX:+UseG1GC
+argv[4] = -XX:-UseLargePages
+argv[5] = HelloWorld
+JRE path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk
+jvm.cfg[0] = ->-server<-
+jvm.cfg[1] = ->-client<-
+22 micro seconds to parse jvm.cfg
+Default VM: server
+Does `/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/lib/server/libjvm.so' exist ... yes.
+mustsetenv: FALSE
+JVM path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/lib/server/libjvm.so
+977226 micro seconds to LoadJavaVM
+[New Thread 0x7ffff780b6c0 (LWP 1273011)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1273011)]
+
+Thread 2 "java" hit Breakpoint 1.2, universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:677
+warning: Source file is more recent than executable.
+677	     ================================
+
+=== [1] universe_init() 入口 ===
+位置:
+#0  universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:677
+
+初始状态:
+$1 = false
+$2 = (CollectedHeap *) 0x0
+$3 = {
+  _base = 0x0,
+  _shift = 0,
+  _use_implicit_null_checks = true
+}
+
+Thread 2 "java" hit Breakpoint 2, Universe::initialize_heap () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:764
+764	// Unscaled  - Use 32-bits oops without encoding when
+
+=== [2] Universe::initialize_heap() ===
+#0  Universe::initialize_heap () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:764
+
+Thread 2 "java" hit Breakpoint 3, HeapRegion::setup_heap_region_size (initial_heap_size=8589934592, max_heap_size=8589934592) at /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegion.cpp:64
+warning: Source file is more recent than executable.
+64	  size_t region_size = G1HeapRegionSize;
+
+=== [3] HeapRegion::setup_heap_region_size ===
+#0  HeapRegion::setup_heap_region_size (initial_heap_size=8589934592, max_heap_size=8589934592) at /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegion.cpp:64
+输入参数:
+$4 = 8589934592
+$5 = 8589934592
+G1CollectorPolicy::G1CollectorPolicy (this=0x7ffff0031fe0) at /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectorPolicy.cpp:49
+49	  HeapRegionRemSet::setup_remset_size();
+
+HeapRegion静态配置(计算后):
+$6 = 4194304
+$7 = 22
+$8 = 524288
+$9 = 8192
+[New Thread 0x7ffff51ff6c0 (LWP 1273012)]
+[New Thread 0x7ffff43f06c0 (LWP 1273013)]
+[New Thread 0x7ffff42ee6c0 (LWP 1273014)]
+[New Thread 0x7fffc09f96c0 (LWP 1273015)]
+[New Thread 0x7fffc08f76c0 (LWP 1273016)]
+
+Thread 2 "java" hit Breakpoint 4, Metaspace::global_initialize () at /data/workspace/openjdk11-core/src/hotspot/share/memory/metaspace.cpp:1293
+1293	  MetaspaceGC::initialize();
+
+=== [4] Metaspace::global_initialize() ===
+#0  Metaspace::global_initialize () at /data/workspace/openjdk11-core/src/hotspot/share/memory/metaspace.cpp:1293
+
+Thread 2 "java" hit Breakpoint 1.1, AOTLoader::universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/aot/aotLoader.cpp:172
+172	  if (UseAOT && libraries_count() > 0) {
+
+=== [5] SymbolTable::create_table() ===
+#0  AOTLoader::universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/aot/aotLoader.cpp:172
+$10 = 20011
+
+Thread 2 "java" hit Breakpoint 5, SymbolTable::create_table () at /data/workspace/openjdk11-core/src/hotspot/share/classfile/symbolTable.hpp:176
+176	    assert(_the_table == NULL, "One symbol table allowed.");
+
+=== [6] StringTable::create_table() ===
+#0  SymbolTable::create_table () at /data/workspace/openjdk11-core/src/hotspot/share/classfile/symbolTable.hpp:176
+
+Thread 2 "java" hit Breakpoint 6, StringTable::create_table () at /data/workspace/openjdk11-core/src/hotspot/share/classfile/stringTable.hpp:108
+108	    assert(_the_table == NULL, "One string table allowed.");
+Breakpoint 7 at 0x7ffff61efdda: file /data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp, line 120.
+
+Thread 2 "java" hit Breakpoint 7, init_globals () at /data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp:120
+warning: Source file is more recent than executable.
+120	                                  // stubRoutines_init1 and metaspace_init.
+
+=== [7] universe_init() 完成后状态 ===
+
+--- 堆对象 ---
+$11 = (CollectedHeap *) 0x7ffff00326b0
+$12 = 0x7ffff00326b0
+
+--- 压缩指针 ---
+$13 = {
+  _base = 0x0,
+  _shift = 3,
+  _use_implicit_null_checks = true
+}
+$14 = 0x0
+
+--- 压缩类指针 ---
+$15 = {
+  _base = 0x800000000 "",
+  _shift = 0,
+  _use_implicit_null_checks = true
+}
+$16 = 0x800000000
+
+--- LatestMethodCache ---
+$17 = (LatestMethodCache *) 0x7ffff0c917e0
+$18 = (LatestMethodCache *) 0x7ffff0c91830
+$19 = (LatestMethodCache *) 0x7ffff0c91880
+$20 = (LatestMethodCache *) 0x7ffff0c918d0
+$21 = (LatestMethodCache *) 0x7ffff0c91920
+$22 = (LatestMethodCache *) 0x7ffff0c91970
+
+--- 初始化标志 ---
+$23 = false
+$24 = false
+
+============================================================================
+调试完成
+============================================================================
+[New Thread 0x7fffc07f56c0 (LWP 1273018)]
+[New Thread 0x7fffc06f36c0 (LWP 1273019)]
+[New Thread 0x7fffc05f36c0 (LWP 1273020)]
+[New Thread 0x7fffc01ff6c0 (LWP 1273024)]
+[New Thread 0x7fffc00ff6c0 (LWP 1273025)]
+[New Thread 0x7fffb97ff6c0 (LWP 1273026)]
+[New Thread 0x7fffb96ff6c0 (LWP 1273027)]
+[New Thread 0x7fffb95ff6c0 (LWP 1273028)]
+[New Thread 0x7fffb94ff6c0 (LWP 1273029)]
+[New Thread 0x7fffb93ff6c0 (LWP 1273030)]
+[New Thread 0x7fffb92ff6c0 (LWP 1273031)]
+[New Thread 0x7fffb91ff6c0 (LWP 1273032)]
+JavaVM args:
+    version 0x00010002, ignoreUnrecognized is JNI_FALSE, nOptions is 9
+    option[ 0] = '-Dsun.java.launcher.diag=true'
+    option[ 1] = '-Djava.class.path=/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:'
+    option[ 2] = '-Xms8g'
+    option[ 3] = '-Xmx8g'
+    option[ 4] = '-XX:+UseG1GC'
+    option[ 5] = '-XX:-UseLargePages'
+    option[ 6] = '-Dsun.java.command=HelloWorld'
+    option[ 7] = '-Dsun.java.launcher=SUN_STANDARD'
+    option[ 8] = '-Dsun.java.launcher.pid=1272954'
+952822 micro seconds to InitializeJVM
+[New Thread 0x7fffb90fd6c0 (LWP 1273033)]
+Hello, World!
+[Thread 0x7fffb91ff6c0 (LWP 1273032) exited]
+[Thread 0x7fffc09f96c0 (LWP 1273015) exited]
+[Thread 0x7fffc08f76c0 (LWP 1273016) exited]
+[Thread 0x7ffff43f06c0 (LWP 1273013) exited]
+[Thread 0x7fffc01ff6c0 (LWP 1273024) exited]
+[Thread 0x7fffc07f56c0 (LWP 1273018) exited]
+Main class is 'HelloWorld'
+App's argc is 0
+38565 micro seconds to load main class
+----_JAVA_LAUNCHER_DEBUG----
+[Thread 0x7ffff780b6c0 (LWP 1273011) exited]
+[Thread 0x7fffb90fd6c0 (LWP 1273033) exited]
+[Thread 0x7fffb92ff6c0 (LWP 1273031) exited]
+[Thread 0x7fffb93ff6c0 (LWP 1273030) exited]
+[Thread 0x7fffb95ff6c0 (LWP 1273028) exited]
+[Thread 0x7fffb96ff6c0 (LWP 1273027) exited]
+[Thread 0x7fffb97ff6c0 (LWP 1273026) exited]
+[Thread 0x7fffc00ff6c0 (LWP 1273025) exited]
+[Thread 0x7fffc05f36c0 (LWP 1273020) exited]
+[Thread 0x7fffc06f36c0 (LWP 1273019) exited]
+[Thread 0x7ffff42ee6c0 (LWP 1273014) exited]
+[Thread 0x7ffff51ff6c0 (LWP 1273012) exited]
+[Thread 0x7ffff7f7a740 (LWP 1272954) exited]
+[Thread 0x7fffb94ff6c0 (LWP 1273029) exited]
+[New process 1272954]
+[Inferior 1 (process 1272954) exited normally]

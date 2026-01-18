@@ -1,0 +1,56 @@
+Warning: 'set logging on', an alias for the command 'set logging enabled', is deprecated.
+Use 'set logging enabled on'.
+
+No source file named universe.cpp.
+Breakpoint 1 (universe.cpp:755) pending.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+----_JAVA_LAUNCHER_DEBUG----
+Launcher state:
+	First application arg index: 6
+	debug:on
+	javargs:off
+	program name:java
+	launcher name:openjdk
+	javaw:off
+	fullversion:11.0.17-internal+0-adhoc.root.openjdk11-core
+Java args:
+Command line args:
+argv[0] = /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/bin/java
+argv[1] = -Xms8g
+argv[2] = -Xmx8g
+argv[3] = -XX:+UseG1GC
+argv[4] = -XX:-UseLargePages
+argv[5] = HelloWorld
+JRE path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk
+jvm.cfg[0] = ->-server<-
+jvm.cfg[1] = ->-client<-
+24 micro seconds to parse jvm.cfg
+Default VM: server
+Does `/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/lib/server/libjvm.so' exist ... yes.
+mustsetenv: FALSE
+JVM path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/lib/server/libjvm.so
+761209 micro seconds to LoadJavaVM
+[New Thread 0x7ffff780b6c0 (LWP 1283809)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1283809)]
+
+Thread 2 "java" hit Breakpoint 1, Universe::initialize_heap () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:764
+warning: Source file is more recent than executable.
+764	// Unscaled  - Use 32-bits oops without encoding when
+
+================================================================
+=== universe_init() 完成后 - G1 GC 对象模型验证 ===
+================================================================
+
+=== 1. HeapRegion 静态配置 ===
+$1 = 0
+$2 = 0
+$3 = 0
+$4 = 0
+
+=== 2. G1CollectedHeap 对象 ===
+$5 = (G1CollectedHeap *) 0x0
+
+=== 3. 堆内存区域 (_reserved) ===
+g1_final_debug.gdb:28: Error in sourced command file:
+Cannot access memory at address 0x10

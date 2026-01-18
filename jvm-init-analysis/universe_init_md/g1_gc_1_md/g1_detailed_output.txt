@@ -1,0 +1,126 @@
+Warning: 'set logging on', an alias for the command 'set logging enabled', is deprecated.
+Use 'set logging enabled on'.
+
+Function "Universe::initialize_heap" not defined.
+Breakpoint 1 (Universe::initialize_heap) pending.
+Function "G1CollectedHeap::initialize" not defined.
+Breakpoint 2 (G1CollectedHeap::initialize) pending.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+----_JAVA_LAUNCHER_DEBUG----
+Launcher state:
+	First application arg index: 6
+	debug:on
+	javargs:off
+	program name:java
+	launcher name:openjdk
+	javaw:off
+	fullversion:11.0.17-internal+0-adhoc.root.openjdk11-core
+Java args:
+Command line args:
+argv[0] = /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/bin/java
+argv[1] = -Xms8g
+argv[2] = -Xmx8g
+argv[3] = -XX:+UseG1GC
+argv[4] = -XX:-UseLargePages
+argv[5] = HelloWorld
+JRE path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk
+jvm.cfg[0] = ->-server<-
+jvm.cfg[1] = ->-client<-
+23 micro seconds to parse jvm.cfg
+Default VM: server
+Does `/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/lib/server/libjvm.so' exist ... yes.
+mustsetenv: FALSE
+JVM path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/lib/server/libjvm.so
+832467 micro seconds to LoadJavaVM
+[New Thread 0x7ffff780b6c0 (LWP 1283102)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1283102)]
+
+Thread 2 "java" hit Breakpoint 1, Universe::initialize_heap () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:764
+warning: Source file is more recent than executable.
+764	// Unscaled  - Use 32-bits oops without encoding when
+
+========================================
+=== [1] Universe::initialize_heap() 入口 ===
+========================================
+$1 = (CollectedHeap *) 0x0
+[New Thread 0x7ffff51ff6c0 (LWP 1283103)]
+
+Thread 2 "java" hit Breakpoint 2, G1CollectedHeap::initialize (this=0x7ffff00326b0) at /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp:1534
+warning: Source file is more recent than executable.
+1534	    G1RegionToSpaceMapper::create_mapper(rs,
+
+========================================
+=== [2] G1CollectedHeap::initialize() ===
+========================================
+Temporary breakpoint 3 at 0x7ffff6095efd: file /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp, line 1858.
+[New Thread 0x7ffff43f06c0 (LWP 1283104)]
+[New Thread 0x7ffff42ee6c0 (LWP 1283105)]
+[New Thread 0x7fffc09f96c0 (LWP 1283106)]
+[New Thread 0x7fffc08f76c0 (LWP 1283107)]
+[New Thread 0x7fffc07f56c0 (LWP 1283108)]
+[New Thread 0x7fffc06f36c0 (LWP 1283109)]
+[New Thread 0x7fffc05f36c0 (LWP 1283110)]
+[New Thread 0x7fffc01ff6c0 (LWP 1283111)]
+[New Thread 0x7fffc00ff6c0 (LWP 1283112)]
+[New Thread 0x7fffb97ff6c0 (LWP 1283113)]
+[New Thread 0x7fffb96ff6c0 (LWP 1283114)]
+[New Thread 0x7fffb95ff6c0 (LWP 1283115)]
+[New Thread 0x7fffb94ff6c0 (LWP 1283116)]
+[New Thread 0x7fffb93ff6c0 (LWP 1283117)]
+[New Thread 0x7fffb92ff6c0 (LWP 1283118)]
+[New Thread 0x7fffb91ff6c0 (LWP 1283119)]
+JavaVM args:
+    version 0x00010002, ignoreUnrecognized is JNI_FALSE, nOptions is 9
+    option[ 0] = '-Dsun.java.launcher.diag=true'
+    option[ 1] = '-Djava.class.path=/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:'
+    option[ 2] = '-Xms8g'
+    option[ 3] = '-Xmx8g'
+    option[ 4] = '-XX:+UseG1GC'
+    option[ 5] = '-XX:-UseLargePages'
+    option[ 6] = '-Dsun.java.command=HelloWorld'
+    option[ 7] = '-Dsun.java.launcher=SUN_STANDARD'
+    option[ 8] = '-Dsun.java.launcher.pid=1283099'
+692038 micro seconds to InitializeJVM
+[New Thread 0x7fffb90fd6c0 (LWP 1283120)]
+Hello, World!
+[Thread 0x7fffb91ff6c0 (LWP 1283119) exited]
+[Thread 0x7fffc09f96c0 (LWP 1283106) exited]
+[Thread 0x7fffc08f76c0 (LWP 1283107) exited]
+[Thread 0x7ffff43f06c0 (LWP 1283104) exited]
+[Thread 0x7fffc01ff6c0 (LWP 1283111) exited]
+[Thread 0x7fffc07f56c0 (LWP 1283108) exited]
+Main class is 'HelloWorld'
+App's argc is 0
+38557 micro seconds to load main class
+----_JAVA_LAUNCHER_DEBUG----
+[Thread 0x7ffff780b6c0 (LWP 1283102) exited]
+[Thread 0x7fffb90fd6c0 (LWP 1283120) exited]
+[Thread 0x7fffb93ff6c0 (LWP 1283117) exited]
+[Thread 0x7fffb94ff6c0 (LWP 1283116) exited]
+[Thread 0x7fffb95ff6c0 (LWP 1283115) exited]
+[Thread 0x7fffb96ff6c0 (LWP 1283114) exited]
+[Thread 0x7fffb97ff6c0 (LWP 1283113) exited]
+[Thread 0x7fffc00ff6c0 (LWP 1283112) exited]
+[Thread 0x7fffc05f36c0 (LWP 1283110) exited]
+[Thread 0x7fffc06f36c0 (LWP 1283109) exited]
+[Thread 0x7ffff42ee6c0 (LWP 1283105) exited]
+[Thread 0x7ffff51ff6c0 (LWP 1283103) exited]
+[Thread 0x7ffff7f7a740 (LWP 1283099) exited]
+[Thread 0x7fffb92ff6c0 (LWP 1283118) exited]
+[New process 1283099]
+[Inferior 1 (process 1283099) exited normally]
+
+========================================
+=== [3] G1CollectedHeap::initialize() 完成后 ===
+========================================
+
+--- HeapRegion 静态配置 ---
+$2 = 0
+$3 = 0
+$4 = 0
+$5 = 0
+
+--- G1CollectedHeap 核心成员 ---
+g1_detailed_debug.gdb:44: Error in sourced command file:
+No symbol "this" in current context.

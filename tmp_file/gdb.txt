@@ -1,0 +1,849 @@
+warning: -: No such file or directory
+No source file named virtualspace.cpp.
+Breakpoint 1 (virtualspace.cpp:757) pending.
+No source file named virtualspace.cpp.
+Breakpoint 2 (virtualspace.cpp:540) pending.
+No source file named virtualspace.cpp.
+Breakpoint 3 (virtualspace.cpp:348) pending.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+[New Thread 0x7ffff780b6c0 (LWP 2766662)]
+[New Thread 0x7ffff51ff6c0 (LWP 2766670)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 2766662)]
+
+Thread 2 "java" hit Breakpoint 1, ReservedHeapSpace::ReservedHeapSpace (this=0x7ffff780a5f0, size=8589934592, alignment=4194304, large=false, heap_allocation_directory=0x0) at /data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp:757
+757	ReservedHeapSpace::ReservedHeapSpace(size_t size, size_t alignment, bool large, const char *heap_allocation_directory)
+
+=== ReservedHeapSpace构造函数 ===
+请求大小: 8589934592 bytes = 8192 MB
+对齐: 4194304
+大页: 0
+
+Thread 2 "java" hit Breakpoint 2, ReservedHeapSpace::initialize_compressed_heap (this=0x7ffff780a5f0, size=8589934592, alignment=4194304, large=false) at /data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp:546
+546	    guarantee(size + noaccess_prefix_size(alignment) <= OopEncodingHeapMax,
+
+=== initialize_compressed_heap ===
+堆大小: 8192 MB
+对齐: 4194304
+
+Thread 2 "java" hit Breakpoint 3, ReservedHeapSpace::try_reserve_heap (this=0x7ffff780a5f0, size=8589934592, alignment=4194304, large=false, requested_address=0x600000000 <error: Cannot access memory at address 0x600000000>) at /data/workspace/openjdk11-core/src/hotspot/share/memory/virtualspace.cpp:353
+353	    if (_base != NULL) {
+
+=== try_reserve_heap ===
+大小: 8192 MB
+期望地址: 0x600000000
+[New Thread 0x7ffff43f06c0 (LWP 2766671)]
+[New Thread 0x7ffff42ee6c0 (LWP 2766672)]
+[New Thread 0x7fffc33f36c0 (LWP 2766673)]
+[New Thread 0x7fffc32f16c0 (LWP 2766674)]
+[New Thread 0x7fffc296e6c0 (LWP 2766675)]
+[New Thread 0x7fffc286c6c0 (LWP 2766676)]
+[New Thread 0x7fffc276c6c0 (LWP 2766677)]
+[New Thread 0x7fffc26146c0 (LWP 2766678)]
+[New Thread 0x7fffc21ff6c0 (LWP 2766679)]
+[New Thread 0x7fffc20ff6c0 (LWP 2766680)]
+[New Thread 0x7fffc1fff6c0 (LWP 2766681)]
+[New Thread 0x7fffc1eff6c0 (LWP 2766682)]
+[New Thread 0x7fffc1dff6c0 (LWP 2766683)]
+[New Thread 0x7fffc1cff6c0 (LWP 2766684)]
+[New Thread 0x7fffc1bff6c0 (LWP 2766689)]
+[New Thread 0x7fffc1aff6c0 (LWP 2766690)]
+[New Thread 0x7fffc19ff6c0 (LWP 2766691)]
+[New Thread 0x7fffc18ff6c0 (LWP 2766692)]
+[New Thread 0x7fffc17ff6c0 (LWP 2766693)]
+[New Thread 0x7fffc16ff6c0 (LWP 2766694)]
+[New Thread 0x7fffc15ff6c0 (LWP 2766695)]
+[Thread 0x7fffc15ff6c0 (LWP 2766695) exited]
+[Thread 0x7fffc32f16c0 (LWP 2766674) exited]
+[Thread 0x7fffc33f36c0 (LWP 2766673) exited]
+[Thread 0x7ffff43f06c0 (LWP 2766671) exited]
+[Thread 0x7fffc26146c0 (LWP 2766678) exited]
+[Thread 0x7fffc296e6c0 (LWP 2766675) exited]
+[Thread 0x7ffff780b6c0 (LWP 2766662) exited]
+[Thread 0x7fffc16ff6c0 (LWP 2766694) exited]
+[Thread 0x7fffc18ff6c0 (LWP 2766692) exited]
+[Thread 0x7fffc19ff6c0 (LWP 2766691) exited]
+[Thread 0x7fffc1aff6c0 (LWP 2766690) exited]
+[Thread 0x7fffc1bff6c0 (LWP 2766689) exited]
+[Thread 0x7fffc1cff6c0 (LWP 2766684) exited]
+[Thread 0x7fffc1dff6c0 (LWP 2766683) exited]
+[Thread 0x7fffc1eff6c0 (LWP 2766682) exited]
+[Thread 0x7fffc1fff6c0 (LWP 2766681) exited]
+[Thread 0x7fffc20ff6c0 (LWP 2766680) exited]
+[Thread 0x7fffc21ff6c0 (LWP 2766679) exited]
+[Thread 0x7fffc276c6c0 (LWP 2766677) exited]
+[Thread 0x7fffc286c6c0 (LWP 2766676) exited]
+[Thread 0x7ffff42ee6c0 (LWP 2766672) exited]
+[Thread 0x7ffff51ff6c0 (LWP 2766670) exited]
+[Thread 0x7ffff7f7a740 (LWP 2766649) exited]
+[Thread 0x7fffc17ff6c0 (LWP 2766693) exited]
+[New process 2766649]
+[Inferior 1 (process 2766649) exited normally]
+No source file named universe.cpp.
+Breakpoint 1 (universe.cpp:755) pending.
+No source file named thread.cpp.
+Breakpoint 2 (thread.cpp:3907) pending.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+[New Thread 0x7ffff780b6c0 (LWP 2767525)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 2767525)]
+
+Thread 2 "java" hit Breakpoint 2, Threads::create_vm (args=0x7ffff780add0, canTryAgain=0x7ffff780acc3) at /data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp:3909
+3909	    Arguments::init_system_properties();
+
+=== JVM初始化完成 - 打印完整内存布局 ===
+
+--- CollectedHeap信息 ---
+$1 = (CollectedHeap *) 0x0
+
+--- 压缩对象指针信息 ---
+$2 = {
+  _base = 0x0,
+  _shift = 0,
+  _use_implicit_null_checks = true
+}
+
+--- 压缩类指针信息 ---
+$3 = {
+  _base = 0x0,
+  _shift = 0,
+  _use_implicit_null_checks = true
+}
+
+--- 压缩指针基地址 ---
+$4 = (address) 0x0
+
+--- Klass范围 ---
+$5 = 4294967296
+[New Thread 0x7ffff51ff6c0 (LWP 2768232)]
+[New Thread 0x7ffff43f06c0 (LWP 2768235)]
+[New Thread 0x7ffff42ee6c0 (LWP 2768236)]
+[New Thread 0x7fffc33f36c0 (LWP 2768239)]
+[New Thread 0x7fffc32f16c0 (LWP 2768240)]
+
+Thread 2 "java" hit Breakpoint 1, universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:755
+755	}
+
+============================================
+=== universe_init 完成后内存布局验证 ===
+============================================
+[New Thread 0x7fffc296e6c0 (LWP 2768241)]
+[New Thread 0x7fffc286c6c0 (LWP 2768242)]
+[New Thread 0x7fffc276c6c0 (LWP 2768243)]
+[New Thread 0x7fffc26146c0 (LWP 2768244)]
+[New Thread 0x7fffc21ff6c0 (LWP 2768245)]
+[New Thread 0x7fffc20ff6c0 (LWP 2768246)]
+[New Thread 0x7fffc1fff6c0 (LWP 2768247)]
+[New Thread 0x7fffc1eff6c0 (LWP 2768248)]
+[New Thread 0x7fffc1dff6c0 (LWP 2768249)]
+[New Thread 0x7fffc1cff6c0 (LWP 2768250)]
+[New Thread 0x7fffc1bff6c0 (LWP 2768251)]
+[New Thread 0x7fffc1aff6c0 (LWP 2768252)]
+[New Thread 0x7fffc19ff6c0 (LWP 2768253)]
+[New Thread 0x7fffc18ff6c0 (LWP 2768254)]
+[New Thread 0x7fffc17ff6c0 (LWP 2768255)]
+[New Thread 0x7fffc16ff6c0 (LWP 2768256)]
+[New Thread 0x7fffc15ff6c0 (LWP 2768259)]
+[Thread 0x7fffc15ff6c0 (LWP 2768259) exited]
+[Thread 0x7fffc33f36c0 (LWP 2768239) exited]
+[Thread 0x7fffc32f16c0 (LWP 2768240) exited]
+[Thread 0x7ffff43f06c0 (LWP 2768235) exited]
+[Thread 0x7fffc26146c0 (LWP 2768244) exited]
+[Thread 0x7fffc296e6c0 (LWP 2768241) exited]
+[Thread 0x7ffff780b6c0 (LWP 2767525) exited]
+[Thread 0x7fffc17ff6c0 (LWP 2768255) exited]
+[Thread 0x7fffc18ff6c0 (LWP 2768254) exited]
+[Thread 0x7fffc19ff6c0 (LWP 2768253) exited]
+[Thread 0x7fffc1aff6c0 (LWP 2768252) exited]
+[Thread 0x7fffc1bff6c0 (LWP 2768251) exited]
+[Thread 0x7fffc1cff6c0 (LWP 2768250) exited]
+[Thread 0x7fffc1dff6c0 (LWP 2768249) exited]
+[Thread 0x7fffc1eff6c0 (LWP 2768248) exited]
+[Thread 0x7fffc1fff6c0 (LWP 2768247) exited]
+[Thread 0x7fffc20ff6c0 (LWP 2768246) exited]
+[Thread 0x7fffc21ff6c0 (LWP 2768245) exited]
+[Thread 0x7fffc276c6c0 (LWP 2768243) exited]
+[Thread 0x7fffc286c6c0 (LWP 2768242) exited]
+[Thread 0x7ffff42ee6c0 (LWP 2768236) exited]
+[Thread 0x7ffff51ff6c0 (LWP 2768232) exited]
+[Thread 0x7ffff7f7a740 (LWP 2767521) exited]
+[Thread 0x7fffc16ff6c0 (LWP 2768256) exited]
+[New process 2767521]
+[Inferior 1 (process 2767521) exited normally]
+Function "Universe::initialize_heap" not defined.
+Breakpoint 1 (Universe::initialize_heap) pending.
+Function "G1CollectedHeap::initialize" not defined.
+Breakpoint 2 (G1CollectedHeap::initialize) pending.
+Function "Metaspace::global_initialize" not defined.
+Breakpoint 3 (Metaspace::global_initialize) pending.
+Function "CodeCache::initialize" not defined.
+Breakpoint 4 (CodeCache::initialize) pending.
+Breakpoint 5 at 0x1208: file /data/workspace/openjdk11-core/src/java.base/share/native/launcher/main.c, line 98.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+
+Breakpoint 5, main (argc=5, argv=0x7fffffffdac8) at /data/workspace/openjdk11-core/src/java.base/share/native/launcher/main.c:98
+98	{
+
+=== JVM初始化完成 - main() ===
+
+--- CollectedHeap信息 ---
+gdb_ai/complete_memory_verify.gdb:51: Error in sourced command file:
+No symbol "Universe" in current context.
+warning: Currently logging to gdb.txt.  Turn the logging off and on to make the new setting effective.
+Already logging to gdb.txt.
+========================================
+JVM 8GB堆内存布局GDB验证开始
+========================================
+Function "Universe::initialize_heap" not defined.
+Breakpoint 1 (Universe::initialize_heap) pending.
+Function "ReservedHeapSpace::initialize_compressed_heap" not defined.
+Breakpoint 2 (ReservedHeapSpace::initialize_compressed_heap) pending.
+Function "ReservedHeapSpace::try_reserve_heap" not defined.
+Breakpoint 3 (ReservedHeapSpace::try_reserve_heap) pending.
+Function "G1CollectedHeap::initialize" not defined.
+Breakpoint 4 (G1CollectedHeap::initialize) pending.
+Function "HeapRegion::setup_heap_region_size" not defined.
+Breakpoint 5 (HeapRegion::setup_heap_region_size) pending.
+Function "Universe::print_compressed_oops_mode" not defined.
+Breakpoint 6 (Universe::print_compressed_oops_mode) pending.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+[New Thread 0x7ffff780b6c0 (LWP 2790583)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 2790583)]
+
+=== [断点] Universe::initialize_heap() ===
+堆初始化开始
+
+=== [断点] HeapRegion::setup_heap_region_size() ===
+初始堆大小(initial_heap_size): 8589934592 bytes (8.00 GB)
+最大堆大小(max_heap_size): 8589934592 bytes (8.00 GB)
+[New Thread 0x7ffff51ff6c0 (LWP 2790584)]
+
+=== [断点] G1CollectedHeap::initialize() ===
+
+=== [断点] initialize_compressed_heap() ===
+堆大小(size): 8589934592 bytes (8.00 GB)
+对齐(alignment): 4194304 bytes (4.00 MB)
+使用大页(large): 0
+
+=== [断点] try_reserve_heap() ===
+请求大小(size): 8589934592 bytes (8.00 GB)
+请求地址(requested_address): 0x600000000
+对齐(alignment): 4194304 bytes
+[New Thread 0x7ffff43f06c0 (LWP 2790585)]
+[New Thread 0x7ffff42ee6c0 (LWP 2790586)]
+[New Thread 0x7fffc33f36c0 (LWP 2790587)]
+[New Thread 0x7fffc32f16c0 (LWP 2790588)]
+
+=== [断点] print_compressed_oops_mode() ===
+即将输出压缩指针模式信息...
+[New Thread 0x7fffc296e6c0 (LWP 2790621)]
+[New Thread 0x7fffc286c6c0 (LWP 2790626)]
+[New Thread 0x7fffc276c6c0 (LWP 2790627)]
+[New Thread 0x7fffc26146c0 (LWP 2790628)]
+[New Thread 0x7fffc21ff6c0 (LWP 2790629)]
+[New Thread 0x7fffc20ff6c0 (LWP 2790630)]
+[New Thread 0x7fffc1fff6c0 (LWP 2790631)]
+[New Thread 0x7fffc1eff6c0 (LWP 2790632)]
+[New Thread 0x7fffc1dff6c0 (LWP 2790633)]
+[New Thread 0x7fffc1cff6c0 (LWP 2790634)]
+[New Thread 0x7fffc1bff6c0 (LWP 2790635)]
+[New Thread 0x7fffc1aff6c0 (LWP 2790636)]
+[New Thread 0x7fffc19ff6c0 (LWP 2790637)]
+[New Thread 0x7fffc18ff6c0 (LWP 2790638)]
+[New Thread 0x7fffc17ff6c0 (LWP 2790639)]
+[New Thread 0x7fffc16ff6c0 (LWP 2790640)]
+[New Thread 0x7fffc15ff6c0 (LWP 2790644)]
+[Thread 0x7fffc15ff6c0 (LWP 2790644) exited]
+[Thread 0x7fffc32f16c0 (LWP 2790588) exited]
+[Thread 0x7fffc33f36c0 (LWP 2790587) exited]
+[Thread 0x7ffff43f06c0 (LWP 2790585) exited]
+[Thread 0x7fffc26146c0 (LWP 2790628) exited]
+[Thread 0x7fffc296e6c0 (LWP 2790621) exited]
+[Thread 0x7ffff780b6c0 (LWP 2790583) exited]
+[Thread 0x7fffc17ff6c0 (LWP 2790639) exited]
+[Thread 0x7fffc18ff6c0 (LWP 2790638) exited]
+[Thread 0x7fffc19ff6c0 (LWP 2790637) exited]
+[Thread 0x7fffc1aff6c0 (LWP 2790636) exited]
+[Thread 0x7fffc1bff6c0 (LWP 2790635) exited]
+[Thread 0x7fffc1cff6c0 (LWP 2790634) exited]
+[Thread 0x7fffc1dff6c0 (LWP 2790633) exited]
+[Thread 0x7fffc1eff6c0 (LWP 2790632) exited]
+[Thread 0x7fffc1fff6c0 (LWP 2790631) exited]
+[Thread 0x7fffc20ff6c0 (LWP 2790630) exited]
+[Thread 0x7fffc21ff6c0 (LWP 2790629) exited]
+[Thread 0x7fffc276c6c0 (LWP 2790627) exited]
+[Thread 0x7fffc286c6c0 (LWP 2790626) exited]
+[Thread 0x7ffff42ee6c0 (LWP 2790586) exited]
+[Thread 0x7ffff51ff6c0 (LWP 2790584) exited]
+[Thread 0x7ffff7f7a740 (LWP 2790577) exited]
+[Thread 0x7fffc16ff6c0 (LWP 2790640) exited]
+[New process 2790577]
+[Inferior 1 (process 2790577) exited normally]
+
+========================================
+验证完成
+========================================
+Warning: 'set logging off', an alias for the command 'set logging enabled', is deprecated.
+Use 'set logging enabled off'.
+
+warning: Currently logging to gdb.txt.  Turn the logging off and on to make the new setting effective.
+Already logging to gdb.txt.
+========================================
+G1辅助数据结构内存验证
+========================================
+No source file named g1CollectedHeap.cpp.
+Breakpoint 1 (g1CollectedHeap.cpp:1775) pending.
+Function "G1CardTable::G1CardTable" not defined.
+Breakpoint 2 (G1CardTable::G1CardTable) pending.
+Function "G1ConcurrentMark::G1ConcurrentMark" not defined.
+Breakpoint 3 (G1ConcurrentMark::G1ConcurrentMark) pending.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+[New Thread 0x7ffff780b6c0 (LWP 2791285)]
+[New Thread 0x7ffff51ff6c0 (LWP 2791286)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 2791285)]
+
+=== [断点] G1CardTable构造 ===
+
+=== G1辅助数据结构映射器创建 ===
+
+=== [断点] G1ConcurrentMark构造 ===
+[New Thread 0x7ffff43f06c0 (LWP 2791287)]
+[New Thread 0x7ffff42ee6c0 (LWP 2791288)]
+[New Thread 0x7fffc33f36c0 (LWP 2791289)]
+[New Thread 0x7fffc32f16c0 (LWP 2791290)]
+[New Thread 0x7fffc296e6c0 (LWP 2791291)]
+[New Thread 0x7fffc286c6c0 (LWP 2791292)]
+[New Thread 0x7fffc276c6c0 (LWP 2791293)]
+[New Thread 0x7fffc26146c0 (LWP 2791294)]
+[New Thread 0x7fffc21ff6c0 (LWP 2791295)]
+[New Thread 0x7fffc20ff6c0 (LWP 2791296)]
+[New Thread 0x7fffc1fff6c0 (LWP 2791297)]
+[New Thread 0x7fffc1eff6c0 (LWP 2791298)]
+[New Thread 0x7fffc1dff6c0 (LWP 2791299)]
+[New Thread 0x7fffc1cff6c0 (LWP 2791303)]
+[New Thread 0x7fffc1bff6c0 (LWP 2791304)]
+[New Thread 0x7fffc1aff6c0 (LWP 2791305)]
+[New Thread 0x7fffc19ff6c0 (LWP 2791306)]
+[New Thread 0x7fffc18ff6c0 (LWP 2791307)]
+[New Thread 0x7fffc17ff6c0 (LWP 2791308)]
+[New Thread 0x7fffc16ff6c0 (LWP 2791309)]
+[New Thread 0x7fffc15ff6c0 (LWP 2791310)]
+[Thread 0x7fffc15ff6c0 (LWP 2791310) exited]
+[Thread 0x7fffc32f16c0 (LWP 2791290) exited]
+[Thread 0x7fffc33f36c0 (LWP 2791289) exited]
+[Thread 0x7ffff43f06c0 (LWP 2791287) exited]
+[Thread 0x7fffc26146c0 (LWP 2791294) exited]
+[Thread 0x7fffc296e6c0 (LWP 2791291) exited]
+[Thread 0x7ffff780b6c0 (LWP 2791285) exited]
+[Thread 0x7fffc16ff6c0 (LWP 2791309) exited]
+[Thread 0x7fffc17ff6c0 (LWP 2791308) exited]
+[Thread 0x7fffc18ff6c0 (LWP 2791307) exited]
+[Thread 0x7fffc19ff6c0 (LWP 2791306) exited]
+[Thread 0x7fffc1aff6c0 (LWP 2791305) exited]
+[Thread 0x7fffc1cff6c0 (LWP 2791303) exited]
+[Thread 0x7fffc1dff6c0 (LWP 2791299) exited]
+[Thread 0x7fffc1eff6c0 (LWP 2791298) exited]
+[Thread 0x7fffc1fff6c0 (LWP 2791297) exited]
+[Thread 0x7fffc20ff6c0 (LWP 2791296) exited]
+[Thread 0x7fffc21ff6c0 (LWP 2791295) exited]
+[Thread 0x7fffc276c6c0 (LWP 2791293) exited]
+[Thread 0x7fffc286c6c0 (LWP 2791292) exited]
+[Thread 0x7ffff42ee6c0 (LWP 2791288) exited]
+[Thread 0x7ffff51ff6c0 (LWP 2791286) exited]
+[Thread 0x7ffff7f7a740 (LWP 2791282) exited]
+[Thread 0x7fffc1bff6c0 (LWP 2791304) exited]
+[New process 2791282]
+[Inferior 1 (process 2791282) exited normally]
+
+========================================
+辅助结构验证完成
+========================================
+No source file named init.cpp.
+Breakpoint 1 (init.cpp:167) pending.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+[New Thread 0x7ffff780b6c0 (LWP 1153141)]
+[New Thread 0x7ffff51ff6c0 (LWP 1153142)]
+[New Thread 0x7ffff42736c0 (LWP 1153143)]
+[New Thread 0x7ffff41716c0 (LWP 1153144)]
+[New Thread 0x7fffc11946c0 (LWP 1153145)]
+[New Thread 0x7fffc10926c0 (LWP 1153146)]
+[New Thread 0x7fffc07906c0 (LWP 1153153)]
+[New Thread 0x7fffc068e6c0 (LWP 1153154)]
+[New Thread 0x7fffc058e6c0 (LWP 1153155)]
+[New Thread 0x7fffc01ff6c0 (LWP 1153156)]
+[New Thread 0x7fffc00ff6c0 (LWP 1153157)]
+[New Thread 0x7fffb9fff6c0 (LWP 1153158)]
+[New Thread 0x7fffb9eff6c0 (LWP 1153159)]
+[New Thread 0x7fffb9dff6c0 (LWP 1153160)]
+[New Thread 0x7fffb9cff6c0 (LWP 1153161)]
+[New Thread 0x7fffb9bff6c0 (LWP 1153162)]
+[New Thread 0x7fffb9aff6c0 (LWP 1153163)]
+[New Thread 0x7fffb99ff6c0 (LWP 1153164)]
+[Thread 0x7fffb99ff6c0 (LWP 1153164) exited]
+[Thread 0x7fffc10926c0 (LWP 1153146) exited]
+[Thread 0x7fffc11946c0 (LWP 1153145) exited]
+[Thread 0x7ffff42736c0 (LWP 1153143) exited]
+[Thread 0x7fffc01ff6c0 (LWP 1153156) exited]
+[Thread 0x7fffc07906c0 (LWP 1153153) exited]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1153141)]
+
+========================================
+=== init_globals() 完成后的完整状态 ===
+========================================
+
+=== 1. Universe 核心静态变量 ===
+Universe::_collectedHeap: 0x7ffff00323e0
+Universe::_main_thread_group: 0x62d8067c0
+Universe::_system_thread_group: 0x62d806730
+Universe::_the_null_sentinel: 0x62d804a48
+Universe::_the_empty_class_klass_array: 0x62d804d20
+Universe::_the_empty_int_array: 0x7fffc0791058
+Universe::_the_empty_short_array: 0x7fffc0791070
+Universe::_the_empty_method_array: 0x7fffc0791088
+Universe::_the_empty_klass_array: 0x7fffc07910a0
+Universe::_the_array_interfaces_array: 0x7fffc0791040
+
+=== 2. 基本类型数组Klass对象 ===
+Universe::_boolArrayKlassObj: 0x800000040
+Universe::_byteArrayKlassObj: 0x800000840
+Universe::_charArrayKlassObj: 0x800000240
+Universe::_intArrayKlassObj: 0x800000c40
+Universe::_longArrayKlassObj: 0x800000e40
+Universe::_shortArrayKlassObj: 0x800000a40
+
+=== 3. 类型数组Klass ===
+Universe::_typeArrayKlassObjs[0]: (nil)
+Universe::_typeArrayKlassObjs[1]: (nil)
+Universe::_typeArrayKlassObjs[2]: (nil)
+Universe::_typeArrayKlassObjs[3]: (nil)
+Universe::_typeArrayKlassObjs[4]: 0x800000040
+Universe::_typeArrayKlassObjs[5]: 0x800000240
+Universe::_typeArrayKlassObjs[6]: 0x800000440
+Universe::_typeArrayKlassObjs[7]: 0x800000640
+Universe::_typeArrayKlassObjs[8]: 0x800000840
+
+=== 4. 压缩指针配置 ===
+Universe::_narrow_oop._base: (nil)
+Universe::_narrow_oop._shift: 3
+Universe::_narrow_oop._use_implicit_null_checks: 1
+Universe::_narrow_klass._base: 0x800000000
+Universe::_narrow_klass._shift: 0
+
+=== 5. 堆内存详情 ===
+Universe::_collectedHeap地址: 0x7ffff00323e0
+gdb_ai/init_globals_deep_debug.gdb:145: Error in sourced command file:
+There is no member or method named _max_capacity.
+Function "init_globals" not defined.
+Breakpoint 1 (init_globals) pending.
+No source file named init.cpp.
+Breakpoint 2 (init.cpp:167) pending.
+Function "universe_init" not defined.
+Breakpoint 3 (universe_init) pending.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+[New Thread 0x7ffff780b6c0 (LWP 1153639)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1153639)]
+
+=== JVM初始化开始 ===
+进入 init_globals() 函数
+
+=== JVM初始化开始 ===
+进入 init_globals() 函数
+
+=== Universe初始化开始 ===
+[New Thread 0x7ffff51ff6c0 (LWP 1153640)]
+[New Thread 0x7ffff42736c0 (LWP 1153641)]
+[New Thread 0x7ffff41716c0 (LWP 1153642)]
+[New Thread 0x7fffc3afa6c0 (LWP 1153643)]
+[New Thread 0x7fffc39f86c0 (LWP 1153644)]
+
+=== Universe初始化开始 ===
+
+=== init_globals() 即将完成 ===
+Universe::_collectedHeap: 0x7ffff00323b0
+堆已初始化!
+堆类型: G1
+[New Thread 0x7fffc30756c0 (LWP 1153645)]
+[New Thread 0x7fffc2f736c0 (LWP 1153646)]
+[New Thread 0x7fffc2e736c0 (LWP 1153647)]
+[New Thread 0x7fffc29ff6c0 (LWP 1153648)]
+[New Thread 0x7fffc28ff6c0 (LWP 1153649)]
+[New Thread 0x7fffc27ff6c0 (LWP 1153650)]
+[New Thread 0x7fffc26ff6c0 (LWP 1153651)]
+[New Thread 0x7fffc25ff6c0 (LWP 1153652)]
+[New Thread 0x7fffc24ff6c0 (LWP 1153654)]
+[New Thread 0x7fffc23ff6c0 (LWP 1153655)]
+[New Thread 0x7fffc22ff6c0 (LWP 1153656)]
+[New Thread 0x7fffc21ff6c0 (LWP 1153657)]
+[New Thread 0x7fffc20ff6c0 (LWP 1153658)]
+[New Thread 0x7fffc1fff6c0 (LWP 1153659)]
+[New Thread 0x7fffc1eff6c0 (LWP 1153660)]
+[New Thread 0x7fffc1dff6c0 (LWP 1153661)]
+[New Thread 0x7fffc1cff6c0 (LWP 1153662)]
+
+Thread 2 "java" received signal SIGPIPE, Broken pipe.
+0x00007ffff78ef5af in write () from /lib64/libc.so.6
+Already logging to gdb.txt.
+Function "init_globals" not defined.
+Breakpoint 1 (init_globals) pending.
+Function "universe_init" not defined.
+Breakpoint 2 (universe_init) pending.
+No source file named init.cpp.
+Breakpoint 3 (init.cpp:167) pending.
+Function "G1CollectedHeap::G1CollectedHeap" not defined.
+Breakpoint 4 (G1CollectedHeap::G1CollectedHeap) pending.
+Function "classLoader_init1" not defined.
+Breakpoint 5 (classLoader_init1) pending.
+Function "codeCache_init" not defined.
+Breakpoint 6 (codeCache_init) pending.
+Function "interpreter_init" not defined.
+Breakpoint 7 (interpreter_init) pending.
+Function "compileBroker_init" not defined.
+Breakpoint 8 (compileBroker_init) pending.
+🎯 开始调试JVM初始化过程...
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+[New Thread 0x7ffff780b6c0 (LWP 1154048)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1154048)]
+
+🚀 === JVM INIT_GLOBALS 开始 ===
+线程ID: 2
+#0  init_globals () at /data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp:105
+#1  0x00007ffff692b1b6 in Threads::create_vm (args=0x7ffff780add0, canTryAgain=0x7ffff780acc3) at /data/workspace/openjdk11-core/src/hotspot/share/runtime/thread.cpp:4060
+#2  0x00007ffff63118c0 in JNI_CreateJavaVM_inner (vm=0x7ffff780ae28, penv=0x7ffff780ae30, args=0x7ffff780add0) at /data/workspace/openjdk11-core/src/hotspot/share/prims/jni.cpp:4010
+
+📚 === CLASS LOADER 初始化 ===
+
+💾 === CODE CACHE 初始化 ===
+
+🚀 === JVM INIT_GLOBALS 开始 ===
+线程ID: 2
+#0  os::init_globals () at /data/workspace/openjdk11-core/src/hotspot/share/runtime/os.hpp:176
+#1  0x00007ffff67004a1 in os_init_globals () at /data/workspace/openjdk11-core/src/hotspot/share/runtime/os.cpp:94
+#2  0x00007ffff61efdab in init_globals () at /data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp:117
+
+🌌 === UNIVERSE_INIT 开始 ===
+当前线程: 2
+
+🔥 === G1 HEAP 构造开始 ===
+[New Thread 0x7ffff51ff6c0 (LWP 1154052)]
+[New Thread 0x7ffff42736c0 (LWP 1154053)]
+[New Thread 0x7ffff41716c0 (LWP 1154054)]
+[New Thread 0x7fffc3afa6c0 (LWP 1154055)]
+[New Thread 0x7fffc39f86c0 (LWP 1154056)]
+
+🌌 === UNIVERSE_INIT 开始 ===
+当前线程: 2
+
+🔄 === INTERPRETER 初始化 ===
+
+⚡ === JIT COMPILER 初始化 ===
+
+✅ === INIT_GLOBALS 即将完成 ===
+Universe::_collectedHeap: 0x7ffff00323b0
+🎯 堆已成功初始化: G1
+堆容量: 522190848 bytes
+[New Thread 0x7fffc30756c0 (LWP 1154059)]
+[New Thread 0x7fffc2f736c0 (LWP 1154060)]
+[New Thread 0x7fffc2e736c0 (LWP 1154061)]
+[New Thread 0x7fffc29ff6c0 (LWP 1154062)]
+[New Thread 0x7fffc28ff6c0 (LWP 1154063)]
+[New Thread 0x7fffc27ff6c0 (LWP 1154064)]
+[New Thread 0x7fffc26ff6c0 (LWP 1154065)]
+[New Thread 0x7fffc25ff6c0 (LWP 1154066)]
+[New Thread 0x7fffc24ff6c0 (LWP 1154067)]
+[New Thread 0x7fffc23ff6c0 (LWP 1154068)]
+[New Thread 0x7fffc22ff6c0 (LWP 1154069)]
+[New Thread 0x7fffc21ff6c0 (LWP 1154070)]
+[New Thread 0x7fffc20ff6c0 (LWP 1154071)]
+[New Thread 0x7fffc1fff6c0 (LWP 1154072)]
+[New Thread 0x7fffc1eff6c0 (LWP 1154073)]
+[New Thread 0x7fffc1dff6c0 (LWP 1154074)]
+[New Thread 0x7fffc1cff6c0 (LWP 1154076)]
+
+Thread 2 "java" received signal SIGPIPE, Broken pipe.
+0x00007ffff78ef5af in write () from /lib64/libc.so.6
+No source file named universe.cpp.
+Breakpoint 1 (universe.cpp:720) pending.
+Function "G1CollectedHeap::initialize" not defined.
+Breakpoint 2 (G1CollectedHeap::initialize) pending.
+Function "HeapRegionManager::initialize" not defined.
+Breakpoint 3 (HeapRegionManager::initialize) pending.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+[New Thread 0x7ffff780b6c0 (LWP 1154694)]
+[New Thread 0x7ffff51ff6c0 (LWP 1154697)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1154694)]
+
+🔥 === G1 HEAP 初始化详情 ===
+G1堆初始化开始...
+
+📊 === G1 REGION MANAGER 初始化 ===
+[New Thread 0x7ffff42736c0 (LWP 1154698)]
+[New Thread 0x7ffff41716c0 (LWP 1154699)]
+[New Thread 0x7fffc3afa6c0 (LWP 1154700)]
+[New Thread 0x7fffc39f86c0 (LWP 1154701)]
+
+🌌 === UNIVERSE 初始化完成状态检查 ===
+
+=== 1. 堆内存信息 ===
+Universe::_collectedHeap: 0x7ffff00323b0
+堆名称: G1
+堆容量: 522190848 bytes
+
+Thread 2 "java" received signal SIGABRT, Aborted.
+0x00007ffff7877114 in __pthread_kill_implementation () from /lib64/libc.so.6
+universe_debug.gdb:59: Error in sourced command file:
+The program being debugged was signaled while in a function called from GDB.
+GDB remains in the frame where the signal was received.
+To change this behavior use "set unwindonsignal on".
+Evaluation of the expression containing the function
+(G1CollectedHeap::used() const) will be abandoned.
+When the function is done executing, GDB will silently stop.
+Function "JavaMain" not defined.
+Breakpoint 1 (JavaMain) pending.
+Function "SystemDictionary::resolve_or_fail" not defined.
+Breakpoint 2 (SystemDictionary::resolve_or_fail) pending.
+Function "CompileBroker::compile_method" not defined.
+Breakpoint 3 (CompileBroker::compile_method) pending.
+🚀 开始安全调试模式...
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+[New Thread 0x7ffff780b6c0 (LWP 1154932)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1154932)]
+
+🎯 === JAVA MAIN 开始执行 ===
+JVM已完全初始化，开始执行Java程序
+
+=== JVM状态检查 ===
+Universe::_collectedHeap: (nil)
+
+SystemDictionary状态检查:
+已加载的类数量统计...
+[New Thread 0x7ffff51ff6c0 (LWP 1155144)]
+[New Thread 0x7ffff42736c0 (LWP 1155145)]
+[New Thread 0x7ffff41716c0 (LWP 1155146)]
+[New Thread 0x7fffc3afa6c0 (LWP 1155147)]
+[New Thread 0x7fffc39f86c0 (LWP 1155148)]
+safe_debug.gdb:43: Error in sourced command file:
+Attempt to extract a component of a value that is not a struct or union
+Function "G1CollectedHeap::initialize" not defined.
+Breakpoint 1 (G1CollectedHeap::initialize) pending.
+Function "HeapRegionManager::initialize" not defined.
+Breakpoint 2 (HeapRegionManager::initialize) pending.
+No source file named universe.cpp.
+Breakpoint 3 (universe.cpp:720) pending.
+🎯 开始G1 Region配置验证...
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+[New Thread 0x7ffff780b6c0 (LWP 1163632)]
+[New Thread 0x7ffff51ff6c0 (LWP 1163633)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1163632)]
+
+🔍 === G1 REGION 配置验证 ===
+
+📊 === HEAP REGION MANAGER 状态 ===
+[New Thread 0x7ffff42736c0 (LWP 1163634)]
+[New Thread 0x7ffff41716c0 (LWP 1163635)]
+[New Thread 0x7fffc3afa6c0 (LWP 1163636)]
+[New Thread 0x7fffc39f86c0 (LWP 1163637)]
+
+🌌 === G1堆配置最终验证 ===
+G1HeapRegionSize: 2097152 bytes
+g1_region_verify.gdb:46: Error in sourced command file:
+No symbol "LogOfHRGrainBytes" in current context.
+Function "JavaMain" not defined.
+Breakpoint 1 (JavaMain) pending.
+🎯 开始精确验证G1 Region大小...
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+[New Thread 0x7ffff780b6c0 (LWP 1166772)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1166772)]
+
+🔍 === G1 REGION 大小精确验证 ===
+G1HeapRegionSize (bytes): 0
+G1HeapRegionSize (KB): 0 KB
+G1HeapRegionSize (MB): 0 MB
+
+=== Region大小相关计算 ===
+1MB = 1048576 bytes
+2MB = 2097152 bytes
+4MB = 4194304 bytes
+8MB = 8388608 bytes
+
+=== 对比验证 ===
+[New Thread 0x7ffff51ff6c0 (LWP 1166773)]
+[New Thread 0x7ffff42676c0 (LWP 1166774)]
+[New Thread 0x7ffff41656c0 (LWP 1166775)]
+[New Thread 0x7fffc32f26c0 (LWP 1166776)]
+[New Thread 0x7fffc31f06c0 (LWP 1166777)]
+[New Thread 0x7fffc286d6c0 (LWP 1166778)]
+[New Thread 0x7fffc276b6c0 (LWP 1166779)]
+[New Thread 0x7fffc266b6c0 (LWP 1166780)]
+[New Thread 0x7fffc21ff6c0 (LWP 1166781)]
+[New Thread 0x7fffc20ff6c0 (LWP 1166782)]
+[New Thread 0x7fffc1fff6c0 (LWP 1166783)]
+[New Thread 0x7fffc1eff6c0 (LWP 1166784)]
+[New Thread 0x7fffc1dff6c0 (LWP 1166785)]
+[New Thread 0x7fffc1cff6c0 (LWP 1166786)]
+[New Thread 0x7fffc1bff6c0 (LWP 1166790)]
+[New Thread 0x7fffc1aff6c0 (LWP 1166791)]
+[New Thread 0x7fffc19ff6c0 (LWP 1166792)]
+[New Thread 0x7fffc18ff6c0 (LWP 1166793)]
+[New Thread 0x7fffc17ff6c0 (LWP 1166794)]
+[New Thread 0x7fffc16ff6c0 (LWP 1166795)]
+[New Thread 0x7fffc15ff6c0 (LWP 1166796)]
+[New Thread 0x7fffc14ff6c0 (LWP 1166797)]
+[Thread 0x7fffc14ff6c0 (LWP 1166797) exited]
+[Thread 0x7fffc31f06c0 (LWP 1166777) exited]
+[Thread 0x7fffc32f26c0 (LWP 1166776) exited]
+[Thread 0x7ffff42676c0 (LWP 1166774) exited]
+[Thread 0x7fffc21ff6c0 (LWP 1166781) exited]
+[Thread 0x7fffc286d6c0 (LWP 1166778) exited]
+[Thread 0x7ffff780b6c0 (LWP 1166772) exited]
+[Thread 0x7fffc16ff6c0 (LWP 1166795) exited]
+[Thread 0x7fffc15ff6c0 (LWP 1166796) exited]
+[Thread 0x7fffc17ff6c0 (LWP 1166794) exited]
+[Thread 0x7fffc19ff6c0 (LWP 1166792) exited]
+[Thread 0x7fffc1aff6c0 (LWP 1166791) exited]
+[Thread 0x7fffc1bff6c0 (LWP 1166790) exited]
+[Thread 0x7fffc1cff6c0 (LWP 1166786) exited]
+[Thread 0x7fffc1dff6c0 (LWP 1166785) exited]
+[Thread 0x7fffc1eff6c0 (LWP 1166784) exited]
+[Thread 0x7fffc1fff6c0 (LWP 1166783) exited]
+[Thread 0x7fffc20ff6c0 (LWP 1166782) exited]
+[Thread 0x7fffc266b6c0 (LWP 1166780) exited]
+[Thread 0x7fffc276b6c0 (LWP 1166779) exited]
+[Thread 0x7ffff41656c0 (LWP 1166775) exited]
+[Thread 0x7ffff51ff6c0 (LWP 1166773) exited]
+[Thread 0x7ffff7f7a740 (LWP 1166765) exited]
+[Thread 0x7fffc18ff6c0 (LWP 1166793) exited]
+[New process 1166765]
+[Inferior 1 (process 1166765) exited normally]
+Function "HeapRegion::setup_heap_region_size" not defined.
+Breakpoint 1 (HeapRegion::setup_heap_region_size) pending.
+No source file named heapRegion.cpp.
+Breakpoint 2 (heapRegion.cpp:98) pending.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+[New Thread 0x7ffff780b6c0 (LWP 1173694)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1173694)]
+=== HeapRegion::setup_heap_region_size 调用 ===
+verify_region_size.gdb:24: Error in sourced command file:
+Argument to arithmetic operation not a number or boolean.
+Function "CodeCache::initialize_heaps" not defined.
+Breakpoint 1 (CodeCache::initialize_heaps) pending.
+Function "CodeCache::add_heap" not defined.
+Breakpoint 2 (CodeCache::add_heap) pending.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+[New Thread 0x7ffff780b6c0 (LWP 1211229)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1211229)]
+
+Thread 2 "java" hit Breakpoint 1, CodeCache::initialize_heaps () at /data/workspace/openjdk11-core/src/hotspot/share/code/codeCache.cpp:175
+175	void CodeCache::initialize_heaps() {
+
+Thread 2 "java" hit Breakpoint 2.2, CodeCache::add_heap (rs=..., name=0x7ffff6baf40a "CodeHeap 'non-nmethods'", code_blob_type=2) at /data/workspace/openjdk11-core/src/hotspot/share/code/codeCache.cpp:405
+405	void CodeCache::add_heap(ReservedSpace rs, const char* name, int code_blob_type) {
+
+🎯 CodeCache完整分析 - 基于8GB堆配置
+=====================================
+
+=== CodeCache三段式内存布局分析 ===
+
+1. CodeCache全局配置:
+ReservedCodeCacheSize: 245760 KB
+NonNMethodCodeHeapSize: 7416 KB
+ProfiledCodeHeapSize: 119171 KB
+NonProfiledCodeHeapSize: 119171 KB
+
+2. CodeHeap实例分析:
+_heaps数组长度: 0
+_compiled_heaps数组长度: 0
+_nmethod_heaps数组长度: 0
+
+3. CodeCache内存边界:
+Lower bound: 0x7fffe1000000
+Upper bound: 0x7ffff0000000
+总跨度: 240 MB
+
+=== nmethod生命周期管理分析 ===
+
+1. nmethod统计:
+依赖nmethod数量: 0
+需要缓存清理: false
+
+2. Scavenge Root nmethods链表:
+
+=== CodeBlob类型分布分析 ===
+
+1. 按CodeHeap统计:
+
+CodeCache总预留: 0 MB
+
+=== JIT编译队列分析 ===
+
+1. CompileBroker状态:
+gdb_ai/codecache_deep_analysis.gdb:137: Error in sourced command file:
+Couldn't find method CompilationPolicy::name
+Breakpoint 1 at 0x1208: file /data/workspace/openjdk11-core/src/java.base/share/native/launcher/main.c, line 98.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+
+Breakpoint 1, main (argc=5, argv=0x7fffffffdac8) at /data/workspace/openjdk11-core/src/java.base/share/native/launcher/main.c:98
+98	{
+Function "Universe::initialize_heap" not defined.
+Breakpoint 2 (Universe::initialize_heap) pending.
+[New Thread 0x7ffff780b6c0 (LWP 1211495)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1211495)]
+
+Thread 2 "java" hit Breakpoint 2, Universe::initialize_heap () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:805
+805	jint Universe::initialize_heap() {
+Breakpoint 3 at 0x7ffff5e3ee5b: file /data/workspace/openjdk11-core/src/hotspot/share/code/codeCache.cpp, line 1082.
+[New Thread 0x7ffff51ff6c0 (LWP 1211496)]
+[New Thread 0x7ffff43f06c0 (LWP 1211497)]
+[New Thread 0x7ffff42ee6c0 (LWP 1211498)]
+[New Thread 0x7fffc33f36c0 (LWP 1211499)]
+[New Thread 0x7fffc32f16c0 (LWP 1211500)]
+[New Thread 0x7fffc296e6c0 (LWP 1211501)]
+[New Thread 0x7fffc286c6c0 (LWP 1211502)]
+[New Thread 0x7fffc276c6c0 (LWP 1211503)]
+[New Thread 0x7fffc26146c0 (LWP 1211504)]
+[New Thread 0x7fffc21ff6c0 (LWP 1211505)]
+[New Thread 0x7fffc20ff6c0 (LWP 1211506)]
+[New Thread 0x7fffc1fff6c0 (LWP 1211507)]
+[New Thread 0x7fffc1eff6c0 (LWP 1211508)]
+[New Thread 0x7fffc1dff6c0 (LWP 1211509)]
+[New Thread 0x7fffc1cff6c0 (LWP 1211510)]
+[New Thread 0x7fffc1bff6c0 (LWP 1211514)]
+[New Thread 0x7fffc1aff6c0 (LWP 1211515)]
+[New Thread 0x7fffc19ff6c0 (LWP 1211516)]
+[New Thread 0x7fffc18ff6c0 (LWP 1211517)]
+[New Thread 0x7fffc17ff6c0 (LWP 1211518)]
+[New Thread 0x7fffc16ff6c0 (LWP 1211519)]
+[New Thread 0x7fffc15ff6c0 (LWP 1211520)]
+
+Thread 2 "java" received signal SIGPIPE, Broken pipe.
+0x00007ffff78ef5af in write () from /lib64/libc.so.6
+
+=== CodeCache配置分析 ===
+ReservedCodeCacheSize: 245760 KB
+
+Thread 2 "java" received signal SIGPIPE, Broken pipe.
+0x00007ffff78ef5af in write () from /lib64/libc.so.6
+Breakpoint 4 at 0x7ffff5f3e071: exit. (7 locations)
+
+Thread 2 "java" hit Breakpoint 4.4, SingleWriterSynchronizer::exit (this=0x7ffff7685d88 <NonJavaThread::_the_list+8>, enter_value=98) at /data/workspace/openjdk11-core/src/hotspot/share/utilities/singleWriterSynchronizer.hpp:96
+96	  uint exit_value = Atomic::add(2u, &_exit[enter_value & 1]);
+
+=== 程序结束时CodeCache状态 ===
+分析完成
+A debugging session is active.
+
+	Inferior 1 [process 1211488] will be killed.
+
+Quit anyway? (y or n) [answered Y; input not from terminal]

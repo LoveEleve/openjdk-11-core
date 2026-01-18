@@ -1,0 +1,309 @@
+Warning: 'set logging on', an alias for the command 'set logging enabled', is deprecated.
+Use 'set logging enabled on'.
+
+Breakpoint 1 at 0x1208: file /data/workspace/openjdk11-core/src/java.base/share/native/launcher/main.c, line 98.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+
+Breakpoint 1, main (argc=6, argv=0x7fffffffda78) at /data/workspace/openjdk11-core/src/java.base/share/native/launcher/main.c:98
+98	{
+Function "universe_init" not defined.
+Breakpoint 2 (universe_init) pending.
+----_JAVA_LAUNCHER_DEBUG----
+Launcher state:
+	First application arg index: 6
+	debug:on
+	javargs:off
+	program name:java
+	launcher name:openjdk
+	javaw:off
+	fullversion:11.0.17-internal+0-adhoc.root.openjdk11-core
+Java args:
+Command line args:
+argv[0] = /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/bin/java
+argv[1] = -Xms8g
+argv[2] = -Xmx8g
+argv[3] = -XX:+UseG1GC
+argv[4] = -XX:-UseLargePages
+argv[5] = HelloWorld
+JRE path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk
+jvm.cfg[0] = ->-server<-
+jvm.cfg[1] = ->-client<-
+23 micro seconds to parse jvm.cfg
+Default VM: server
+Does `/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/lib/server/libjvm.so' exist ... yes.
+mustsetenv: FALSE
+JVM path is /data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/images/jdk/lib/server/libjvm.so
+753330 micro seconds to LoadJavaVM
+[New Thread 0x7ffff780b6c0 (LWP 1285050)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1285050)]
+
+Thread 2 "java" hit Breakpoint 2.2, universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:677
+warning: Source file is more recent than executable.
+677	     ================================
+[New Thread 0x7ffff51ff6c0 (LWP 1285051)]
+[New Thread 0x7ffff43f06c0 (LWP 1285052)]
+[New Thread 0x7ffff42ee6c0 (LWP 1285053)]
+[New Thread 0x7fffc09f96c0 (LWP 1285054)]
+[New Thread 0x7fffc08f76c0 (LWP 1285055)]
+
+Thread 2 "java" hit Breakpoint 2.1, AOTLoader::universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/aot/aotLoader.cpp:172
+172	  if (UseAOT && libraries_count() > 0) {
+
+================================================================
+=== universe_init() 完成后 - G1 GC 对象模型验证 ===
+================================================================
+
+=== 1. HeapRegion 静态配置 ===
+$1 = 4194304
+$2 = 22
+$3 = 524288
+$4 = 8192
+
+=== 2. G1CollectedHeap 对象 ===
+$5 = (G1CollectedHeap *) 0x7ffff00326b0
+
+=== 3. 堆内存区域 (_reserved) ===
+$6 = {
+  _start = 0x600000000,
+  _word_size = 1073741824
+}
+
+=== 4. HeapRegionManager ===
+$7 = 2048
+$8 = 2048
+
+=== 5. G1Allocator ===
+$9 = (G1Allocator *) 0x7ffff0041520
+
+=== 6. G1CardTable ===
+$10 = (G1CardTable *) 0x7ffff0042c60
+
+=== 7. G1Policy ===
+$11 = (G1Policy *) 0x7ffff0038b00
+
+=== 8. WorkGang ===
+$12 = (WorkGang *) 0x7ffff003f610
+$13 = 13
+
+=== 9. BOT (Block Offset Table) ===
+$14 = (G1BlockOffsetTable *) 0x7ffff0059180
+
+=== 10. 巨型对象阈值 ===
+$15 = 262144
+
+=== 11. HotCardCache ===
+$16 = (G1HotCardCache *) 0x7ffff0042ed0
+
+=== 12. G1RemSet ===
+$17 = (G1RemSet *) 0x7ffff004c670
+
+=== 13. ConcurrentMark ===
+$18 = (G1ConcurrentMark *) 0x7ffff005a360
+
+=== 14. ConcurrentRefine ===
+$19 = (G1ConcurrentRefine *) 0x7ffff0c7e460
+
+=== 15. Eden/Survivor ===
+$20 = {
+  _length = 0
+}
+$21 = {
+  _regions = 0x7ffff0038670
+}
+
+=== 16. Old/Humongous Set ===
+$22 = 0
+$23 = 0
+
+=== 17. CollectorState ===
+$24 = {
+  _in_young_only_phase = true,
+  _in_young_gc_before_mixed = false,
+  _in_initial_mark_gc = false,
+  _initiate_conc_mark_if_possible = false,
+  _mark_or_rebuild_in_progress = false,
+  _clearing_next_bitmap = false,
+  _in_full_gc = false
+}
+
+=== 18. 压缩指针配置 ===
+$25 = {
+  _base = 0x0,
+  _shift = 3,
+  _use_implicit_null_checks = true
+}
+$26 = {
+  _base = 0x800000000 "",
+  _shift = 0,
+  _use_implicit_null_checks = true
+}
+
+=== 19. EvacStats ===
+$27 = {
+  <PLABStats> = {
+    <CHeapObj<(MemoryType)5>> = {
+      <AllocatedObj> = {
+        _vptr.AllocatedObj = 0x7ffff758b870 <vtable for G1EvacStats+16>
+      }, <No data fields>}, 
+    members of PLABStats:
+    _description = 0x7ffff6c5a53d "Young",
+    _allocated = 0,
+    _wasted = 0,
+    _undo_wasted = 0,
+    _unused = 0,
+    _desired_net_plab_sz = 4096,
+    _filter = {
+      <CHeapObj<(MemoryType)5>> = {
+        <AllocatedObj> = {
+          _vptr.AllocatedObj = 0x7ffff758dac0 <vtable for AdaptiveWeightedAverage+16>
+        }, <No data fields>}, 
+      members of AdaptiveWeightedAverage:
+      _average = 0,
+      _sample_count = 0,
+      _weight = 75,
+      _is_old = false,
+      static OLD_THRESHOLD = 100,
+      _last_sample = 0
+    }
+  }, 
+  members of G1EvacStats:
+  _region_end_waste = 0,
+  _regions_filled = 0,
+  _direct_allocated = 0,
+  _failure_used = 0,
+  _failure_waste = 0
+}
+$28 = {
+  <PLABStats> = {
+    <CHeapObj<(MemoryType)5>> = {
+      <AllocatedObj> = {
+        _vptr.AllocatedObj = 0x7ffff758b870 <vtable for G1EvacStats+16>
+      }, <No data fields>}, 
+    members of PLABStats:
+    _description = 0x7ffff6c5a543 "Old",
+    _allocated = 0,
+    _wasted = 0,
+    _undo_wasted = 0,
+    _unused = 0,
+    _desired_net_plab_sz = 1024,
+    _filter = {
+      <CHeapObj<(MemoryType)5>> = {
+        <AllocatedObj> = {
+          _vptr.AllocatedObj = 0x7ffff758dac0 <vtable for AdaptiveWeightedAverage+16>
+        }, <No data fields>}, 
+      members of AdaptiveWeightedAverage:
+      _average = 0,
+      _sample_count = 0,
+      _weight = 75,
+      _is_old = false,
+      static OLD_THRESHOLD = 100,
+      _last_sample = 0
+    }
+  }, 
+  members of G1EvacStats:
+  _region_end_waste = 0,
+  _regions_filled = 0,
+  _direct_allocated = 0,
+  _failure_used = 0,
+  _failure_waste = 0
+}
+
+=== 20. 引用处理器 ===
+$29 = (ReferenceProcessor *) 0x0
+$30 = (ReferenceProcessor *) 0x0
+
+=== 21. DirtyCardQueueSet ===
+$31 = {
+  <PtrQueueSet> = {
+    _vptr.PtrQueueSet = 0x7ffff74b9868 <vtable for DirtyCardQueueSet+16>,
+    _buffer_size = 256,
+    _cbl_mon = 0x7ffff001a2e0,
+    _completed_buffers_head = 0x0,
+    _completed_buffers_tail = 0x0,
+    _n_completed_buffers = 0,
+    _process_completed_threshold = -1,
+    _process_completed = false,
+    _fl_lock = 0x7ffff001a210,
+    _buf_free_list = 0x0,
+    _buf_free_list_sz = 0,
+    _fl_owner = 0x7ffff763bb00 <G1BarrierSet::_dirty_card_queue_set>,
+    _all_active = true,
+    _notify_when_complete = false,
+    _max_completed_queue = -1,
+    _completed_queue_padding = 0
+  }, 
+  members of DirtyCardQueueSet:
+  _shared_dirty_card_queue = {
+    <PtrQueue> = {
+      _vptr.PtrQueue = 0x7ffff74b9880 <vtable for DirtyCardQueue+16>,
+      _qset = 0x7ffff0032c58,
+      _active = true,
+      _permanent = true,
+      _index = 0,
+      _capacity_in_bytes = 0,
+      static _element_size = 8,
+      _buf = 0x0,
+      _lock = 0x7ffff001a3b0
+    }, <No data fields>},
+  _free_ids = 0x0,
+  _processed_buffers_mut = 0,
+  _processed_buffers_rs_thread = 0,
+  _cur_par_buffer_node = 0xf1f1f1f1f1f1f1f1
+}
+
+================================================================
+=== GDB 调试完成 ===
+================================================================
+[New Thread 0x7fffc07f56c0 (LWP 1285127)]
+[New Thread 0x7fffc06f36c0 (LWP 1285128)]
+[New Thread 0x7fffc05f36c0 (LWP 1285129)]
+[New Thread 0x7fffc01ff6c0 (LWP 1285134)]
+[New Thread 0x7fffc00ff6c0 (LWP 1285135)]
+[New Thread 0x7fffb97ff6c0 (LWP 1285136)]
+[New Thread 0x7fffb96ff6c0 (LWP 1285137)]
+[New Thread 0x7fffb95ff6c0 (LWP 1285138)]
+[New Thread 0x7fffb94ff6c0 (LWP 1285142)]
+[New Thread 0x7fffb93ff6c0 (LWP 1285143)]
+[New Thread 0x7fffb92ff6c0 (LWP 1285144)]
+[New Thread 0x7fffb91ff6c0 (LWP 1285145)]
+JavaVM args:
+    version 0x00010002, ignoreUnrecognized is JNI_FALSE, nOptions is 9
+    option[ 0] = '-Dsun.java.launcher.diag=true'
+    option[ 1] = '-Djava.class.path=/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:/data/workspace/openjdk11-core/build/linux-x86_64-normal-server-slowdebug/jdk/lib:'
+    option[ 2] = '-Xms8g'
+    option[ 3] = '-Xmx8g'
+    option[ 4] = '-XX:+UseG1GC'
+    option[ 5] = '-XX:-UseLargePages'
+    option[ 6] = '-Dsun.java.command=HelloWorld'
+    option[ 7] = '-Dsun.java.launcher=SUN_STANDARD'
+    option[ 8] = '-Dsun.java.launcher.pid=1285046'
+1764114 micro seconds to InitializeJVM
+[New Thread 0x7fffb90fd6c0 (LWP 1285146)]
+Hello, World!
+[Thread 0x7fffb91ff6c0 (LWP 1285145) exited]
+[Thread 0x7fffc08f76c0 (LWP 1285055) exited]
+[Thread 0x7fffc09f96c0 (LWP 1285054) exited]
+[Thread 0x7ffff43f06c0 (LWP 1285052) exited]
+[Thread 0x7fffc01ff6c0 (LWP 1285134) exited]
+[Thread 0x7fffc07f56c0 (LWP 1285127) exited]
+Main class is 'HelloWorld'
+App's argc is 0
+38273 micro seconds to load main class
+----_JAVA_LAUNCHER_DEBUG----
+[Thread 0x7ffff780b6c0 (LWP 1285050) exited]
+[Thread 0x7fffb90fd6c0 (LWP 1285146) exited]
+[Thread 0x7fffb93ff6c0 (LWP 1285143) exited]
+[Thread 0x7fffb94ff6c0 (LWP 1285142) exited]
+[Thread 0x7fffb95ff6c0 (LWP 1285138) exited]
+[Thread 0x7fffb96ff6c0 (LWP 1285137) exited]
+[Thread 0x7fffb97ff6c0 (LWP 1285136) exited]
+[Thread 0x7fffc00ff6c0 (LWP 1285135) exited]
+[Thread 0x7fffc05f36c0 (LWP 1285129) exited]
+[Thread 0x7fffc06f36c0 (LWP 1285128) exited]
+[Thread 0x7ffff42ee6c0 (LWP 1285053) exited]
+[Thread 0x7ffff51ff6c0 (LWP 1285051) exited]
+[Thread 0x7ffff7f7a740 (LWP 1285046) exited]
+[Thread 0x7fffb92ff6c0 (LWP 1285144) exited]
+[New process 1285046]
+[Inferior 1 (process 1285046) exited normally]

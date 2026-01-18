@@ -1,0 +1,340 @@
+Function "universe_init" not defined.
+Breakpoint 1 (universe_init) pending.
+Function "HeapRegion::setup_heap_region_size" not defined.
+Breakpoint 2 (HeapRegion::setup_heap_region_size) pending.
+Function "Universe::reserve_heap" not defined.
+Breakpoint 3 (Universe::reserve_heap) pending.
+Function "G1CollectedHeap::initialize" not defined.
+Breakpoint 4 (G1CollectedHeap::initialize) pending.
+
+=== 开始调试 ===
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+[New Thread 0x7ffff780b6c0 (LWP 1270896)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1270896)]
+
+Thread 2 "java" hit Breakpoint 1.2, universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:677
+warning: Source file is more recent than executable.
+677	     ================================
+
+=== 1. universe_init() 入口 ===
+$1 = false
+$2 = (CollectedHeap *) 0x0
+
+Thread 2 "java" hit Breakpoint 2, HeapRegion::setup_heap_region_size (initial_heap_size=8589934592, max_heap_size=8589934592) at /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegion.cpp:64
+warning: Source file is more recent than executable.
+64	  size_t region_size = G1HeapRegionSize;
+
+=== 2. HeapRegion::setup_heap_region_size ===
+$3 = 8589934592
+$4 = 8589934592
+[New Thread 0x7ffff51ff6c0 (LWP 1270933)]
+
+Thread 2 "java" hit Breakpoint 4, G1CollectedHeap::initialize (this=0x7ffff00326b0) at /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectedHeap.cpp:1534
+warning: Source file is more recent than executable.
+1534	    G1RegionToSpaceMapper::create_mapper(rs,
+
+=== 3. HeapRegion 静态配置 (计算后) ===
+$5 = 4194304
+$6 = 22
+$7 = 524288
+$8 = 8192
+
+Thread 2 "java" hit Breakpoint 3, Universe::reserve_heap (heap_size=8589934592, alignment=4194304) at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:845
+845	    Arguments::PropertyList_add(new SystemProperty("java.vm.compressedOopsMode",
+
+=== 4. Universe::reserve_heap ===
+$9 = 8589934592
+$10 = 4194304
+[New Thread 0x7ffff43f06c0 (LWP 1270934)]
+[New Thread 0x7ffff42ee6c0 (LWP 1270935)]
+[New Thread 0x7fffc09f96c0 (LWP 1270936)]
+[New Thread 0x7fffc08f76c0 (LWP 1270937)]
+
+Thread 2 "java" hit Breakpoint 1.1, AOTLoader::universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/aot/aotLoader.cpp:172
+172	  if (UseAOT && libraries_count() > 0) {
+
+=== 5. G1CollectedHeap::initialize ===
+[New Thread 0x7fffc07f56c0 (LWP 1270938)]
+[New Thread 0x7fffc06f36c0 (LWP 1270939)]
+[New Thread 0x7fffc05f36c0 (LWP 1270940)]
+[New Thread 0x7fffc01ff6c0 (LWP 1270941)]
+[New Thread 0x7fffc00ff6c0 (LWP 1270942)]
+[New Thread 0x7fffb97ff6c0 (LWP 1270943)]
+[New Thread 0x7fffb96ff6c0 (LWP 1270944)]
+[New Thread 0x7fffb95ff6c0 (LWP 1270945)]
+[New Thread 0x7fffb94ff6c0 (LWP 1270947)]
+[New Thread 0x7fffb93ff6c0 (LWP 1270948)]
+[New Thread 0x7fffb92ff6c0 (LWP 1270949)]
+[New Thread 0x7fffb91ff6c0 (LWP 1270950)]
+[New Thread 0x7fffb90fd6c0 (LWP 1270951)]
+[Thread 0x7fffb91ff6c0 (LWP 1270950) exited]
+[Thread 0x7fffc09f96c0 (LWP 1270936) exited]
+[Thread 0x7fffc08f76c0 (LWP 1270937) exited]
+[Thread 0x7ffff43f06c0 (LWP 1270934) exited]
+[Thread 0x7fffc01ff6c0 (LWP 1270941) exited]
+[Thread 0x7fffc07f56c0 (LWP 1270938) exited]
+[Thread 0x7ffff780b6c0 (LWP 1270896) exited]
+[Thread 0x7fffb90fd6c0 (LWP 1270951) exited]
+[Thread 0x7fffb92ff6c0 (LWP 1270949) exited]
+[Thread 0x7fffb94ff6c0 (LWP 1270947) exited]
+[Thread 0x7fffb95ff6c0 (LWP 1270945) exited]
+[Thread 0x7fffb96ff6c0 (LWP 1270944) exited]
+[Thread 0x7fffb97ff6c0 (LWP 1270943) exited]
+[Thread 0x7fffc00ff6c0 (LWP 1270942) exited]
+[Thread 0x7fffc05f36c0 (LWP 1270940) exited]
+[Thread 0x7fffc06f36c0 (LWP 1270939) exited]
+[Thread 0x7ffff42ee6c0 (LWP 1270935) exited]
+[Thread 0x7ffff51ff6c0 (LWP 1270933) exited]
+[Thread 0x7ffff7f7a740 (LWP 1270888) exited]
+[Thread 0x7fffb93ff6c0 (LWP 1270948) exited]
+[New process 1270888]
+[Inferior 1 (process 1270888) exited normally]
+Breakpoint 5 at 0x7ffff695f7c2: file /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp, line 754.
+universe_init_core_debug.gdb:54: Error in sourced command file:
+The program is not being run.
+warning: Currently logging to gdb.txt.  Turn the logging off and on to make the new setting effective.
+Already logging to gdb.txt.
+============================================================================
+universe_init() 8GB G1GC 详细调试
+============================================================================
+Function "universe_init" not defined.
+Breakpoint 1 (universe_init) pending.
+No source file named universe.cpp.
+Breakpoint 2 (universe.cpp:754) pending.
+开始运行...
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+[New Thread 0x7ffff780b6c0 (LWP 1271716)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1271716)]
+
+Thread 2 "java" hit Breakpoint 1.2, universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:677
+warning: Source file is more recent than executable.
+677	     ================================
+
+=== [阶段1] universe_init() 入口 ===
+当前位置:
+#0  universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:677
+
+初始化前状态:
+_fully_initialized =$1 = false
+_collectedHeap =$2 = (CollectedHeap *) 0x0
+_narrow_oop._base =$3 = (address) 0x0
+_narrow_oop._shift =$4 = 0
+[New Thread 0x7ffff51ff6c0 (LWP 1272262)]
+
+Thread 2 "java" hit Breakpoint 2, Universe::create_heap () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:754
+754	  return JNI_OK;
+
+=== [阶段2] universe_init() 完成 (返回前) ===
+
+--- 堆信息 ---
+_collectedHeap 地址 =$5 = (CollectedHeap *) 0x0
+
+_collectedHeap->_reserved._start =universe_init_detailed_debug.gdb:49: Error in sourced command file:
+Cannot access memory at address 0x10
+============================================================================
+universe_init() 8GB G1GC 详细调试
+============================================================================
+Function "universe_init" not defined.
+Breakpoint 1 (universe_init) pending.
+Function "Universe::initialize_heap" not defined.
+Breakpoint 2 (Universe::initialize_heap) pending.
+Function "HeapRegion::setup_heap_region_size" not defined.
+Breakpoint 3 (HeapRegion::setup_heap_region_size) pending.
+Function "Metaspace::global_initialize" not defined.
+Breakpoint 4 (Metaspace::global_initialize) pending.
+Function "SymbolTable::create_table" not defined.
+Breakpoint 5 (SymbolTable::create_table) pending.
+Function "StringTable::create_table" not defined.
+Breakpoint 6 (StringTable::create_table) pending.
+开始运行...
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+[New Thread 0x7ffff780b6c0 (LWP 1273011)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1273011)]
+
+Thread 2 "java" hit Breakpoint 1.2, universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:677
+warning: Source file is more recent than executable.
+677	     ================================
+
+=== [1] universe_init() 入口 ===
+位置:
+#0  universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:677
+
+初始状态:
+$1 = false
+$2 = (CollectedHeap *) 0x0
+$3 = {
+  _base = 0x0,
+  _shift = 0,
+  _use_implicit_null_checks = true
+}
+
+Thread 2 "java" hit Breakpoint 2, Universe::initialize_heap () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:764
+764	// Unscaled  - Use 32-bits oops without encoding when
+
+=== [2] Universe::initialize_heap() ===
+#0  Universe::initialize_heap () at /data/workspace/openjdk11-core/src/hotspot/share/memory/universe.cpp:764
+
+Thread 2 "java" hit Breakpoint 3, HeapRegion::setup_heap_region_size (initial_heap_size=8589934592, max_heap_size=8589934592) at /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegion.cpp:64
+warning: Source file is more recent than executable.
+64	  size_t region_size = G1HeapRegionSize;
+
+=== [3] HeapRegion::setup_heap_region_size ===
+#0  HeapRegion::setup_heap_region_size (initial_heap_size=8589934592, max_heap_size=8589934592) at /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/heapRegion.cpp:64
+输入参数:
+$4 = 8589934592
+$5 = 8589934592
+G1CollectorPolicy::G1CollectorPolicy (this=0x7ffff0031fe0) at /data/workspace/openjdk11-core/src/hotspot/share/gc/g1/g1CollectorPolicy.cpp:49
+49	  HeapRegionRemSet::setup_remset_size();
+
+HeapRegion静态配置(计算后):
+$6 = 4194304
+$7 = 22
+$8 = 524288
+$9 = 8192
+[New Thread 0x7ffff51ff6c0 (LWP 1273012)]
+[New Thread 0x7ffff43f06c0 (LWP 1273013)]
+[New Thread 0x7ffff42ee6c0 (LWP 1273014)]
+[New Thread 0x7fffc09f96c0 (LWP 1273015)]
+[New Thread 0x7fffc08f76c0 (LWP 1273016)]
+
+Thread 2 "java" hit Breakpoint 4, Metaspace::global_initialize () at /data/workspace/openjdk11-core/src/hotspot/share/memory/metaspace.cpp:1293
+1293	  MetaspaceGC::initialize();
+
+=== [4] Metaspace::global_initialize() ===
+#0  Metaspace::global_initialize () at /data/workspace/openjdk11-core/src/hotspot/share/memory/metaspace.cpp:1293
+
+Thread 2 "java" hit Breakpoint 1.1, AOTLoader::universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/aot/aotLoader.cpp:172
+172	  if (UseAOT && libraries_count() > 0) {
+
+=== [5] SymbolTable::create_table() ===
+#0  AOTLoader::universe_init () at /data/workspace/openjdk11-core/src/hotspot/share/aot/aotLoader.cpp:172
+$10 = 20011
+
+Thread 2 "java" hit Breakpoint 5, SymbolTable::create_table () at /data/workspace/openjdk11-core/src/hotspot/share/classfile/symbolTable.hpp:176
+176	    assert(_the_table == NULL, "One symbol table allowed.");
+
+=== [6] StringTable::create_table() ===
+#0  SymbolTable::create_table () at /data/workspace/openjdk11-core/src/hotspot/share/classfile/symbolTable.hpp:176
+
+Thread 2 "java" hit Breakpoint 6, StringTable::create_table () at /data/workspace/openjdk11-core/src/hotspot/share/classfile/stringTable.hpp:108
+108	    assert(_the_table == NULL, "One string table allowed.");
+Breakpoint 7 at 0x7ffff61efdda: file /data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp, line 120.
+
+Thread 2 "java" hit Breakpoint 7, init_globals () at /data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp:120
+warning: Source file is more recent than executable.
+120	                                  // stubRoutines_init1 and metaspace_init.
+
+=== [7] universe_init() 完成后状态 ===
+
+--- 堆对象 ---
+$11 = (CollectedHeap *) 0x7ffff00326b0
+$12 = 0x7ffff00326b0
+
+--- 压缩指针 ---
+$13 = {
+  _base = 0x0,
+  _shift = 3,
+  _use_implicit_null_checks = true
+}
+$14 = 0x0
+
+--- 压缩类指针 ---
+$15 = {
+  _base = 0x800000000 "",
+  _shift = 0,
+  _use_implicit_null_checks = true
+}
+$16 = 0x800000000
+
+--- LatestMethodCache ---
+$17 = (LatestMethodCache *) 0x7ffff0c917e0
+$18 = (LatestMethodCache *) 0x7ffff0c91830
+$19 = (LatestMethodCache *) 0x7ffff0c91880
+$20 = (LatestMethodCache *) 0x7ffff0c918d0
+$21 = (LatestMethodCache *) 0x7ffff0c91920
+$22 = (LatestMethodCache *) 0x7ffff0c91970
+
+--- 初始化标志 ---
+$23 = false
+$24 = false
+
+============================================================================
+调试完成
+============================================================================
+[New Thread 0x7fffc07f56c0 (LWP 1273018)]
+[New Thread 0x7fffc06f36c0 (LWP 1273019)]
+[New Thread 0x7fffc05f36c0 (LWP 1273020)]
+[New Thread 0x7fffc01ff6c0 (LWP 1273024)]
+[New Thread 0x7fffc00ff6c0 (LWP 1273025)]
+[New Thread 0x7fffb97ff6c0 (LWP 1273026)]
+[New Thread 0x7fffb96ff6c0 (LWP 1273027)]
+[New Thread 0x7fffb95ff6c0 (LWP 1273028)]
+[New Thread 0x7fffb94ff6c0 (LWP 1273029)]
+[New Thread 0x7fffb93ff6c0 (LWP 1273030)]
+[New Thread 0x7fffb92ff6c0 (LWP 1273031)]
+[New Thread 0x7fffb91ff6c0 (LWP 1273032)]
+[New Thread 0x7fffb90fd6c0 (LWP 1273033)]
+[Thread 0x7fffb91ff6c0 (LWP 1273032) exited]
+[Thread 0x7fffc09f96c0 (LWP 1273015) exited]
+[Thread 0x7fffc08f76c0 (LWP 1273016) exited]
+[Thread 0x7ffff43f06c0 (LWP 1273013) exited]
+[Thread 0x7fffc01ff6c0 (LWP 1273024) exited]
+[Thread 0x7fffc07f56c0 (LWP 1273018) exited]
+[Thread 0x7ffff780b6c0 (LWP 1273011) exited]
+[Thread 0x7fffb90fd6c0 (LWP 1273033) exited]
+[Thread 0x7fffb92ff6c0 (LWP 1273031) exited]
+[Thread 0x7fffb93ff6c0 (LWP 1273030) exited]
+[Thread 0x7fffb95ff6c0 (LWP 1273028) exited]
+[Thread 0x7fffb96ff6c0 (LWP 1273027) exited]
+[Thread 0x7fffb97ff6c0 (LWP 1273026) exited]
+[Thread 0x7fffc00ff6c0 (LWP 1273025) exited]
+[Thread 0x7fffc05f36c0 (LWP 1273020) exited]
+[Thread 0x7fffc06f36c0 (LWP 1273019) exited]
+[Thread 0x7ffff42ee6c0 (LWP 1273014) exited]
+[Thread 0x7ffff51ff6c0 (LWP 1273012) exited]
+[Thread 0x7ffff7f7a740 (LWP 1272954) exited]
+[Thread 0x7fffb94ff6c0 (LWP 1273029) exited]
+[New process 1272954]
+[Inferior 1 (process 1272954) exited normally]
+No source file named init.cpp.
+Breakpoint 1 (init.cpp:120) pending.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib64/libthread_db.so.1".
+[New Thread 0x7ffff780b6c0 (LWP 1273685)]
+[New Thread 0x7ffff51ff6c0 (LWP 1273686)]
+[New Thread 0x7ffff43f06c0 (LWP 1273687)]
+[New Thread 0x7ffff42ee6c0 (LWP 1273688)]
+[New Thread 0x7fffc09f96c0 (LWP 1273689)]
+[New Thread 0x7fffc08f76c0 (LWP 1273690)]
+[Switching to Thread 0x7ffff780b6c0 (LWP 1273685)]
+
+Thread 2 "java" hit Breakpoint 1, init_globals () at /data/workspace/openjdk11-core/src/hotspot/share/runtime/init.cpp:120
+warning: Source file is more recent than executable.
+120	                                  // stubRoutines_init1 and metaspace_init.
+
+=== 堆详细信息 ===
+
+--- G1CollectedHeap对象 ---
+$1 = (CollectedHeap *) 0x7ffff00326b0
+$2 = 0x7ffff00326b0
+
+--- 堆内存区域 (_reserved) ---
+$3 = {
+  _start = 0x600000000,
+  _word_size = 1073741824
+}
+$4 = 0x600000000
+
+--- HeapRegion配置 ---
+$5 = 4194304
+$6 = 22
+$7 = 524288
+$8 = 8192
+
+--- G1堆特有属性 ---
+$9 = 2048
+heap_details_debug.gdb:30: Error in sourced command file:
+There is no member or method named _length.

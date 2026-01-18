@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-01-14T00:00:00.000Z" agent="JVM Learning Roadmap" version="21.0.0" type="device">
+  <diagram id="jvm-learning-roadmap" name="JVM源码学习路线图">
+    <mxGraphModel dx="2000" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="2000" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+        
+        <!-- 标题 -->
+        <mxCell id="title" value="🎯 OpenJDK 11 HotSpot JVM 源码学习路线图" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=28;fontStyle=1;fontColor=#1a1a2e;" vertex="1" parent="1">
+          <mxGeometry x="500" y="20" width="800" height="50" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="subtitle" value="从入门到精通，系统掌握JVM内核" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="600" y="65" width="600" height="30" as="geometry"/>
+        </mxCell>
+        
+        <!-- ==================== 第一阶段 ==================== -->
+        <mxCell id="phase1-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#4caf50;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="110" width="550" height="420" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="phase1-title" value="🌱 第一阶段：基础入门 (2-3周)" style="text;html=1;strokeColor=none;fillColor=#4caf50;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="120" width="530" height="35" as="geometry"/>
+        </mxCell>
+        
+        <!-- 1.1 对象模型 -->
+        <mxCell id="p1-1" value="1.1 对象内存模型 ⭐⭐⭐⭐⭐&#xa;─────────────────────────&#xa;📖 必读源码:&#xa;• oops/oop.hpp - oopDesc结构&#xa;• oops/markOop.hpp - Mark Word详解&#xa;• oops/klass.hpp - Klass基类&#xa;&#xa;🎯 学习目标:&#xa;✓ 理解oop/klass二元模型&#xa;✓ 掌握Mark Word 64位布局&#xa;✓ 理解对象头各字段含义&#xa;&#xa;💡 关键知识点:&#xa;• _mark字段: 锁状态/hashCode/GC年龄&#xa;• _metadata._klass: 类型指针&#xa;• 压缩指针原理" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4caf50;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="165" width="260" height="230" as="geometry"/>
+        </mxCell>
+        
+        <!-- 1.2 synchronized -->
+        <mxCell id="p1-2" value="1.2 synchronized锁机制 ⭐⭐⭐⭐⭐&#xa;─────────────────────────&#xa;📖 必读源码:&#xa;• runtime/objectMonitor.hpp/cpp&#xa;• runtime/synchronizer.cpp&#xa;• runtime/biasedLocking.cpp&#xa;&#xa;🎯 学习目标:&#xa;✓ 掌握锁升级完整流程&#xa;✓ 理解ObjectMonitor结构&#xa;✓ 理解偏向锁撤销机制&#xa;&#xa;💡 关键知识点:&#xa;• 无锁→偏向→轻量→重量&#xa;• _owner/_EntryList/_WaitSet&#xa;• BasicLock与Lock Record" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4caf50;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="320" y="165" width="260" height="230" as="geometry"/>
+        </mxCell>
+        
+        <!-- 1.3 类加载 -->
+        <mxCell id="p1-3" value="1.3 类加载基础 ⭐⭐⭐⭐&#xa;─────────────────────────&#xa;📖 必读源码:&#xa;• classfile/classFileParser.cpp (关键函数)&#xa;• classfile/systemDictionary.cpp&#xa;• oops/instanceKlass.hpp&#xa;&#xa;🎯 学习目标:&#xa;✓ 理解加载→链接→初始化流程&#xa;✓ 理解InstanceKlass结构&#xa;✓ 理解ClassState状态机" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#4caf50;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="405" width="530" height="115" as="geometry"/>
+        </mxCell>
+        
+        <!-- ==================== 第二阶段 ==================== -->
+        <mxCell id="phase2-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#2196f3;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="610" y="110" width="550" height="420" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="phase2-title" value="🚀 第二阶段：核心深入 (3-4周)" style="text;html=1;strokeColor=none;fillColor=#2196f3;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="120" width="530" height="35" as="geometry"/>
+        </mxCell>
+        
+        <!-- 2.1 G1 GC -->
+        <mxCell id="p2-1" value="2.1 G1垃圾收集器 ⭐⭐⭐⭐⭐&#xa;─────────────────────────&#xa;📖 必读源码:&#xa;• gc/g1/g1CollectedHeap.cpp&#xa;• gc/g1/heapRegion.hpp&#xa;• gc/g1/g1ConcurrentMark.cpp&#xa;• gc/g1/g1RemSet.cpp&#xa;&#xa;🎯 学习目标:&#xa;✓ 理解Region划分与类型&#xa;✓ 掌握Young GC/Mixed GC流程&#xa;✓ 理解并发标记SATB算法&#xa;✓ 理解RSet与卡表&#xa;&#xa;💡 关键知识点:&#xa;• HeapRegion结构与GrainBytes&#xa;• Collection Set选择策略&#xa;• SATB写屏障原理" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#2196f3;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="620" y="165" width="260" height="250" as="geometry"/>
+        </mxCell>
+        
+        <!-- 2.2 线程系统 -->
+        <mxCell id="p2-2" value="2.2 线程与SafePoint ⭐⭐⭐⭐⭐&#xa;─────────────────────────&#xa;📖 必读源码:&#xa;• runtime/thread.hpp/cpp&#xa;• runtime/safepoint.hpp/cpp&#xa;• runtime/safepointMechanism.cpp&#xa;&#xa;🎯 学习目标:&#xa;✓ 理解JavaThread生命周期&#xa;✓ 掌握SafePoint同步机制&#xa;✓ 理解线程状态转换&#xa;&#xa;💡 关键知识点:&#xa;• JavaThreadState状态机&#xa;• polling page机制&#xa;• STW触发与恢复流程" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#2196f3;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="890" y="165" width="260" height="220" as="geometry"/>
+        </mxCell>
+        
+        <!-- 2.3 TLAB -->
+        <mxCell id="p2-3" value="2.3 对象分配与TLAB ⭐⭐⭐⭐&#xa;─────────────────────────&#xa;📖 必读源码:&#xa;• gc/shared/threadLocalAllocBuffer.hpp/cpp&#xa;• gc/shared/collectedHeap.cpp&#xa;&#xa;🎯 学习目标:&#xa;✓ 理解TLAB快速分配路径&#xa;✓ 理解分配失败后的慢速路径" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#2196f3;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="620" y="425" width="260" height="95" as="geometry"/>
+        </mxCell>
+        
+        <!-- 2.4 字节码 -->
+        <mxCell id="p2-4" value="2.4 字节码与解释器 ⭐⭐⭐⭐&#xa;─────────────────────────&#xa;📖 必读源码:&#xa;• interpreter/bytecodes.hpp&#xa;• interpreter/templateInterpreter.cpp&#xa;• interpreter/linkResolver.cpp" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#2196f3;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="890" y="395" width="260" height="95" as="geometry"/>
+        </mxCell>
+        
+        <!-- ==================== 第三阶段 ==================== -->
+        <mxCell id="phase3-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff3e0;strokeColor=#ff9800;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="110" width="550" height="420" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="phase3-title" value="🔥 第三阶段：高级进阶 (4-6周)" style="text;html=1;strokeColor=none;fillColor=#ff9800;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1190" y="120" width="530" height="35" as="geometry"/>
+        </mxCell>
+        
+        <!-- 3.1 JIT编译 -->
+        <mxCell id="p3-1" value="3.1 JIT编译系统 ⭐⭐⭐⭐&#xa;─────────────────────────&#xa;📖 必读源码:&#xa;• compiler/compileBroker.cpp&#xa;• code/nmethod.hpp/cpp&#xa;• code/codeCache.cpp&#xa;• c1/c1_Compilation.cpp&#xa;• opto/compile.cpp&#xa;&#xa;🎯 学习目标:&#xa;✓ 理解分层编译策略&#xa;✓ 理解nmethod生命周期&#xa;✓ 理解CodeCache管理&#xa;&#xa;💡 关键知识点:&#xa;• 编译阈值与热点探测&#xa;• C1/C2编译器差异&#xa;• OSR栈上替换" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ff9800;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1190" y="165" width="260" height="240" as="geometry"/>
+        </mxCell>
+        
+        <!-- 3.2 逃逸分析 -->
+        <mxCell id="p3-2" value="3.2 逃逸分析与优化 ⭐⭐⭐⭐&#xa;─────────────────────────&#xa;📖 必读源码:&#xa;• opto/escape.cpp&#xa;• runtime/deoptimization.cpp&#xa;&#xa;🎯 学习目标:&#xa;✓ 理解逃逸分析算法&#xa;✓ 理解栈上分配/标量替换&#xa;✓ 理解去优化触发条件&#xa;&#xa;💡 关键知识点:&#xa;• NoEscape/ArgEscape/GlobalEscape&#xa;• 锁消除优化&#xa;• Uncommon Trap" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ff9800;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1460" y="165" width="260" height="200" as="geometry"/>
+        </mxCell>
+        
+        <!-- 3.3 Reference -->
+        <mxCell id="p3-3" value="3.3 引用处理 ⭐⭐⭐&#xa;─────────────────────────&#xa;📖 必读源码:&#xa;• gc/shared/referenceProcessor.cpp&#xa;&#xa;🎯 学习目标:&#xa;✓ 理解软/弱/虚/终结引用处理" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ff9800;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1190" y="415" width="260" height="105" as="geometry"/>
+        </mxCell>
+        
+        <!-- 3.4 OopMap -->
+        <mxCell id="p3-4" value="3.4 OopMap与栈帧 ⭐⭐⭐&#xa;─────────────────────────&#xa;📖 必读源码:&#xa;• compiler/oopMap.cpp&#xa;• runtime/frame.hpp/cpp&#xa;&#xa;🎯 学习目标:&#xa;✓ 理解GC根枚举原理&#xa;✓ 理解栈帧结构" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#ff9800;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1460" y="375" width="260" height="115" as="geometry"/>
+        </mxCell>
+        
+        <!-- ==================== 第四阶段 ==================== -->
+        <mxCell id="phase4-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#e91e63;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="550" width="550" height="350" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="phase4-title" value="💎 第四阶段：专家精通 (持续)" style="text;html=1;strokeColor=none;fillColor=#e91e63;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="560" width="530" height="35" as="geometry"/>
+        </mxCell>
+        
+        <!-- 4.1 平台相关 -->
+        <mxCell id="p4-1" value="4.1 平台相关代码 ⭐⭐⭐&#xa;─────────────────────────&#xa;📖 源码目录:&#xa;• cpu/x86/ - x86汇编器&#xa;• os/linux/ - Linux系统调用&#xa;&#xa;🎯 学习目标:&#xa;✓ 理解汇编代码生成&#xa;✓ 理解系统调用封装" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e91e63;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="605" width="260" height="135" as="geometry"/>
+        </mxCell>
+        
+        <!-- 4.2 JFR -->
+        <mxCell id="p4-2" value="4.2 JFR性能分析 ⭐⭐⭐&#xa;─────────────────────────&#xa;📖 源码目录:&#xa;• jfr/ - Flight Recorder&#xa;&#xa;🎯 学习目标:&#xa;✓ 理解事件采集机制&#xa;✓ 理解性能数据记录" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e91e63;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="320" y="605" width="260" height="135" as="geometry"/>
+        </mxCell>
+        
+        <!-- 4.3 JVMTI -->
+        <mxCell id="p4-3" value="4.3 JVMTI与调试 ⭐⭐⭐&#xa;─────────────────────────&#xa;📖 源码目录:&#xa;• prims/jvmti*.cpp&#xa;• services/&#xa;&#xa;🎯 学习目标:&#xa;✓ 理解调试接口实现&#xa;✓ 理解类重定义机制" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e91e63;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="750" width="260" height="135" as="geometry"/>
+        </mxCell>
+        
+        <!-- 4.4 源码贡献 -->
+        <mxCell id="p4-4" value="4.4 源码贡献与定制 ⭐⭐⭐&#xa;─────────────────────────&#xa;🎯 进阶目标:&#xa;✓ 编译调试OpenJDK&#xa;✓ 修改源码验证理论&#xa;✓ 参与社区贡献&#xa;✓ 定制JVM特性" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#e91e63;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="320" y="750" width="260" height="135" as="geometry"/>
+        </mxCell>
+        
+        <!-- ==================== 学习方法 ==================== -->
+        <mxCell id="method-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#9c27b0;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="610" y="550" width="550" height="350" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="method-title" value="📚 学习方法论" style="text;html=1;strokeColor=none;fillColor=#9c27b0;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="620" y="560" width="530" height="35" as="geometry"/>
+        </mxCell>
+        
+        <!-- 方法1 -->
+        <mxCell id="m1" value="🔍 方法一：自顶向下&#xa;─────────────────────────&#xa;1. 先看.hpp头文件了解结构&#xa;2. 再看.cpp实现理解逻辑&#xa;3. 关注核心字段和关键方法&#xa;4. 忽略边界检查和调试代码&#xa;&#xa;适用: 初学者，建立整体认知" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9c27b0;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="620" y="605" width="260" height="130" as="geometry"/>
+        </mxCell>
+        
+        <!-- 方法2 -->
+        <mxCell id="m2" value="🔬 方法二：问题驱动&#xa;─────────────────────────&#xa;1. 带着问题去读源码&#xa;   例: &quot;锁升级时Mark Word如何变化?&quot;&#xa;2. 使用grep/search定位关键代码&#xa;3. 画出调用链和数据流&#xa;4. 验证你的理解&#xa;&#xa;适用: 有一定基础，深入某个主题" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9c27b0;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="890" y="605" width="260" height="130" as="geometry"/>
+        </mxCell>
+        
+        <!-- 方法3 -->
+        <mxCell id="m3" value="🛠️ 方法三：调试验证&#xa;─────────────────────────&#xa;1. 编译debug版JDK&#xa;2. 使用GDB/LLDB调试&#xa;3. 添加日志输出验证&#xa;4. 修改源码观察效果&#xa;&#xa;命令: make images CONF=linux-x86_64-server-slowdebug" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9c27b0;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="620" y="745" width="260" height="140" as="geometry"/>
+        </mxCell>
+        
+        <!-- 方法4 -->
+        <mxCell id="m4" value="📝 方法四：输出倒逼&#xa;─────────────────────────&#xa;1. 写技术博客总结&#xa;2. 画架构图/流程图&#xa;3. 给别人讲解&#xa;4. 回答社区问题&#xa;&#xa;&quot;如果你不能简单地解释它，&#xa; 说明你还没有真正理解它&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#9c27b0;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="890" y="745" width="260" height="140" as="geometry"/>
+        </mxCell>
+        
+        <!-- ==================== 工具与资源 ==================== -->
+        <mxCell id="tools-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8eaf6;strokeColor=#3f51b5;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1180" y="550" width="550" height="350" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="tools-title" value="🛠️ 工具与资源" style="text;html=1;strokeColor=none;fillColor=#3f51b5;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1190" y="560" width="530" height="35" as="geometry"/>
+        </mxCell>
+        
+        <!-- 工具 -->
+        <mxCell id="tools" value="🔧 必备工具&#xa;─────────────────────────&#xa;IDE:&#xa;• CLion / VS Code + C++插件&#xa;• 配置好include路径&#xa;&#xa;调试:&#xa;• GDB/LLDB&#xa;• Arthas (运行时诊断)&#xa;• async-profiler&#xa;&#xa;分析:&#xa;• JITWatch (JIT分析)&#xa;• JOL (对象布局)&#xa;• JMH (基准测试)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#3f51b5;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1190" y="605" width="260" height="200" as="geometry"/>
+        </mxCell>
+        
+        <!-- 资源 -->
+        <mxCell id="resources" value="📖 学习资源&#xa;─────────────────────────&#xa;书籍:&#xa;• 《深入理解Java虚拟机》周志明&#xa;• 《HotSpot实战》陈涛&#xa;• 《垃圾回收算法手册》&#xa;&#xa;官方:&#xa;• OpenJDK Wiki&#xa;• JEP文档&#xa;• HotSpot Glossary&#xa;&#xa;社区:&#xa;• hotspot-dev邮件列表&#xa;• JVM源码阅读群" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#3f51b5;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1460" y="605" width="260" height="200" as="geometry"/>
+        </mxCell>
+        
+        <!-- JVM参数 -->
+        <mxCell id="jvm-flags" value="⚙️ 调试JVM参数&#xa;─────────────────────────&#xa;-XX:+PrintCompilation        # 打印编译信息&#xa;-XX:+PrintGCDetails          # GC详情&#xa;-XX:+PrintSafepointStatistics # SafePoint统计&#xa;-XX:+TraceBiasedLocking      # 偏向锁跟踪&#xa;-XX:+TraceClassLoading       # 类加载跟踪" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#3f51b5;align=left;verticalAlign=top;spacingLeft=8;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1190" y="815" width="530" height="75" as="geometry"/>
+        </mxCell>
+        
+        <!-- ==================== 面试重点 ==================== -->
+        <mxCell id="interview-bg" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffebee;strokeColor=#f44336;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="920" width="1690" height="200" as="geometry"/>
+        </mxCell>
+        
+        <mxCell id="interview-title" value="🎯 面试重点速查" style="text;html=1;strokeColor=none;fillColor=#f44336;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;fontColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="930" width="1670" height="35" as="geometry"/>
+        </mxCell>
+        
+        <!-- 面试点1 -->
+        <mxCell id="i1" value="对象创建 (95%)&#xa;─────────────&#xa;• TLAB分配路径&#xa;• 对象头结构&#xa;• 指针压缩" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f44336;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="50" y="975" width="150" height="90" as="geometry"/>
+        </mxCell>
+        
+        <!-- 面试点2 -->
+        <mxCell id="i2" value="synchronized (95%)&#xa;─────────────&#xa;• 锁升级流程&#xa;• Mark Word变化&#xa;• ObjectMonitor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f44336;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="210" y="975" width="150" height="90" as="geometry"/>
+        </mxCell>
+        
+        <!-- 面试点3 -->
+        <mxCell id="i3" value="G1 GC (90%)&#xa;─────────────&#xa;• Region结构&#xa;• Young/Mixed GC&#xa;• 并发标记SATB" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f44336;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="370" y="975" width="150" height="90" as="geometry"/>
+        </mxCell>
+        
+        <!-- 面试点4 -->
+        <mxCell id="i4" value="类加载 (85%)&#xa;─────────────&#xa;• 双亲委派&#xa;• 加载→链接→初始化&#xa;• ClassState" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f44336;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="530" y="975" width="150" height="90" as="geometry"/>
+        </mxCell>
+        
+        <!-- 面试点5 -->
+        <mxCell id="i5" value="SafePoint (80%)&#xa;─────────────&#xa;• STW原理&#xa;• polling page&#xa;• 线程状态" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f44336;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="690" y="975" width="150" height="90" as="geometry"/>
+        </mxCell>
+        
+        <!-- 面试点6 -->
+        <mxCell id="i6" value="JIT编译 (75%)&#xa;─────────────&#xa;• 分层编译&#xa;• 热点探测&#xa;• CodeCache" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f44336;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="850" y="975" width="150" height="90" as="geometry"/>
+        </mxCell>
+        
+        <!-- 面试点7 -->
+        <mxCell id="i7" value="内存模型 (70%)&#xa;─────────────&#xa;• 堆/栈/方法区&#xa;• 元空间&#xa;• 直接内存" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f44336;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1010" y="975" width="150" height="90" as="geometry"/>
+        </mxCell>
+        
+        <!-- 面试点8 -->
+        <mxCell id="i8" value="逃逸分析 (60%)&#xa;─────────────&#xa;• 栈上分配&#xa;• 标量替换&#xa;• 锁消除" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f44336;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1170" y="975" width="150" height="90" as="geometry"/>
+        </mxCell>
+        
+        <!-- 面试点9 -->
+        <mxCell id="i9" value="字节码 (55%)&#xa;─────────────&#xa;• 常见指令&#xa;• 方法调用&#xa;• 异常处理" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f44336;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1330" y="975" width="150" height="90" as="geometry"/>
+        </mxCell>
+        
+        <!-- 面试点10 -->
+        <mxCell id="i10" value="Reference (50%)&#xa;─────────────&#xa;• 四种引用&#xa;• 引用队列&#xa;• Finalizer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#f44336;align=left;verticalAlign=top;spacingLeft=5;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="1490" y="975" width="150" height="90" as="geometry"/>
+        </mxCell>
+        
+        <!-- 时间线 -->
+        <mxCell id="timeline" value="⏱️ 建议学习时间线: 第1阶段(2-3周) → 第2阶段(3-4周) → 第3阶段(4-6周) → 第4阶段(持续深入) | 总计: 3-6个月达到面试优秀水平" style="text;html=1;strokeColor=none;fillColor=#e0e0e0;align=center;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#333333;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1080" width="1670" height="30" as="geometry"/>
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
